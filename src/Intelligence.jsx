@@ -1014,7 +1014,7 @@ function OwnerRow({ o }) {
           ? "radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.08) 0%,transparent 65%)"
           : "radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.05) 0%,transparent 65%)",
         border:`1px solid ${open||hov?"rgba(255,255,255,.14)":"rgba(255,255,255,.08)"}`,
-        borderLeft:`2px solid ${o.border}`,borderRadius:10,marginBottom:5,overflow:"hidden",
+        borderLeft:`2px solid ${o.border}`,borderRadius:8,marginBottom:3,overflow:"hidden",
         transition:"all .22s",
         transform: hov ? "translateY(-1px)" : "none",
         boxShadow: hov ? `0 6px 20px rgba(0,0,0,.35),0 0 12px ${o.border}18` : "0 2px 8px rgba(0,0,0,.2)",
@@ -1024,7 +1024,6 @@ function OwnerRow({ o }) {
           <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,color:T.txt,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>
             <a href={o.href} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} style={{ color:T.txt,textDecoration:"none" }}>{o.name}</a>
           </div>
-          <div style={{ fontSize:8,color:T.txt4,letterSpacing:".02em",marginTop:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>{o.role}</div>
         </div>
         <span style={{ fontSize:7.5,fontWeight:500,letterSpacing:".07em",padding:"2px 6px",borderRadius:3,
           color:o.sigColor,background:o.sigBg,flexShrink:0 }}>{o.sig}</span>
