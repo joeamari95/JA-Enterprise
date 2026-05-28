@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const PASSWORD = "BlackberryQ252026";
+const PASSWORD = "1413Ab!";
 
 function useInView(threshold = 0.08) {
   const ref = useRef(null);
@@ -909,6 +909,30 @@ function DesktopView({ navigate }) {
             ].map(o => <OwnerRow key={o.name} o={o} />)}
           </Reveal>
 
+          <Reveal delay={280}>
+            <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(100,145,255,.10) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(45,212,180,.06) 0%,transparent 60%)",
+              backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",border:"1px solid rgba(100,145,255,.22)",
+              borderRadius:16,boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
+              padding:16,position:"relative",overflow:"hidden" }}>
+              <div style={{ position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)" }} />
+              <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:7 }}>
+                  <div style={{ width:6,height:6,borderRadius:"50%",background:T.teal,boxShadow:"0 0 8px rgba(45,212,180,.8)" }} />
+                  <span style={{ fontSize:9,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:T.teal }}>Core Thesis</span>
+                </div>
+                <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
+              </div>
+              <div style={{ fontSize:11.5,color:T.txt,lineHeight:1.72,marginBottom:10,fontWeight:300 }}>
+                Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
+              </div>
+              <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
+                Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
+              </div>
+              <RefreshBtn isMobile={false} />
+            </div>
+          </Reveal>
+
+
           <Reveal delay={160}>
             <SecHdr label="Executive Leadership" />
             {[
@@ -942,28 +966,7 @@ function DesktopView({ navigate }) {
             </div>
           </Reveal>
 
-          <Reveal delay={280}>
-            <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(100,145,255,.10) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(45,212,180,.06) 0%,transparent 60%)",
-              backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",border:"1px solid rgba(100,145,255,.22)",
-              borderRadius:16,boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
-              padding:16,position:"relative",overflow:"hidden" }}>
-              <div style={{ position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)" }} />
-              <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:7 }}>
-                  <div style={{ width:6,height:6,borderRadius:"50%",background:T.teal,boxShadow:"0 0 8px rgba(45,212,180,.8)" }} />
-                  <span style={{ fontSize:9,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:T.teal }}>Core Thesis</span>
-                </div>
-                <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
-              </div>
-              <div style={{ fontSize:11.5,color:T.txt,lineHeight:1.72,marginBottom:10,fontWeight:300 }}>
-                Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
-              </div>
-              <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
-                Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
-              </div>
-              <RefreshBtn isMobile={false} />
-            </div>
-          </Reveal>
+
 
           <Reveal delay={340}>
             <SecHdr label="Block Ecosystem Pitch Map" />
