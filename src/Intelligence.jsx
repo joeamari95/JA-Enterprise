@@ -1290,9 +1290,7 @@ function DesktopView({ navigate }) {
         gridTemplateColumns:"220px 1fr 268px",height:"calc(100vh - 78px)",overflow:"hidden" }}>
 
         {/* LEFT COL */}
-        <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16,
-          maskImage:"linear-gradient(to bottom, black 0%, black 88%, transparent 100%)",
-          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 88%, transparent 100%)" }}>
+        <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16 }}>
           <div style={{ paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
             <div style={{ fontFamily:"Georgia,serif",fontSize:17,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
             <div style={{ fontSize:8.5,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands</div>
