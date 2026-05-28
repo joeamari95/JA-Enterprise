@@ -846,40 +846,37 @@ function ThesisCard({ isMobile }) {
       </div>
 
       {/* Text clip container */}
-      <div style={{ position:"relative" }}>
-        <div style={{
-          maxHeight: expanded ? "400px" : `${PREVIEW_HEIGHT}px`,
-          overflow:"hidden",
-          transition:"max-height .45s cubic-bezier(.4,0,.2,1)",
-        }}>
-          <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300,
-            paddingBottom: expanded ? 0 : 8 }}>
-            Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
-          </div>
-          {expanded && (
-            <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,
-              marginTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
-              Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
-            </div>
-          )}
+      <div style={{
+        maxHeight: expanded ? "400px" : `${PREVIEW_HEIGHT}px`,
+        overflow:"hidden",
+        transition:"max-height .45s cubic-bezier(.4,0,.2,1)",
+        maskImage: expanded ? "none" : "linear-gradient(to bottom, black 30%, transparent 100%)",
+        WebkitMaskImage: expanded ? "none" : "linear-gradient(to bottom, black 30%, transparent 100%)",
+      }}>
+        <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300 }}>
+          Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
         </div>
-
-        {/* Gradient + arrow — OUTSIDE the overflow:hidden div, absolute to this wrapper */}
-        {!expanded && (
-          <div onClick={() => setExpanded(true)} style={{
-            position:"absolute", bottom:0, left:-16, right:-16,
-            height:60, cursor:"pointer", zIndex:2,
-            background:`linear-gradient(to bottom, transparent 0%, ${BG}cc 50%, ${BG}f5 100%)`,
-            display:"flex", alignItems:"flex-end", justifyContent:"center", paddingBottom:6,
-          }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-              stroke="rgba(255,255,255,.35)" strokeWidth="1.5"
-              style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
-              <path d="M2 4l4 4 4-4"/>
-            </svg>
+        {expanded && (
+          <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,
+            marginTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
+            Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
           </div>
         )}
       </div>
+
+      {/* Clean in-flow toggle — no absolute, no floating arrow */}
+      <button onClick={() => setExpanded(!expanded)} style={{
+        display:"flex",alignItems:"center",justifyContent:"center",
+        width:"100%",marginTop:8,paddingTop:6,paddingBottom:2,
+        background:"none",border:"none",borderTop:"1px solid rgba(255,255,255,.05)",
+        cursor:"pointer" }}>
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
+          stroke="rgba(255,255,255,.18)" strokeWidth="1.5"
+          style={{ transition:"transform .3s",transform:expanded?"rotate(180deg)":"none",
+            animation:expanded?"none":"arrowBounce 1.8s ease-in-out infinite" }}>
+          <path d="M2 4l4 4 4-4"/>
+        </svg>
+      </button>
 
       {expanded && <RefreshBtn isMobile={isMobile} />}
     </div>
@@ -1057,33 +1054,15 @@ function OverviewCard() {
         </div>
       </div>
 
-      {/* Key Metrics — always visible, with gradient + arrow overlay when collapsed */}
-      <div style={{ position:"relative" }}>
-        <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:5 }}>
-          {[["8,785",T.teal,"Properties"],["141",T.blue,"Countries"],["~418k",T.txt2,"Employees"],["$23.7B",T.green,"Revenue '24"],["2022",T.amber,"Prior Eval"]].map(([v,c,l]) => (
-            <div key={l} style={{ padding:"8px 10px",background:"rgba(255,255,255,.04)",
-              border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:15,fontWeight:300,color:c,lineHeight:1,marginBottom:3 }}>{v}</div>
-              <div style={{ fontSize:7.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Gradient fade + arrow sits over the bottom of the metrics row when collapsed */}
-        {!open && (
-          <div onClick={() => setOpen(true)} style={{
-            position:"absolute", bottom:0, left:-16, right:-16, height:44,
-            background:`linear-gradient(to bottom, transparent 0%, ${BG}bb 50%, ${BG}ee 100%)`,
-            cursor:"pointer", display:"flex", alignItems:"flex-end", justifyContent:"center",
-            paddingBottom:5, zIndex:4,
-          }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-              stroke="rgba(255,255,255,.32)" strokeWidth="1.5"
-              style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
-              <path d="M2 4l4 4 4-4"/>
-            </svg>
+      {/* Key Metrics — always visible */}
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:5,marginBottom: open ? 12 : 0 }}>
+        {[["8,785",T.teal,"Properties"],["141",T.blue,"Countries"],["~418k",T.txt2,"Employees"],["$23.7B",T.green,"Revenue '24"],["2022",T.amber,"Prior Eval"]].map(([v,c,l]) => (
+          <div key={l} style={{ padding:"8px 10px",background:"rgba(255,255,255,.04)",
+            border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
+            <div style={{ fontFamily:"Georgia,serif",fontSize:15,fontWeight:300,color:c,lineHeight:1,marginBottom:3 }}>{v}</div>
+            <div style={{ fontSize:7.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
           </div>
-        )}
+        ))}
       </div>
 
       {/* Expandable body */}
@@ -1102,17 +1081,19 @@ function OverviewCard() {
         </div>
       </div>
 
-      {/* Collapse arrow when open */}
-      {open && (
-        <button onClick={() => setOpen(false)} style={{
-          display:"flex",alignItems:"center",justifyContent:"center",
-          width:"100%",paddingTop:8,background:"none",border:"none",cursor:"pointer" }}>
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
-            stroke="rgba(255,255,255,.2)" strokeWidth="1.5" style={{ transform:"rotate(180deg)" }}>
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
-        </button>
-      )}
+      {/* Toggle tap area — always at bottom, no floating arrow */}
+      <button onClick={() => setOpen(!open)} style={{
+        display:"flex",alignItems:"center",justifyContent:"center",
+        width:"100%",marginTop:8,paddingTop:6,paddingBottom:2,
+        background:"none",border:"none",borderTop:"1px solid rgba(255,255,255,.05)",
+        cursor:"pointer" }}>
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
+          stroke="rgba(255,255,255,.18)" strokeWidth="1.5"
+          style={{ transition:"transform .3s",transform:open?"rotate(180deg)":"none",
+            animation:open?"none":"arrowBounce 1.8s ease-in-out infinite" }}>
+          <path d="M2 4l4 4 4-4"/>
+        </svg>
+      </button>
     </div>
   );
 }
