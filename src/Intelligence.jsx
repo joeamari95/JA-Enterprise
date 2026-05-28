@@ -1340,18 +1340,18 @@ function DesktopView({ navigate }) {
           </Reveal>
 
           <Reveal delay={160}>
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch" }}>
+            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,height:280 }}>
               {/* OWNERSHIP */}
               <div style={{
                 background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.07) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.04) 0%,transparent 60%)",
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
                 display:"flex",flexDirection:"column",
                 boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
-                position:"relative",overflow:"hidden",
+                position:"relative",minHeight:0,
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
-                  pointerEvents:"none" }} />
+                  pointerEvents:"none",zIndex:1 }} />
                 <SecHdr label="Key Stakeholders" />
                 <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1,overflowY:"auto",minHeight:0,scrollbarWidth:"thin" }}>
                   {[
