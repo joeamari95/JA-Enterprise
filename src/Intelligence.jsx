@@ -357,12 +357,16 @@ function PartnerCard({ p, isMobile }) {
             letterSpacing:".05em",transition:"all .2s",lineHeight:1 }}>
             {messaged ? (
               <>
-                <span style={{ fontSize:11,lineHeight:1,display:"flex",alignItems:"center" }}>📩</span>
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" style={{flexShrink:0}}>
+                  <rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 5l7 5 7-5"/>
+                </svg>
                 <span style={{ lineHeight:1 }}>Sent {messagedDate}</span>
               </>
             ) : (
               <>
-                <span style={{ fontSize:11,lineHeight:1,display:"flex",alignItems:"center" }}>📩</span>
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" style={{flexShrink:0}}>
+                  <rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 5l7 5 7-5"/>
+                </svg>
                 <span style={{ lineHeight:1 }}>Message Partner Manager on Slack {p.id==="oracle"?"(@stevienicks)":"(@cmcvie)"}</span>
               </>
             )}
@@ -1291,8 +1295,6 @@ function DesktopView({ navigate }) {
           display:"flex",flexDirection:"column",gap:8,
           background:"rgba(13,14,19,.4)",
           backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",
-          maskImage:"linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
-          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
         }}>
           <div style={{ paddingBottom:6,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
             <div style={{ fontFamily:"Georgia,serif",fontSize:14,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
