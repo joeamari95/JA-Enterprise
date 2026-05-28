@@ -346,35 +346,25 @@ function PartnerCard({ p, isMobile }) {
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </div>
-          {/* Row 2: envelope message button full width */}
+          {/* Row 2: message button full width */}
           <button onClick={e => { e.stopPropagation(); setModal(true); }} style={{
             width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:6,
-            padding:isMobile?"8px 0":"6px 0",
+            padding:isMobile?"8px 0":"5px 0",
             background:messaged?"rgba(245,166,35,.08)":"rgba(255,255,255,.04)",
             border:messaged?"1px solid rgba(245,166,35,.2)":"1px solid rgba(255,255,255,.09)",
             borderRadius:8,cursor:"pointer",fontFamily:"Jost,sans-serif",
             fontSize:isMobile?10:9,fontWeight:400,
-            color:messaged?T.amber:"rgba(255,255,255,.45)",
-            letterSpacing:".06em",transition:"all .2s" }}>
-            {/* Envelope with arrow icon */}
+            color:messaged?T.amber:"rgba(255,255,255,.4)",
+            letterSpacing:".05em",transition:"all .2s",lineHeight:1 }}>
             {messaged ? (
               <>
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3"
-                  style={{ flexShrink:0,marginTop:0 }}>
-                  <rect x="1" y="3" width="14" height="10" rx="1.5"/>
-                  <path d="M1 5l7 5 7-5"/>
-                </svg>
-                <span>Sent {messagedDate}</span>
+                <span style={{ fontSize:11,lineHeight:1,display:"flex",alignItems:"center" }}>📩</span>
+                <span style={{ lineHeight:1 }}>Sent {messagedDate}</span>
               </>
             ) : (
               <>
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3"
-                  style={{ flexShrink:0,marginTop:0 }}>
-                  <rect x="1" y="3" width="11" height="9" rx="1.5"/>
-                  <path d="M1 5l5.5 4 5.5-4"/>
-                  <path d="M13 7l2.5-2.5M13 7h2M13 7v-2" strokeWidth="1.2"/>
-                </svg>
-                <span>Message Partner Manager on Slack {p.id==="oracle"?"(@stevienicks)":p.id==="netsuite"?"(@lbuckingham)":"(@cmcvie)"}</span>
+                <span style={{ fontSize:11,lineHeight:1,display:"flex",alignItems:"center" }}>📩</span>
+                <span style={{ lineHeight:1 }}>↗ Message Partner Manager on Slack {p.id==="oracle"?"(@stevienicks)":"(@cmcvie)"}</span>
               </>
             )}
           </button>
@@ -936,6 +926,10 @@ function SfdcFloater() { return <SfdcToast />; }
 function ThesisCard({ isMobile }) {
   const [expanded, setExpanded] = useState(false);
 
+  const TLDR = "Re-engagement play, not a cold pitch. MICROS EOL + new CTO + open VP F&B = rare simultaneous opening. The pitch: \"You evaluated us early. Here's what's different.\"";
+
+  const FULL = "Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: \"You evaluated us early. Here's what's different.\" Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.";
+
   return (
     <div style={{
       background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%),rgba(13,14,19,.6)",
@@ -955,35 +949,52 @@ function ThesisCard({ isMobile }) {
         <div style={{ display:"flex",alignItems:"center",gap:8 }}>
           <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",
             border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
-          {expanded && (
-            <button onClick={() => setExpanded(false)} style={{
-              display:"flex",alignItems:"center",gap:4,
-              background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.10)",
-              borderRadius:6,padding:"3px 8px",cursor:"pointer",fontFamily:"Jost,sans-serif",
-              fontSize:8.5,color:T.txt3,letterSpacing:".06em" }}>
-              <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
-                style={{ transform:"rotate(180deg)" }}>
-                <path d="M2 4l4 4 4-4"/>
-              </svg>
-              Collapse
-            </button>
-          )}
         </div>
       </div>
 
-      {/* Text — always fully visible, no fade */}
-      <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300,marginBottom:8 }}>
-        Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
+      {/* TLDR — always visible */}
+      <div style={{ fontSize:isMobile?12:11,color:T.txt,lineHeight:1.65,fontWeight:300,
+        fontStyle: expanded ? "normal" : "normal" }}>
+        {expanded ? (
+          <>
+            <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300,marginBottom:12 }}>
+              {FULL.replace('"You evaluated us early. Here\'s what\'s different."', '')}
+              <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em>
+              {" Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play."}
+            </div>
+            {/* Expanded detail sections */}
+            <div style={{ display:"flex",flexDirection:"column",gap:6 }}>
+              {[
+                ["Why Now","MICROS EOL creates a forced migration window. Drew Pinto joined 2023 with a rationalization mandate — the 2022 no was not his decision. VP F&B seat is open, creating a rare entry before the new exec is fully onboarded."],
+                ["The Pitch Frame","Lead with what changed, not what Square is. Open with: 'You evaluated us early. Our enterprise infrastructure gaps are closed — KDS is live, APIs are open, Opera + Bonvoy integrate natively.' Capability update, not a cold pitch."],
+                ["The Wildcard","Franchise vs. corporate authority determines the entire sales motion. Confirm top-down mandate before committing resources. If franchisee-by-franchisee, the pilot path is more viable than a corporate-led rollout."],
+              ].map(([label, body]) => (
+                <div key={label} style={{ padding:"8px 10px",background:"rgba(255,255,255,.03)",
+                  border:"1px solid rgba(255,255,255,.07)",borderRadius:8 }}>
+                  <div style={{ fontSize:8.5,color:T.teal,letterSpacing:".08em",textTransform:"uppercase",
+                    marginBottom:4,fontWeight:500 }}>{label}</div>
+                  <div style={{ fontSize:isMobile?11:10.5,color:T.txt2,lineHeight:1.6,fontWeight:300 }}>{body}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize:8,color:T.txt4,lineHeight:1.6,paddingTop:10,marginTop:8,
+              borderTop:"1px solid rgba(255,255,255,.06)" }}>
+              Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
+            </div>
+            <RefreshBtn isMobile={isMobile} />
+          </>
+        ) : (
+          <div style={{ fontSize:isMobile?12:11,color:T.txt2,lineHeight:1.65,fontWeight:300,
+            fontStyle:"italic" }}>
+            {TLDR}
+          </div>
+        )}
       </div>
-      {expanded && (
-        <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,
-          marginTop:4,borderTop:"1px solid rgba(255,255,255,.06)" }}>
-          Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
-        </div>
-      )}
+
+      {/* Toggle */}
       <button onClick={() => setExpanded(!expanded)} style={{
         display:"flex",alignItems:"center",justifyContent:"center",
-        width:"100%",marginTop:6,paddingTop:5,paddingBottom:1,
+        width:"100%",marginTop:8,paddingTop:5,paddingBottom:1,
         background:"none",border:"none",borderTop:"1px solid rgba(255,255,255,.05)",cursor:"pointer" }}>
         <svg width="9" height="9" viewBox="0 0 12 12" fill="none"
           stroke="rgba(255,255,255,.15)" strokeWidth="1.5"
@@ -991,8 +1002,6 @@ function ThesisCard({ isMobile }) {
           <path d="M2 4l4 4 4-4"/>
         </svg>
       </button>
-
-      {expanded && <RefreshBtn isMobile={isMobile} />}
     </div>
   );
 }
