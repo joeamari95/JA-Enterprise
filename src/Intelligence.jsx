@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const PASSWORD = "block2026";
+const PASSWORD = "BlackberryQ252026";
 
 function useInView(threshold = 0.08) {
   const ref = useRef(null);
@@ -388,6 +388,75 @@ function PasswordGate({ onUnlock }) {
   );
 }
 
+function SfdcWidget() {
+  const [nextStep, setNextStep] = useState("Re-engage Drew Pinto — MICROS EOL trigger");
+  const [editing, setEditing] = useState(false);
+  const [logged, setLogged] = useState(false);
+  const [logDate, setLogDate] = useState("");
+
+  const handleLog = () => {
+    setLogged(true);
+    const n = new Date();
+    setLogDate(`${n.getMonth()+1}/${n.getDate()}/${n.getFullYear()} ${n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}`);
+    setTimeout(() => setEditing(false), 200);
+  };
+
+  return (
+    <div>
+      <SecHdr label="SFDC" />
+      {[
+        ["Stage", <span style={{color:T.blue,fontSize:10.5,fontWeight:400}}>Stage 2 — Discovery</span>],
+        ["Owner", <span style={{color:T.txt,fontSize:10.5,fontWeight:400}}>Joey Amari</span>],
+        ["Trigger", <span style={{color:T.amber,fontSize:10,fontWeight:400}}>MICROS EOL → Re-engage now</span>],
+        ["Record", <a href="#" style={{color:T.blue,textDecoration:"none",fontSize:10.5}}>Open →</a>],
+      ].map(([l,v]) => (
+        <div key={l} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",
+          padding:"5px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",
+          borderRadius:7,marginBottom:4 }}>
+          <span style={{ fontSize:9,color:T.txt3,letterSpacing:".06em" }}>{l}</span>
+          {v}
+        </div>
+      ))}
+      {/* Next Step + Log to SFDC */}
+      <div style={{ marginTop:8,padding:"9px 10px",background:"rgba(255,255,255,.03)",
+        border:`1px solid ${logged?"rgba(74,222,128,.25)":"rgba(255,255,255,.07)"}`,borderRadius:8,
+        transition:"border-color .3s" }}>
+        <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:5 }}>
+          Next Step
+        </div>
+        {editing ? (
+          <input value={nextStep} onChange={e => setNextStep(e.target.value)}
+            style={{ width:"100%",background:"rgba(255,255,255,.06)",border:"1px solid rgba(122,168,255,.3)",
+              borderRadius:6,padding:"5px 8px",color:T.txt,fontFamily:"Jost,sans-serif",fontSize:11,
+              outline:"none",marginBottom:8 }} autoFocus
+            onKeyDown={e => e.key === "Enter" && handleLog()} />
+        ) : (
+          <div onClick={() => setEditing(true)} style={{ fontSize:11,color:T.txt2,lineHeight:1.5,
+            marginBottom:8,cursor:"text",padding:"2px 0" }}>{nextStep}</div>
+        )}
+        <button onClick={handleLog} style={{ width:"100%",padding:"6px 0",
+          background:logged?"rgba(74,222,128,.12)":"rgba(122,168,255,.10)",
+          border:logged?"1px solid rgba(74,222,128,.28)":"1px solid rgba(122,168,255,.25)",
+          borderRadius:7,cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:9,fontWeight:500,
+          color:logged?T.green:T.blue,letterSpacing:".07em",transition:"all .25s",
+          display:"flex",alignItems:"center",justifyContent:"center",gap:6 }}>
+          {logged ? <>✓ Logged to SFDC · {logDate}</> : <>📊 Log Next Step to SFDC</>}
+        </button>
+      </div>
+      {/* Stage bar */}
+      <div style={{ height:3,background:"rgba(255,255,255,.08)",borderRadius:2,marginTop:8,overflow:"hidden" }}>
+        <div style={{ height:"100%",width:"28%",background:`linear-gradient(90deg,${T.blue},${T.teal})`,
+          borderRadius:2,animation:"fillBar .8s .4s ease both" }} />
+      </div>
+      <div style={{ display:"flex",justifyContent:"space-between",marginTop:4 }}>
+        {["Prospect","Discovery","Eval","Negotiate","Close"].map((s,i) => (
+          <span key={s} style={{ fontSize:7.5,color:i===1?T.blue:T.txt4,letterSpacing:".06em" }}>{s}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Intelligence() {
   const navigate = useNavigate();
   const [clock, setClock] = useState("");
@@ -563,25 +632,7 @@ export default function Intelligence() {
           </Reveal>
 
           <Reveal delay={240}>
-            <SecHdr label="SFDC" />
-            {[["Stage","Stage 2 — Discovery",T.blue],["Owner","Joey Amari",T.txt],["Re-engage","Q2 2025",T.txt],["Record",null,T.blue]].map(([l,v,c]) => (
-              <div key={l} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",
-                padding:"5px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",
-                borderRadius:7,marginBottom:4 }}>
-                <span style={{ fontSize:9,color:T.txt3,letterSpacing:".06em" }}>{l}</span>
-                {v ? <span style={{ fontSize:10.5,color:c,fontWeight:400 }}>{v}</span>
-                   : <a href="#" style={{ fontSize:10.5,color:T.blue,textDecoration:"none" }}>Open →</a>}
-              </div>
-            ))}
-            <div style={{ height:3,background:"rgba(255,255,255,.08)",borderRadius:2,marginTop:6,overflow:"hidden" }}>
-              <div style={{ height:"100%",width:"28%",background:`linear-gradient(90deg,${T.blue},${T.teal})`,
-                borderRadius:2,animation:"fillBar .8s .4s ease both" }} />
-            </div>
-            <div style={{ display:"flex",justifyContent:"space-between",marginTop:4 }}>
-              {["Prospect","Discovery","Eval","Negotiate","Close"].map((s,i) => (
-                <span key={s} style={{ fontSize:7.5,color:i===1?T.blue:T.txt4,letterSpacing:".06em" }}>{s}</span>
-              ))}
-            </div>
+            <SfdcWidget />
           </Reveal>
         </div>
 
@@ -770,11 +821,11 @@ export default function Intelligence() {
               </div>
             </div>
             {[
-              ["red","Oracle MICROS EOL Confirmed","EOL timeline confirmed for MICROS 3700 across select-service. Marriott brands in active vendor evaluation.","Hotels & Lodging News · Jan 2025"],
-              ["green","Q1 2025 Earnings — Tech Priority","Capuano cited \"property-level digital experience\" as top 2025 capex priority. F&B modernization called out in CFO remarks.","Marriott Q1 2025 Earnings · May 2025"],
-              ["amber","VP F&B Americas — Active Search","Open role on LinkedIn. Leadership transition in key buyer seat — engage before new exec is fully onboarded.","LinkedIn Jobs · Mar 2025"],
-              ["blue","Oracle + NetSuite — Confirmed Partners","Both confirmed Square partners with active Marriott relationships. Dual entry path via Hayley Williams + Gerard Way.","Square Partner Network · Confirmed"],
-              ["green","2022 Pilot Props — Still Running Square","NYC/Boston Courtyard properties still active on Square. Internal reference + performance data in SFDC.","Square Internal · SFDC"],
+              ["red","$1.1B Tech Overhaul — Active Now","Marriott committed $1.1B in 2026 investment. 40%+ earmarked for digital transformation. CEO Capuano: replatforming PMS, central reservations, and loyalty — all moving into deployment this year.","Q4 2025 Earnings · Feb 2026"],
+              ["red","PMS Migration In Progress","Capuano confirmed PMS replatform is live rollout at 'a meaningful number' of hotels in 2026. Cloud-native replacement of legacy systems — direct Square entry point.","CIO Dive · Feb 2026"],
+              ["amber","Naveen Manga — New CIO Signal","CIO Naveen Manga: 2026 is 'a year for scale.' Front desk associates forced to navigate multiple systems daily — evaluating tools to consolidate. Exact Square F&B pain.","Hotel Dive · May 2026"],
+              ["blue","Drew Pinto at J.P. Morgan Forum","EVP & Chief Revenue + Technology Officer Drew Pinto spoke at J.P. Morgan Gaming, Lodging, Restaurant & Leisure Forum (Mar 12, 2026). Signals active engagement with enterprise tech vendors.","PRNewswire · Feb 2026"],
+              ["green","AI Strategy: 'Pulling Into the Parking Lot'","Capuano quote on AI: 'We're not even in uniform or on the field.' Early innings = maximum openness to foundational infrastructure like Square F&B. The window is now.","Q4 2025 Earnings · Feb 2026"],
             ].map(([dot,title,body,meta]) => {
               const dotColors = { red:T.red, green:T.green, amber:T.amber, blue:T.blue };
               return (
