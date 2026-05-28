@@ -877,24 +877,30 @@ function ThesisCard({ isMobile }) {
         {/* Fade gradient — only when collapsed */}
         {!expanded && (
           <div style={{
-            position:"absolute",bottom:0,left:0,right:0,height:32,
-            background:"linear-gradient(to bottom,transparent,rgba(9,10,18,.92))",
+            position:"absolute",bottom:0,left:0,right:0,height:40,
+            background:"linear-gradient(to bottom,transparent,rgba(9,10,18,.96))",
             pointerEvents:"none",
           }} />
         )}
       </div>
 
-      {/* Expand hint when collapsed */}
+      {/* Animated arrow expand hint — only when collapsed */}
       {!expanded && (
         <button onClick={() => setExpanded(true)} style={{
-          marginTop:6,width:"100%",padding:"5px 0",
-          background:"none",border:"none",cursor:"pointer",
-          fontFamily:"Jost,sans-serif",fontSize:9,color:T.txt3,
-          letterSpacing:".06em",transition:"color .2s",display:"flex",
-          alignItems:"center",justifyContent:"center",gap:4 }}
+          display:"flex",alignItems:"center",justifyContent:"center",
+          width:"100%",paddingTop:6,paddingBottom:2,
+          background:"none",border:"none",cursor:"pointer",gap:5,
+          fontFamily:"Jost,sans-serif",fontSize:9,color:"rgba(255,255,255,.3)",
+          letterSpacing:".08em",transition:"color .2s" }}
           onMouseEnter={e=>e.currentTarget.style.color=T.teal}
-          onMouseLeave={e=>e.currentTarget.style.color=T.txt3}>
-          <span>···</span> read full thesis
+          onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,.3)"}>
+          <span>show more</span>
+          {/* Bouncing animated arrow */}
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
+            stroke="currentColor" strokeWidth="1.5"
+            style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
+            <path d="M2 4l4 4 4-4"/>
+          </svg>
         </button>
       )}
 
@@ -979,6 +985,72 @@ function ExecRow({ e }) {
           <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.55,paddingTop:8 }}>{e.note}</div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ── OVERVIEW CARD — collapsible ──
+function OverviewCard() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ ...CARD,padding:16,position:"relative",overflow:"hidden" }} className="living-card hover-lift">
+      <Sheen />
+      <div style={{ position:"absolute",top:0,bottom:0,width:"40%",
+        background:"linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent)",
+        animation:"shimmer 1.8s .3s ease forwards",pointerEvents:"none",zIndex:3 }} />
+
+      {/* Always visible: title + badges + stat bar */}
+      <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:10 }}>
+        <div>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:20,fontWeight:300,lineHeight:1.05 }}>Marriott International</div>
+          <div style={{ fontSize:10,color:T.txt3,letterSpacing:".03em",marginTop:3 }}>Global Hospitality · Est. 1927 · 30 brands · 141 countries · NYSE: MAR</div>
+        </div>
+        <div style={{ display:"flex",flexWrap:"wrap",gap:4,justifyContent:"flex-end" }}>
+          {tag("HOSPITALITY",T.blue,"rgba(100,145,255,.12)","rgba(100,145,255,.22)")}
+          {tag("🔥 ACTIVE SIGNAL",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)")}
+          {tag("★ IDEAL ICP",T.green,"rgba(74,222,128,.10)","rgba(74,222,128,.2)")}
+        </div>
+      </div>
+
+      {/* Stat bar — always visible */}
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:1,background:"rgba(255,255,255,.07)",borderRadius:8,overflow:"hidden",marginBottom:open?12:0 }}>
+        {[["8,785","Properties"],["30","Brands"],["$23.7B","Revenue"],["~418k","Employees"],["2022","Prior Eval"]].map(([v,l]) => (
+          <div key={l} style={{ background:"rgba(13,14,19,.7)",padding:"9px 12px" }}>
+            <div style={{ fontFamily:"Georgia,serif",fontSize:16,fontWeight:300,color:T.txt,lineHeight:1,marginBottom:2 }}>{v}</div>
+            <div style={{ fontSize:8,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Expandable: description + meta */}
+      <div style={{ maxHeight:open?"200px":"0px",overflow:"hidden",
+        transition:"max-height .4s cubic-bezier(.4,0,.2,1)" }}>
+        <div style={{ paddingTop:12,fontSize:11.5,color:T.txt2,lineHeight:1.68,marginBottom:12,fontWeight:300 }}>
+          World's largest hotel company. Hybrid franchise-managed model with complex F&B spanning full-service restaurants, bars, banquet & catering at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance — blocked by enterprise infrastructure gaps that no longer exist. $1.1B tech investment committed in 2026 with PMS replatform in live deployment. The window is now.
+        </div>
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10 }}>
+          {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
+            <div key={l}>
+              <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
+              <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Toggle */}
+      <button onClick={() => setOpen(!open)} style={{
+        display:"flex",alignItems:"center",gap:5,marginTop:10,
+        background:"none",border:"none",cursor:"pointer",fontFamily:"Jost,sans-serif",
+        fontSize:9,color:T.txt3,letterSpacing:".07em",padding:"2px 0",transition:"color .2s" }}
+        onMouseEnter={e=>e.currentTarget.style.color=T.blue}
+        onMouseLeave={e=>e.currentTarget.style.color=T.txt3}>
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
+          style={{ transition:"transform .3s",transform:open?"rotate(180deg)":"none" }}>
+          <path d="M2 4l4 4 4-4"/>
+        </svg>
+        {open ? "Show less" : "Show more"}
+      </button>
     </div>
   );
 }
@@ -1093,44 +1165,7 @@ function DesktopView({ navigate }) {
         {/* MAIN COL */}
         <div style={{ padding:"20px 24px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14 }}>
           <Reveal delay={40}>
-            <div style={{ ...CARD,padding:16,position:"relative",overflow:"hidden" }} className="living-card hover-lift">
-              <Sheen />
-              {/* Shimmer sweep on load */}
-              <div style={{ position:"absolute",top:0,bottom:0,width:"40%",
-                background:"linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent)",
-                animation:"shimmer 1.8s .3s ease forwards",pointerEvents:"none",zIndex:3 }} />
-              <SecHdr label="Strategic Overview" />
-              <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:10 }}>
-                <div>
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:20,fontWeight:300,lineHeight:1.05 }}>Marriott International</div>
-                  <div style={{ fontSize:10,color:T.txt3,letterSpacing:".03em",marginTop:3 }}>Global Hospitality · Est. 1927 · 30 brands · 141 countries · NYSE: MAR</div>
-                </div>
-                <div style={{ display:"flex",flexWrap:"wrap",gap:4,justifyContent:"flex-end" }}>
-                  {tag("HOSPITALITY",T.blue,"rgba(100,145,255,.12)","rgba(100,145,255,.22)")}
-                  {tag("🔥 ACTIVE SIGNAL",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)")}
-                  {tag("★ IDEAL ICP",T.green,"rgba(74,222,128,.10)","rgba(74,222,128,.2)")}
-                </div>
-              </div>
-              <div style={{ fontSize:11.5,color:T.txt2,lineHeight:1.68,marginBottom:12,fontWeight:300 }}>
-                World's largest hotel company. Hybrid franchise-managed model with complex F&B spanning full-service restaurants, bars, banquet & catering at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance — blocked by enterprise infrastructure gaps that no longer exist. $1.1B tech investment committed in 2026 with PMS replatform in live deployment. The window is now.
-              </div>
-              <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:1,background:"rgba(255,255,255,.07)",borderRadius:8,overflow:"hidden",marginBottom:12 }}>
-                {[["8,785","Properties"],["30","Brands"],["$23.7B","Revenue"],["~418k","Employees"],["2022","Prior Eval"]].map(([v,l]) => (
-                  <div key={l} style={{ background:"rgba(13,14,19,.7)",padding:"9px 12px" }}>
-                    <div style={{ fontFamily:"Georgia,serif",fontSize:16,fontWeight:300,color:T.txt,lineHeight:1,marginBottom:2 }}>{v}</div>
-                    <div style={{ fontSize:8,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10 }}>
-                {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
-                  <div key={l}>
-                    <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
-                    <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <OverviewCard />
           </Reveal>
 
           <Reveal delay={100}>
@@ -1138,15 +1173,28 @@ function DesktopView({ navigate }) {
           </Reveal>
 
           <Reveal delay={160}>
-            <SecHdr label="Ownership & Power Structure" />
-            {[
-              { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
-              { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
-              { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
-            ].map(o => <OwnerRow key={o.name} o={o} />)}
+            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14 }}>
+              <div>
+                <SecHdr label="Ownership & Power Structure" />
+                {[
+                  { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
+                  { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
+                  { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
+                ].map(o => <OwnerRow key={o.name} o={o} />)}
+              </div>
+              <div>
+                <SecHdr label="What's Changed Since 2022" />
+                {[["✓",T.green,"Enterprise KDS live","— was the #1 gap in 2022. Now deployed at scale."],["✓",T.green,"Open APIs mature","— Opera Cloud + Bonvoy fully supported. Blocker gone."],["✓",T.green,"Multi-brand menu mgmt","— centralized with per-location overrides."],["⚡",T.amber,"MICROS EOL confirmed","— Oracle EOL announced. Active search underway."],["→",T.blue,"New CTO in seat 2023","— Drew Pinto. Rationalization mandate. 2022 no was not his."]].map(([icon,c,t,b]) => (
+                  <div key={t} style={{ display:"flex",gap:9,padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:8,marginBottom:4,transition:"all .2s" }}>
+                    <div style={{ fontSize:9,flexShrink:0,paddingTop:2,width:12,color:c }}>{icon}</div>
+                    <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.55 }}><strong style={{ color:T.txt,fontWeight:500 }}>{t}</strong>{b}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </Reveal>
 
-          <Reveal delay={160}>
+          <Reveal delay={200}>
             <SecHdr label="Executive Leadership" />
             {[
               { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",title:"President & CEO",note:"F&B modernization = top 2025 capex priority. Board-level digital mandate.",badge:"Economic Buyer",bc:T.blue,bb:"rgba(100,145,255,.12)",bbr:"rgba(100,145,255,.22)" },
@@ -1156,32 +1204,19 @@ function DesktopView({ navigate }) {
             ].map(e => <ExecRow key={e.name} e={e} />)}
           </Reveal>
 
-          <Reveal delay={220}>
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14 }}>
-              <div>
-                <SecHdr label="Discovery Priorities" />
-                {[["01","Why the 2022 Pilot Stalled","What specifically blocked — API gaps, multi-brand complexity, or champion loss?"],["02","Oracle MICROS Migration Timeline","Which brands are actively replacing. Urgency determines the entry point."],["03","Franchise vs. Corporate Authority","Top-down mandate or franchisee-by-franchisee? This determines the sales play."],["04","PMS + Loyalty Integration Req","Confirm API coverage for Opera Cloud + Bonvoy. Address the 2022 blocker."]].map(([n,t,b]) => (
-                  <div key={n} style={{ display:"flex",gap:10,padding:"8px 11px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
-                    <div style={{ fontSize:9,color:T.txt3,flexShrink:0,width:16,paddingTop:2,fontFamily:"monospace" }}>{n}</div>
-                    <div><div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,marginBottom:2 }}>{t}</div><div style={{ fontSize:10,color:T.txt2,lineHeight:1.55 }}>{b}</div></div>
-                  </div>
-                ))}
-              </div>
-              <div>
-                <SecHdr label="What's Changed Since 2022" />
-                {[["✓",T.green,"Enterprise KDS live","— was the #1 gap in 2022. Now deployed at scale."],["✓",T.green,"Open APIs mature","— Opera Cloud + Bonvoy fully supported. Blocker gone."],["✓",T.green,"Multi-brand menu mgmt","— centralized with per-location overrides."],["⚡",T.amber,"MICROS EOL confirmed","— Oracle EOL announced. Active search underway."],["→",T.blue,"New CTO in seat 2023","— Drew Pinto. Rationalization mandate. 2022 no was not his."]].map(([icon,c,t,b]) => (
-                  <div key={t} style={{ display:"flex",gap:9,padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:8,marginBottom:4 }}>
-                    <div style={{ fontSize:9,flexShrink:0,paddingTop:2,width:12,color:c }}>{icon}</div>
-                    <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.55 }}><strong style={{ color:T.txt,fontWeight:500 }}>{t}</strong>{b}</div>
-                  </div>
-                ))}
-              </div>
+          <Reveal delay={260}>
+            <SecHdr label="Discovery Priorities" />
+            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:8 }}>
+              {[["01","Why the 2022 Pilot Stalled","What specifically blocked — API gaps, multi-brand complexity, or champion loss?"],["02","Oracle MICROS Migration Timeline","Which brands are actively replacing. Urgency determines the entry point."],["03","Franchise vs. Corporate Authority","Top-down mandate or franchisee-by-franchisee? This determines the sales play."],["04","PMS + Loyalty Integration Req","Confirm API coverage for Opera Cloud + Bonvoy. Address the 2022 blocker."]].map(([n,t,b]) => (
+                <div key={n} style={{ display:"flex",gap:10,padding:"8px 11px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
+                  <div style={{ fontSize:9,color:T.txt3,flexShrink:0,width:16,paddingTop:2,fontFamily:"monospace" }}>{n}</div>
+                  <div><div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,marginBottom:2 }}>{t}</div><div style={{ fontSize:10,color:T.txt2,lineHeight:1.55 }}>{b}</div></div>
+                </div>
+              ))}
             </div>
           </Reveal>
 
-
-
-          <Reveal delay={340}>
+          <Reveal delay={320}>
             <SecHdr label="Block Ecosystem Pitch Map" />
             {[["▶","Restaurants Premium"," — Full-service F&B, course mgmt, multi-revenue-center reporting. MICROS replacement at lower TCO."],["▶","Enterprise KDS"," — High-volume, multi-station kitchen display. Closes the primary 2022 gap."],["▶","Multi-location Menu Mgmt"," — Centralized control with per-location overrides. Solves franchise POS variance."],["▶","Open APIs → Opera + Bonvoy"," — Native PMS & loyalty integration. The 2022 blocker is gone."],["▶","Square Banking + Payroll"," — Expansion motion post-POS via confirmed NetSuite integration."]].map(([a,t,b]) => (
               <div key={t} style={{ display:"flex",gap:8,padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:8,marginBottom:4 }}>
@@ -1261,6 +1296,7 @@ export default function Intelligence() {
         @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
         @keyframes gateIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
         @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        @keyframes arrowBounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(3px);opacity:1}}
         @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-33.33%)}}
         @keyframes floaterPulse{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 16px rgba(74,222,128,.12);}50%{box-shadow:0 4px 24px rgba(0,0,0,.5),0 0 24px rgba(74,222,128,.22);}}
         @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
