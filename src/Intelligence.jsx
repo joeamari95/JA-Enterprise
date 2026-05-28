@@ -1293,8 +1293,6 @@ function DesktopView({ navigate }) {
           padding:"12px 14px 0 14px",
           overflowY:"auto",
           display:"flex",flexDirection:"column",gap:8,
-          background:"rgba(13,14,19,.4)",
-          backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",
         }}>
           <div style={{ paddingBottom:6,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
             <div style={{ fontFamily:"Georgia,serif",fontSize:14,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
