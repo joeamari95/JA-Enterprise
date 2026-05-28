@@ -935,8 +935,6 @@ function SfdcFloater() { return <SfdcToast />; }
 
 function ThesisCard({ isMobile }) {
   const [expanded, setExpanded] = useState(false);
-  const PREVIEW_HEIGHT = 68;
-  const BG = "#0d0e13";
 
   return (
     <div style={{
@@ -973,35 +971,23 @@ function ThesisCard({ isMobile }) {
         </div>
       </div>
 
-      {/* Text clip container */}
-      <div style={{
-        maxHeight: expanded ? "400px" : `${PREVIEW_HEIGHT}px`,
-        overflow:"hidden",
-        transition:"max-height .45s cubic-bezier(.4,0,.2,1)",
-        maskImage: expanded ? "none" : "linear-gradient(to bottom, black 30%, transparent 100%)",
-        WebkitMaskImage: expanded ? "none" : "linear-gradient(to bottom, black 30%, transparent 100%)",
-      }}>
-        <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300 }}>
-          Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
-        </div>
-        {expanded && (
-          <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,
-            marginTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
-            Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
-          </div>
-        )}
+      {/* Text — always fully visible, no fade */}
+      <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300,marginBottom:8 }}>
+        Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
       </div>
-
-      {/* Clean in-flow toggle — no absolute, no floating arrow */}
+      {expanded && (
+        <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,
+          marginTop:4,borderTop:"1px solid rgba(255,255,255,.06)" }}>
+          Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
+        </div>
+      )}
       <button onClick={() => setExpanded(!expanded)} style={{
         display:"flex",alignItems:"center",justifyContent:"center",
-        width:"100%",marginTop:8,paddingTop:6,paddingBottom:2,
-        background:"none",border:"none",borderTop:"1px solid rgba(255,255,255,.05)",
-        cursor:"pointer" }}>
-        <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
-          stroke="rgba(255,255,255,.18)" strokeWidth="1.5"
-          style={{ transition:"transform .3s",transform:expanded?"rotate(180deg)":"none",
-            animation:expanded?"none":"arrowBounce 1.8s ease-in-out infinite" }}>
+        width:"100%",marginTop:6,paddingTop:5,paddingBottom:1,
+        background:"none",border:"none",borderTop:"1px solid rgba(255,255,255,.05)",cursor:"pointer" }}>
+        <svg width="9" height="9" viewBox="0 0 12 12" fill="none"
+          stroke="rgba(255,255,255,.15)" strokeWidth="1.5"
+          style={{ transition:"transform .3s",transform:expanded?"rotate(180deg)":"none" }}>
           <path d="M2 4l4 4 4-4"/>
         </svg>
       </button>
@@ -1290,20 +1276,26 @@ function DesktopView({ navigate }) {
         {/* LEFT COL */}
         <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16 }}>
           <Reveal delay={0}>
-            <div style={{ paddingBottom:14,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:21,fontWeight:300,lineHeight:1.05,marginBottom:5 }}>Marriott<br/>International</div>
-              <div style={{ fontSize:10,color:T.txt3,letterSpacing:".04em",lineHeight:1.7 }}>marriott.com · Global Hospitality<br/>Bethesda, MD · NYSE: MAR<br/>Est. 1927 · 30 Brands</div>
-              <div style={{ display:"flex",flexWrap:"wrap",gap:4,marginTop:8 }}>
-                {tag("HOSPITALITY",T.blue,"rgba(100,145,255,.12)","rgba(100,145,255,.22)")}
-                {tag("FRANCHISE",T.teal,"rgba(45,212,180,.10)","rgba(45,212,180,.2)")}
-                {tag("🔥 HOT",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)")}
-                {tag("★ IDEAL ICP",T.green,"rgba(74,222,128,.10)","rgba(74,222,128,.2)")}
-              </div>
+            <div style={{ paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
+              <div style={{ fontFamily:"Georgia,serif",fontSize:17,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
+              <div style={{ fontSize:8.5,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands</div>
             </div>
           </Reveal>
           <Reveal delay={100}>
             <SecHdr label="Confirmed Partners" />
             {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={false} />)}
+          </Reveal>
+          <Reveal delay={120}>
+            <SecHdr label="Re-Engagement Strategy" />
+            {[["#1","Drew Pinto Direct","Lead with MICROS pressure. 'What's Changed' framing — capability update, not a cold pitch."],["#2","Oracle Partner Path","Stevie Nicks has active Marriott relationship. Co-sell MICROS EOL through the partner channel."],["#3","Courtyard GM Loop","Re-engage pilot GMs via Christine McVie. Updated testimonials + referral to Drew Pinto's team."]].map(([n,t,b]) => (
+              <div key={n} style={{ padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:3 }}>
+                  <span style={{ fontFamily:"monospace",fontSize:8.5,color:T.blue,flexShrink:0 }}>{n}</span>
+                  <span style={{ fontFamily:"Georgia,serif",fontSize:10.5,fontWeight:300,color:T.txt }}>{t}</span>
+                </div>
+                <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:16 }}>{b}</div>
+              </div>
+            ))}
           </Reveal>
           <Reveal delay={140}>
             <SecHdr label="F&B Stack" />
@@ -1316,18 +1308,6 @@ function DesktopView({ navigate }) {
           </Reveal>
           <Reveal delay={180}>
             <SfdcWidget isMobile={false} />
-          </Reveal>
-          <Reveal delay={210}>
-            <SecHdr label="Re-Engagement Strategy" />
-            {[["#1","Drew Pinto Direct","\"What's Changed\" framing. Lead with MICROS pressure. Capability update, not a cold pitch."],["#2","Oracle Partner Path","Stevie Nicks at Oracle has active Marriott relationship. Co-sell MICROS EOL through the partner channel."],["#3","Courtyard GM Loop","Re-engage pilot GMs via Christine McVie. Updated testimonials + corporate referral to Drew Pinto's team."]].map(([n,t,b]) => (
-              <div key={n} style={{ padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:3 }}>
-                  <span style={{ fontFamily:"monospace",fontSize:8.5,color:T.blue,flexShrink:0 }}>{n}</span>
-                  <span style={{ fontFamily:"Georgia,serif",fontSize:10.5,fontWeight:300,color:T.txt }}>{t}</span>
-                </div>
-                <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:16 }}>{b}</div>
-              </div>
-            ))}
           </Reveal>
         </div>
 
