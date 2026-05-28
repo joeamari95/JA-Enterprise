@@ -1337,7 +1337,7 @@ function DesktopView({ navigate }) {
           </Reveal>
 
           <Reveal delay={160}>
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,height:280 }}>
+            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,height:380 }}>
               {/* OWNERSHIP */}
               <div style={{
                 background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.07) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.04) 0%,transparent 60%)",
