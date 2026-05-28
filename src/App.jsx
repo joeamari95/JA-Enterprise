@@ -132,6 +132,7 @@ function BuildCard({ b, bi = 0, isMobile, delay = 0, enterClass = "" }) {
   const [ref, visible] = useInView(0.08);
   const navigate = useNavigate();
   const isIntelligence = b.name === "Enterprise Intelligence";
+  const isDealDashboard = b.name === "Deal Dashboards";
 
   return (
     <div ref={ref} className={enterClass}
@@ -180,6 +181,16 @@ function BuildCard({ b, bi = 0, isMobile, delay = 0, enterClass = "" }) {
               }}>
               View Live →
             </button>
+          )}
+          {isDealDashboard && (
+            <a href="/deal/" onClick={e => e.stopPropagation()}
+              style={{ display:"flex",alignItems:"center",gap:6,marginTop:4,padding:"7px 14px",
+                background:`${b.color}14`,border:`1px solid ${b.color}44`,borderRadius:8,
+                cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,
+                color:b.color,letterSpacing:".06em",textDecoration:"none",width:"fit-content",
+              }}>
+              View Live →
+            </a>
           )}
         </div>
       )}
