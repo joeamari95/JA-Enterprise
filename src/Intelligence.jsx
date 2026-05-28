@@ -508,11 +508,9 @@ function PasswordGate({ onUnlock }) {
 // ── MOBILE VIEW ──
 function MobileView({ navigate }) {
   const dotColors = { red:T.red, green:T.green, amber:T.amber, blue:T.blue };
-  const BG = "#0d0e13";
 
   return (
     <div style={{ background:T.bg,minHeight:"100vh",fontFamily:"Jost,sans-serif",color:T.txt,position:"relative",WebkitFontSmoothing:"antialiased" }}>
-      {/* BG orbs */}
       <div style={{ position:"fixed",inset:0,zIndex:0,pointerEvents:"none" }}>
         <div style={{ position:"absolute",width:400,height:400,top:"-10%",left:"-15%",borderRadius:"50%",background:"radial-gradient(ellipse,rgba(24,60,200,.15),transparent 65%)",filter:"blur(70px)",animation:"drift1 26s ease-in-out infinite" }} />
         <div style={{ position:"absolute",width:360,height:360,top:"30%",right:"-15%",borderRadius:"50%",background:"radial-gradient(ellipse,rgba(90,30,190,.10),transparent 65%)",filter:"blur(70px)",animation:"drift2 32s ease-in-out infinite" }} />
@@ -538,43 +536,104 @@ function MobileView({ navigate }) {
       </div>
       <SfdcFloater />
 
-      {/* Content */}
-      <div style={{ position:"relative",zIndex:1,padding:"12px 12px 48px",display:"flex",flexDirection:"column",gap:10 }}>
+      <div style={{ position:"relative",zIndex:1,padding:"12px 12px 60px",display:"flex",flexDirection:"column",gap:10 }}>
 
-        {/* Company header — compact */}
-        <Reveal delay={0}>
-          <div style={{ ...CARD,padding:"14px 14px 12px" }}>
-            <Sheen />
-            <div style={{ marginBottom:10 }}>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:22,fontWeight:300,lineHeight:1.05,marginBottom:3 }}>Marriott International</div>
-              <div style={{ fontSize:9,color:T.txt3,letterSpacing:".04em" }}>NYSE: MAR · Global Hospitality · Est. 1927 · 30 Brands</div>
-            </div>
-            {/* 5-col metrics */}
-            <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:4 }}>
-              {[["8,785",T.teal,"Props"],["141",T.blue,"Countries"],["~418k",T.txt2,"Staff"],["$23.7B",T.green,"Rev"],["2022",T.amber,"Eval"]].map(([v,c,l]) => (
-                <div key={l} style={{ padding:"6px 6px",background:"rgba(255,255,255,.04)",
-                  border:"1px solid rgba(255,255,255,.07)",borderRadius:7,textAlign:"center" }}>
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:c,lineHeight:1,marginBottom:2 }}>{v}</div>
-                  <div style={{ fontSize:6.5,color:T.txt4,letterSpacing:".07em",textTransform:"uppercase" }}>{l}</div>
-                </div>
-              ))}
-            </div>
+        {/* ── PRIORITY 1: Company card ── */}
+        <div style={{ ...CARD,padding:"14px 14px 12px" }}>
+          <Sheen />
+          <div style={{ marginBottom:10 }}>
+            <div style={{ fontFamily:"Georgia,serif",fontSize:20,fontWeight:300,lineHeight:1.05,marginBottom:3 }}>Marriott International</div>
+            <div style={{ fontSize:8.5,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands · 141 Countries</div>
           </div>
-        </Reveal>
+          <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:4 }}>
+            {[["8,785",T.teal,"Props"],["141",T.blue,"Ctries"],["~418k",T.txt2,"Staff"],["$23.7B",T.green,"Rev"],["2022",T.amber,"Eval"]].map(([v,c,l]) => (
+              <div key={l} style={{ padding:"6px 4px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:7,textAlign:"center" }}>
+                <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:c,lineHeight:1,marginBottom:2 }}>{v}</div>
+                <div style={{ fontSize:6,color:T.txt4,letterSpacing:".06em",textTransform:"uppercase" }}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        {/* Core Thesis */}
-        <Reveal delay={40}>
-          <ThesisCard isMobile={true} />
-        </Reveal>
+        {/* ── PRIORITY 2: Core Thesis ── */}
+        <ThesisCard isMobile={true} />
 
-        {/* Partners */}
-        <Reveal delay={80}>
-          <SecHdr label="Confirmed Partners" />
-          {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={true} />)}
-        </Reveal>
+        {/* ── PRIORITY 3: What's Changed + Key Stakeholders side by side ── */}
+        <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:8 }}>
+          {/* What's Changed — compact left */}
+          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px",display:"flex",flexDirection:"column" }}>
+            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>What's Changed</div>
+            {[
+              [T.green,"MICROS EOL"],
+              [T.green,"Enterprise KDS"],
+              [T.green,"Open APIs"],
+              [T.blue,"New CTO"],
+              [T.teal,"Multi-brand Menu"],
+            ].map(([c,t]) => (
+              <div key={t} style={{ display:"flex",alignItems:"center",gap:6,marginBottom:5 }}>
+                <div style={{ width:4,height:4,borderRadius:"50%",background:c,flexShrink:0,boxShadow:`0 0 4px ${c}88` }} />
+                <span style={{ fontSize:9.5,color:T.txt2,lineHeight:1.3 }}>{t}</span>
+              </div>
+            ))}
+          </div>
 
-        {/* Live Signals — compact */}
-        <Reveal delay={110}>
+          {/* Key Stakeholders — compact right */}
+          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px",display:"flex",flexDirection:"column" }}>
+            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>Stakeholders</div>
+            {[
+              [T.red,"Capuano","CEO"],
+              [T.red,"D. Pinto","CTO"],
+              [T.blue,"Oberg","CFO"],
+              [T.red,"Manga","CIO"],
+              [T.amber,"VP F&B","Open"],
+            ].map(([c,n,r]) => (
+              <div key={n} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:5 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:5 }}>
+                  <div style={{ width:2,height:14,background:c,borderRadius:1,flexShrink:0 }} />
+                  <span style={{ fontSize:10,color:T.txt,fontFamily:"Georgia,serif",fontWeight:300 }}>{n}</span>
+                </div>
+                <span style={{ fontSize:8,color:T.txt4 }}>{r}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── PRIORITY 4: Partners + Re-engagement side by side ── */}
+        <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:8 }}>
+          {/* Partners */}
+          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px" }}>
+            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>Partners</div>
+            {PARTNERS.map(p => (
+              <div key={p.id} style={{ marginBottom:8 }}>
+                <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,marginBottom:3 }}>{p.name}</div>
+                <button onClick={() => {}} style={{
+                  width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:4,
+                  padding:"4px 0",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",
+                  borderRadius:6,cursor:"pointer",fontFamily:"Jost,sans-serif",
+                  fontSize:7.5,fontWeight:400,color:"rgba(255,255,255,.38)",letterSpacing:".04em" }}>
+                  <svg width="8" height="8" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" style={{flexShrink:0}}>
+                    <rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 5l7 5 7-5"/>
+                  </svg>
+                  Message on Slack
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Re-engagement */}
+          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px" }}>
+            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>Re-Engagement</div>
+            {[["#1","Pinto Direct"],["#2","Oracle Path"],["#3","GM Loop"]].map(([n,t]) => (
+              <div key={n} style={{ display:"flex",alignItems:"center",gap:6,marginBottom:7 }}>
+                <span style={{ fontSize:8,color:T.blue,fontFamily:"monospace",flexShrink:0 }}>{n}</span>
+                <span style={{ fontSize:10,color:T.txt2,fontFamily:"Georgia,serif",fontWeight:300,lineHeight:1.3 }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── PRIORITY 5: Live Signals ── */}
+        <div>
           <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
             <SecHdr label="Live Signals" />
             <div style={{ display:"flex",alignItems:"center",gap:4,fontSize:8.5,color:T.green,letterSpacing:".08em",marginBottom:10 }}>
@@ -582,93 +641,58 @@ function MobileView({ navigate }) {
             </div>
           </div>
           {SIGNALS.map(s => (
-            <a key={s.title} href={s.url} target="_blank" rel="noreferrer" style={{ textDecoration:"none",display:"block",marginBottom:6 }}>
-              <div style={{ padding:"9px 11px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:3 }}>
+            <a key={s.title} href={s.url} target="_blank" rel="noreferrer" style={{ textDecoration:"none",display:"block",marginBottom:5 }}>
+              <div style={{ padding:"8px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:2 }}>
                   <div style={{ width:4,height:4,borderRadius:"50%",flexShrink:0,background:dotColors[s.dot],boxShadow:`0 0 5px ${dotColors[s.dot]}88` }} />
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,color:T.txt,lineHeight:1.3,flex:1 }}>{s.title}</div>
-                  <span style={{ fontSize:9,color:T.txt4,flexShrink:0 }}>↗</span>
+                  <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,lineHeight:1.3,flex:1 }}>{s.title}</div>
+                  <span style={{ fontSize:8.5,color:T.txt4,flexShrink:0 }}>↗</span>
                 </div>
-                <div style={{ fontSize:10,color:T.txt2,lineHeight:1.5,paddingLeft:10 }}>{s.body}</div>
-                <div style={{ fontSize:8,color:T.blue,marginTop:2,paddingLeft:10,letterSpacing:".03em" }}>{s.meta}</div>
+                <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:10 }}>{s.body}</div>
+                <div style={{ fontSize:7.5,color:T.blue,marginTop:2,paddingLeft:10,letterSpacing:".03em" }}>{s.meta}</div>
               </div>
             </a>
           ))}
-        </Reveal>
+        </div>
 
-        {/* Key Stakeholders — uses same OwnerRow as desktop */}
-        <Reveal delay={140}>
-          <SecHdr label="Key Stakeholders" />
-          {[
-            { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
-            { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
-            { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction.",stakeholders:"Board-level influence",prior:"No direct engagement",sentiment:"Margin-focused",sentimentColor:T.blue },
-          ].map(o => <OwnerRow key={o.name} o={o} />)}
-        </Reveal>
+        {/* ── BELOW FOLD: Full Stakeholders ── */}
+        <SecHdr label="Key Stakeholders · Full" />
+        {[
+          { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate. Ultimate economic buyer.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
+          { name:"Drew Pinto",href:"#",role:"EVP & Chief Revenue + Technology Officer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech. Evaluated Square in 2022 — that no was not his.",action:"→ Primary re-engagement. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
+          { name:"Leeny Oberg",href:"#",role:"EVP & CFO",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Controls capex. Lead with per-property TCO reduction.",action:"→ ROI narrative.",stakeholders:"Finance team",prior:"No direct engagement",sentiment:"ROI-focused",sentimentColor:T.blue },
+          { name:"Naveen Manga",href:"#",role:"Global CIO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"2026 is 'a year for scale.' Cited front desk systems complexity.",action:"→ Systems consolidation narrative.",stakeholders:"IT + Ops teams",prior:"No prior engagement",sentiment:"Active",sentimentColor:T.green },
+          { name:"VP F&B Americas",href:"#",role:"Active Search — Role Open",sig:"GAP",sigColor:T.amber,sigBg:"rgba(245,166,35,.13)",border:T.amber,body:"Key buyer seat is vacant. Engage before new exec is onboarded.",action:"→ Engage now during transition.",stakeholders:"F&B ops team",prior:"Prior pilot champion",sentiment:"Transition",sentimentColor:T.amber },
+        ].map(o => <OwnerRow key={o.name} o={o} />)}
 
-        {/* Exec Leadership — uses same ExecRow as desktop */}
-        <Reveal delay={170}>
-          <SecHdr label="Executive Leadership" />
-          {[
-            { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",title:"President & CEO",note:"F&B modernization = top 2025 capex priority. Board-level digital mandate.",badge:"Economic Buyer",bc:T.blue,bb:"rgba(100,145,255,.12)",bbr:"rgba(100,145,255,.22)" },
-            { name:"Drew Pinto",href:"#",title:"EVP & Global CTO",note:"Evaluated Square in 2022. Re-engage on enterprise deployment. 2022 no was not his decision.",badge:"Tech Buyer",bc:T.teal,bb:"rgba(45,212,180,.10)",bbr:"rgba(45,212,180,.2)" },
-            { name:"Leeny Oberg",href:"#",title:"EVP & CFO",note:"Lead with per-property TCO reduction and Square ↔ NetSuite reconciliation story.",badge:"CFO",bc:T.blue,bb:"rgba(100,145,255,.12)",bbr:"rgba(100,145,255,.22)" },
-            { name:"VP F&B Americas",href:"#",title:"Active Search — Role Open",note:"Leadership transition. Engage before new exec is fully onboarded.",badge:"⚠ Gap",bc:T.red,bb:"rgba(255,96,96,.12)",bbr:"rgba(255,96,96,.2)" },
-          ].map(e => <ExecRow key={e.name} e={e} />)}
-        </Reveal>
+        {/* ── BELOW FOLD: What's Changed full ── */}
+        <SecHdr label="What's Changed Since 2022" />
+        {[
+          { rank:1, color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"MICROS EOL — Forced Migration", change:"Oracle confirmed MICROS 3700 end-of-life.", why:"The 2022 objection is gone — they have to move.", buyer:"Drew Pinto (CTO)" },
+          { rank:2, color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Enterprise KDS Now Live", change:"Square's enterprise KDS deployed at scale.", why:"VP F&B's primary technical objection is closed.", buyer:"VP F&B Americas" },
+          { rank:3, color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Open APIs — Opera + Bonvoy", change:"Native PMS and loyalty integration live.", why:"The 2022 integration blocker is gone.", buyer:"Drew Pinto + IT" },
+          { rank:4, color:T.blue, bg:"rgba(100,145,255,.08)", border:"rgba(100,145,255,.18)", title:"New CTO — Fresh Mandate", change:"Drew Pinto joined 2023 with rationalization mandate.", why:"The 2022 'no' was not his decision.", buyer:"All stakeholders" },
+          { rank:5, color:T.teal, bg:"rgba(45,212,180,.07)", border:"rgba(45,212,180,.15)", title:"Multi-brand Menu Management", change:"Centralized menu control with per-location overrides.", why:"Franchise variance now solvable.", buyer:"Operations + Franchise" },
+        ].map(item => <ChangedRow key={item.rank} item={item} defaultOpen={item.rank===1} />)}
 
-        {/* What's Changed — uses same ChangedRow as desktop */}
-        <Reveal delay={200}>
-          <SecHdr label="What's Changed Since 2022" />
-          {[
-            { rank:1, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"MICROS EOL — Forced Migration", change:"Oracle confirmed MICROS 3700 end-of-life. Marriott brands actively evaluating replacements.", why:"The 2022 objection was 'we're not replacing what works.' That's gone — they have to move.", buyer:"Drew Pinto (CTO)" },
-            { rank:2, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Enterprise KDS Now Live", change:"Square's enterprise kitchen display system is deployed at scale — the #1 gap from 2022.", why:"VP F&B's primary technical objection is closed. Full-service F&B at property scale is proven.", buyer:"VP F&B Americas" },
-            { rank:3, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Open APIs — Opera + Bonvoy", change:"Native PMS and loyalty integration now fully supported. The 2022 blocker is gone.", why:"Pinto's IT team blocked on integration gaps. Those gaps no longer exist.", buyer:"Drew Pinto + IT" },
-            { rank:4, icon:"→", color:T.blue, bg:"rgba(100,145,255,.08)", border:"rgba(100,145,255,.18)", title:"New CTO — Fresh Mandate", change:"Drew Pinto joined 2023 with an active tech rationalization mandate.", why:"The 2022 'no' was not his decision. He evaluates Square with fresh eyes.", buyer:"All stakeholders" },
-            { rank:5, icon:"✓", color:T.teal, bg:"rgba(45,212,180,.07)", border:"rgba(45,212,180,.15)", title:"Multi-brand Menu Management", change:"Centralized menu control with per-location overrides now live.", why:"Franchise variance was the ops objection. Now solvable with a single platform.", buyer:"Operations + Franchise" },
-          ].map(item => <ChangedRow key={item.rank} item={item} defaultOpen={item.rank===1} />)}
-        </Reveal>
-
-        {/* Discovery */}
-        <Reveal delay={230}>
-          <SecHdr label="Discovery Priorities" />
-          {[["01","Why the 2022 Pilot Stalled","What specifically blocked — API gaps, multi-brand complexity, or champion loss?"],
-            ["02","MICROS Migration Timeline","Which brands are actively replacing. Urgency determines the entry point."],
-            ["03","Franchise vs. Corporate","Top-down mandate or franchisee-by-franchisee? Determines the sales play."],
-            ["04","PMS + Loyalty Integration","Confirm API coverage for Opera Cloud + Bonvoy. Address the 2022 blocker."]].map(([n,t,b]) => (
-            <div key={n} style={{ display:"flex",gap:9,padding:"9px 11px",background:"rgba(255,255,255,.03)",
-              border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
-              <div style={{ fontSize:8.5,color:T.txt4,flexShrink:0,paddingTop:1,fontFamily:"monospace" }}>{n}</div>
-              <div>
-                <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,marginBottom:2 }}>{t}</div>
-                <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.5 }}>{b}</div>
-              </div>
+        {/* ── BELOW FOLD: Discovery ── */}
+        <SecHdr label="Discovery Priorities" />
+        {[["01","Why the 2022 Pilot Stalled","API gaps, multi-brand complexity, or champion loss?"],
+          ["02","MICROS Migration Timeline","Which brands are replacing. Urgency determines entry point."],
+          ["03","Franchise vs. Corporate","Top-down mandate or franchisee-by-franchisee?"],
+          ["04","PMS + Loyalty Integration","Opera Cloud + Bonvoy API coverage?"]].map(([n,t,b]) => (
+          <div key={n} style={{ display:"flex",gap:9,padding:"9px 11px",background:"rgba(255,255,255,.03)",
+            border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
+            <div style={{ fontSize:8.5,color:T.txt4,flexShrink:0,paddingTop:1,fontFamily:"monospace" }}>{n}</div>
+            <div>
+              <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,marginBottom:2 }}>{t}</div>
+              <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.5 }}>{b}</div>
             </div>
-          ))}
-        </Reveal>
+          </div>
+        ))}
 
-        {/* SFDC */}
-        <Reveal delay={260}>
-          <SfdcWidget isMobile={true} />
-        </Reveal>
-
-        {/* Pitch Map */}
-        <Reveal delay={290}>
-          <SecHdr label="Block Ecosystem Pitch Map" />
-          {[["Restaurants Premium","MICROS replacement. Full-service F&B, course mgmt, multi-revenue-center reporting."],
-            ["Enterprise KDS","High-volume kitchen display at scale. Closes the primary 2022 gap."],
-            ["Multi-location Menu","Centralized control with per-location overrides. Solves franchise variance."],
-            ["Open APIs → Opera + Bonvoy","Native PMS & loyalty integration. The 2022 blocker is gone."],
-            ["Square Banking + Payroll","Expansion motion post-POS via confirmed NetSuite integration."]].map(([t,b]) => (
-            <div key={t} style={{ display:"flex",gap:8,padding:"7px 11px",background:"rgba(255,255,255,.03)",
-              border:"1px solid rgba(255,255,255,.07)",borderRadius:8,marginBottom:4 }}>
-              <div style={{ fontSize:9,color:T.blue,flexShrink:0,paddingTop:2,fontFamily:"monospace" }}>▶</div>
-              <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.5 }}>
-                <strong style={{ color:T.txt,fontWeight:500 }}>{t}</strong> — {b}
-              </div>
-            </div>
-          ))}
-        </Reveal>
+        {/* ── BELOW FOLD: SFDC ── */}
+        <SfdcWidget isMobile={true} />
 
       </div>
     </div>
