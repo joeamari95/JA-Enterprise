@@ -1372,13 +1372,15 @@ function DesktopView({ navigate }) {
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"12px 12px",
                 display:"flex",flexDirection:"column",
                 boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
-                position:"relative",overflow:"hidden",
+                position:"relative",minHeight:0,
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
                 <SecHdr label="What's Changed Since 2022" />
-                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
+                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1,overflowY:"auto",minHeight:0,scrollbarWidth:"thin",
+                  maskImage:"linear-gradient(to bottom,black 0%,black 80%,transparent 100%)",
+                  WebkitMaskImage:"linear-gradient(to bottom,black 0%,black 80%,transparent 100%)" }}>
                   {[
                     { rank:1, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"MICROS EOL — Forced Migration", change:"Oracle confirmed MICROS 3700 end-of-life. Marriott brands actively evaluating replacements.", why:"The 2022 objection was 'we're not replacing what works.' That's gone — they have to move.", buyer:"Drew Pinto (CTO)" },
                     { rank:2, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Enterprise KDS Now Live", change:"Square's enterprise kitchen display system is deployed at scale — the #1 gap from 2022.", why:"VP F&B's primary technical objection is closed. Full-service F&B at property scale is proven.", buyer:"VP F&B Americas" },
