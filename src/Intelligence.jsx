@@ -835,19 +835,19 @@ function SfdcFloater() { return <SfdcToast />; }
 function ThesisCard({ isMobile }) {
   const [expanded, setExpanded] = useState(false);
   const PREVIEW_HEIGHT = 68;
+  const BG = "#0d0e13";
 
   return (
     <div style={{
-      background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.08) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.05) 0%,transparent 60%)",
+      background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%),rgba(13,14,19,.6)",
       backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",
-      border:"1px solid rgba(255,255,255,.12)",borderRadius:16,
-      boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
+      border:"1px solid rgba(255,255,255,.10)",borderRadius:16,
+      boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.18)",
       padding:16,position:"relative" }}>
-      {/* Top sheen */}
       <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
-        background:"linear-gradient(90deg,transparent,rgba(255,255,255,.32) 50%,transparent)",pointerEvents:"none" }} />
+        background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",pointerEvents:"none" }} />
 
-      {/* Header — always visible */}
+      {/* Header */}
       <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
         <div style={{ display:"flex",alignItems:"center",gap:7 }}>
           <div style={{ width:6,height:6,borderRadius:"50%",background:T.teal,boxShadow:"0 0 8px rgba(45,212,180,.8)" }} />
@@ -856,50 +856,51 @@ function ThesisCard({ isMobile }) {
         <div style={{ display:"flex",alignItems:"center",gap:8 }}>
           <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",
             border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
-          <button onClick={() => setExpanded(!expanded)} style={{
-            display:"flex",alignItems:"center",gap:4,
-            background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.12)",
-            borderRadius:6,padding:"3px 8px",cursor:"pointer",fontFamily:"Jost,sans-serif",
-            fontSize:8.5,color:T.txt3,letterSpacing:".06em",transition:"all .2s" }}>
-            <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
-              style={{ transition:"transform .3s",transform:expanded?"rotate(180deg)":"none" }}>
-              <path d="M2 4l4 4 4-4"/>
-            </svg>
-            {expanded ? "Collapse" : "Expand"}
-          </button>
+          {expanded && (
+            <button onClick={() => setExpanded(false)} style={{
+              display:"flex",alignItems:"center",gap:4,
+              background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.10)",
+              borderRadius:6,padding:"3px 8px",cursor:"pointer",fontFamily:"Jost,sans-serif",
+              fontSize:8.5,color:T.txt3,letterSpacing:".06em" }}>
+              <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
+                style={{ transform:"rotate(180deg)" }}>
+                <path d="M2 4l4 4 4-4"/>
+              </svg>
+              Collapse
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Body with gradient overlay and arrow — all in one relative container */}
+      {/* Text clip container */}
       <div style={{ position:"relative" }}>
-        {/* Text — clipped by maxHeight */}
         <div style={{
           maxHeight: expanded ? "400px" : `${PREVIEW_HEIGHT}px`,
           overflow:"hidden",
           transition:"max-height .45s cubic-bezier(.4,0,.2,1)",
         }}>
-          <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,marginBottom:10,fontWeight:300 }}>
+          <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,fontWeight:300,
+            paddingBottom: expanded ? 0 : 8 }}>
             Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
           </div>
           {expanded && (
-            <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
+            <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,
+              marginTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
               Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
             </div>
           )}
         </div>
 
-        {/* Dark gradient fade + bouncing arrow — sits on top of clipped text */}
+        {/* Gradient + arrow — OUTSIDE the overflow:hidden div, absolute to this wrapper */}
         {!expanded && (
-          <div
-            onClick={() => setExpanded(true)}
-            style={{
-              position:"absolute", bottom:0, left:0, right:0, height:56,
-              background:"linear-gradient(to bottom, transparent 0%, rgba(8,9,16,.82) 45%, rgba(8,9,16,.97) 100%)",
-              cursor:"pointer", display:"flex", alignItems:"flex-end", justifyContent:"center",
-              paddingBottom:4,
-            }}>
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
-              stroke="rgba(255,255,255,.28)" strokeWidth="1.5"
+          <div onClick={() => setExpanded(true)} style={{
+            position:"absolute", bottom:0, left:-16, right:-16,
+            height:60, cursor:"pointer", zIndex:2,
+            background:`linear-gradient(to bottom, transparent 0%, ${BG}cc 50%, ${BG}f5 100%)`,
+            display:"flex", alignItems:"flex-end", justifyContent:"center", paddingBottom:6,
+          }}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+              stroke="rgba(255,255,255,.35)" strokeWidth="1.5"
               style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
               <path d="M2 4l4 4 4-4"/>
             </svg>
