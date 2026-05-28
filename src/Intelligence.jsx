@@ -1331,7 +1331,12 @@ function DesktopView({ navigate }) {
 
         {/* MAIN COL */}
         <div style={{ position:"relative", minHeight:0, display:"flex", flexDirection:"column", overflow:"hidden" }}>
-          <div style={{ padding:"20px 24px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14,flex:1,minHeight:0 }}>
+          <div style={{
+            padding:"20px 24px 0 24px",
+            overflowY:"auto",display:"flex",flexDirection:"column",gap:14,flex:1,minHeight:0,
+            maskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
+            WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
+          }}>
           <Reveal delay={40}>
             <OverviewCard />
           </Reveal>
@@ -1428,18 +1433,6 @@ function DesktopView({ navigate }) {
               </div>
             ))}
           </Reveal>
-          </div>
-          {/* Bottom fade — hints more content below */}
-          <div style={{
-            position:"absolute",bottom:0,left:0,right:0,height:60,
-            background:"linear-gradient(to bottom,transparent 0%,rgba(13,14,19,.7) 60%,rgba(13,14,19,.95) 100%)",
-            pointerEvents:"none",zIndex:2,
-            display:"flex",alignItems:"flex-end",justifyContent:"center",paddingBottom:8,
-          }}>
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-              style={{animation:"arrowBounce 1.8s ease-in-out infinite",opacity:.35}}>
-              <path d="M4 6l4 4 4-4" stroke="rgba(255,255,255,.7)" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
           </div>
         </div>
 
