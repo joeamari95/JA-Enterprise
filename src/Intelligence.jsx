@@ -838,14 +838,14 @@ function ThesisCard({ isMobile }) {
 
   return (
     <div style={{
-      background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(100,145,255,.10) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(45,212,180,.06) 0%,transparent 60%)",
+      background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.08) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.05) 0%,transparent 60%)",
       backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",
-      border:"1px solid rgba(100,145,255,.22)",borderRadius:16,
+      border:"1px solid rgba(255,255,255,.12)",borderRadius:16,
       boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
       padding:16,position:"relative" }}>
       {/* Top sheen */}
       <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
-        background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)",pointerEvents:"none" }} />
+        background:"linear-gradient(90deg,transparent,rgba(255,255,255,.32) 50%,transparent)",pointerEvents:"none" }} />
 
       {/* Header — always visible */}
       <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
@@ -1051,7 +1051,7 @@ function ChangedRow({ item }) {
 function OverviewCard() {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ ...CARD,padding:16,position:"relative",overflow:"hidden" }} className="living-card hover-lift">
+    <div style={{ ...CARD, padding:16, position:"relative" }} className="living-card hover-lift">
       <Sheen />
       <div style={{ position:"absolute",top:0,bottom:0,width:"40%",
         background:"linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent)",
@@ -1071,7 +1071,8 @@ function OverviewCard() {
       </div>
 
       {/* Stat bar — always visible */}
-      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:1,background:"rgba(255,255,255,.07)",borderRadius:8,overflow:"hidden",marginBottom:open?12:0 }}>
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:1,
+        background:"rgba(255,255,255,.07)",borderRadius:8,overflow:"hidden" }}>
         {[["8,785","Properties"],["30","Brands"],["$23.7B","Revenue"],["~418k","Employees"],["2022","Prior Eval"]].map(([v,l]) => (
           <div key={l} style={{ background:"rgba(13,14,19,.7)",padding:"9px 12px" }}>
             <div style={{ fontFamily:"Georgia,serif",fontSize:16,fontWeight:300,color:T.txt,lineHeight:1,marginBottom:2 }}>{v}</div>
@@ -1080,35 +1081,52 @@ function OverviewCard() {
         ))}
       </div>
 
-      {/* Expandable: description + meta */}
-      <div style={{ maxHeight:open?"200px":"0px",overflow:"hidden",
-        transition:"max-height .4s cubic-bezier(.4,0,.2,1)" }}>
-        <div style={{ paddingTop:12,fontSize:11.5,color:T.txt2,lineHeight:1.68,marginBottom:12,fontWeight:300 }}>
-          World's largest hotel company. Hybrid franchise-managed model with complex F&B spanning full-service restaurants, bars, banquet & catering at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance — blocked by enterprise infrastructure gaps that no longer exist. $1.1B tech investment committed in 2026 with PMS replatform in live deployment. The window is now.
+      {/* Expandable body — with gradient fade overlay when collapsed */}
+      <div style={{ position:"relative" }}>
+        <div style={{ maxHeight:open?"220px":"0px", overflow:"hidden",
+          transition:"max-height .4s cubic-bezier(.4,0,.2,1)" }}>
+          <div style={{ paddingTop:12,fontSize:11.5,color:T.txt2,lineHeight:1.68,marginBottom:12,fontWeight:300 }}>
+            World's largest hotel company. Hybrid franchise-managed model with complex F&B spanning full-service restaurants, bars, banquet & catering at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance — blocked by enterprise infrastructure gaps that no longer exist. $1.1B tech investment committed in 2026 with PMS replatform in live deployment. The window is now.
+          </div>
+          <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,paddingBottom:8 }}>
+            {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
+              <div key={l}>
+                <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
+                <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10 }}>
-          {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
-            <div key={l}>
-              <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
-              <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
-            </div>
-          ))}
-        </div>
+
+        {/* Dark gradient + bouncing arrow when collapsed */}
+        {!open && (
+          <div onClick={() => setOpen(true)} style={{
+            position:"absolute", bottom:0, left:0, right:0, height:32,
+            background:"linear-gradient(to bottom, transparent 0%, rgba(8,9,16,.82) 45%, rgba(8,9,16,.96) 100%)",
+            cursor:"pointer", display:"flex", alignItems:"flex-end", justifyContent:"center",
+            paddingBottom:2,
+          }}>
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
+              stroke="rgba(255,255,255,.28)" strokeWidth="1.5"
+              style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </div>
+        )}
       </div>
 
-      {/* Toggle */}
-      <button onClick={() => setOpen(!open)} style={{
-        display:"flex",alignItems:"center",gap:5,marginTop:10,
-        background:"none",border:"none",cursor:"pointer",fontFamily:"Jost,sans-serif",
-        fontSize:9,color:T.txt3,letterSpacing:".07em",padding:"2px 0",transition:"color .2s" }}
-        onMouseEnter={e=>e.currentTarget.style.color=T.blue}
-        onMouseLeave={e=>e.currentTarget.style.color=T.txt3}>
-        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
-          style={{ transition:"transform .3s",transform:open?"rotate(180deg)":"none" }}>
-          <path d="M2 4l4 4 4-4"/>
-        </svg>
-        {open ? "Show less" : "Show more"}
-      </button>
+      {/* Collapse arrow when open */}
+      {open && (
+        <button onClick={() => setOpen(false)} style={{
+          display:"flex",alignItems:"center",justifyContent:"center",
+          width:"100%",paddingTop:6,background:"none",border:"none",cursor:"pointer" }}>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
+            stroke="rgba(255,255,255,.22)" strokeWidth="1.5"
+            style={{ transform:"rotate(180deg)" }}>
+            <path d="M2 4l4 4 4-4"/>
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
@@ -1235,14 +1253,14 @@ function DesktopView({ navigate }) {
             <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch" }}>
               {/* OWNERSHIP */}
               <div style={{
-                background:"radial-gradient(ellipse 80% 60% at 10% 0%,rgba(255,96,96,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(100,145,255,.04) 0%,transparent 60%)",
+                background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.07) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.04) 0%,transparent 60%)",
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
                 display:"flex",flexDirection:"column",
-                boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)",
+                boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
                 position:"relative",overflow:"hidden",
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
-                  background:"linear-gradient(90deg,transparent,rgba(255,96,96,.3) 40%,rgba(100,145,255,.2) 70%,transparent)",
+                  background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
                 <SecHdr label="Ownership & Power Structure" />
                 <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
@@ -1256,14 +1274,14 @@ function DesktopView({ navigate }) {
 
               {/* WHAT'S CHANGED */}
               <div style={{
-                background:"radial-gradient(ellipse 80% 60% at 10% 0%,rgba(74,222,128,.05) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(45,212,180,.03) 0%,transparent 60%)",
+                background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.07) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.04) 0%,transparent 60%)",
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
                 display:"flex",flexDirection:"column",
-                boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)",
+                boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
                 position:"relative",overflow:"hidden",
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
-                  background:"linear-gradient(90deg,transparent,rgba(74,222,128,.25) 40%,rgba(45,212,180,.2) 70%,transparent)",
+                  background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
                 <SecHdr label="What's Changed Since 2022" />
                 <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
