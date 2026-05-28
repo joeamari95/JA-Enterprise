@@ -331,10 +331,9 @@ function PartnerCard({ p, isMobile }) {
   return (
     <>
       {modal && <SlackModal partner={p} onClose={handleSlackClose} isMobile={isMobile} />}
-      <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%)",
-        border:`1px solid ${open?"rgba(255,255,255,.14)":"rgba(255,255,255,.08)"}`,borderRadius:12,marginBottom:7,
-        overflow:"hidden",transition:"border-color .2s",
-        boxShadow:open?"0 8px 24px rgba(0,0,0,.3)":"0 2px 8px rgba(0,0,0,.2)" }}>
+      <div style={{ background:"rgba(255,255,255,.04)",
+        border:`1px solid ${open?"rgba(255,255,255,.14)":"rgba(255,255,255,.08)"}`,borderRadius:10,marginBottom:6,
+        overflow:"hidden",transition:"border-color .2s" }}>
 
         {/* Always-visible collapsed row */}
         <div style={{ padding:"10px 12px",cursor:"pointer" }} onClick={() => setOpen(!open)}>
@@ -1281,7 +1280,16 @@ function DesktopView({ navigate }) {
         gridTemplateColumns:"220px 1fr 268px",height:"calc(100vh - 78px)",overflow:"hidden" }}>
 
         {/* LEFT COL */}
-        <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"12px 14px 0 14px",overflowY:"auto",display:"flex",flexDirection:"column",gap:8 }}>
+        <div style={{
+          borderRight:"1px solid rgba(255,255,255,.07)",
+          padding:"12px 14px 0 14px",
+          overflowY:"auto",
+          display:"flex",flexDirection:"column",gap:8,
+          background:"rgba(13,14,19,.4)",
+          backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",
+          maskImage:"linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+        }}>
           <div style={{ paddingBottom:6,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
             <div style={{ fontFamily:"Georgia,serif",fontSize:14,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
             <div style={{ fontSize:8,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands</div>
