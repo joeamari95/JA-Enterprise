@@ -27,6 +27,23 @@ function useIsMobile() {
   return mob;
 }
 
+// Global SFDC activity log — shared across components
+const sfdcLog = { items: [], listeners: [] };
+function logSfdc(action) {
+  const entry = { action, time: new Date() };
+  sfdcLog.items.push(entry);
+  sfdcLog.listeners.forEach(fn => fn());
+}
+function useSfdcCount() {
+  const [count, setCount] = useState(sfdcLog.items.length);
+  useEffect(() => {
+    const fn = () => setCount(sfdcLog.items.length);
+    sfdcLog.listeners.push(fn);
+    return () => { sfdcLog.listeners = sfdcLog.listeners.filter(f => f !== fn); };
+  }, []);
+  return count;
+}
+
 const T = {
   bg: "#0d0e13", txt: "rgba(255,255,255,.93)", txt2: "rgba(255,255,255,.72)",
   txt3: "rgba(255,255,255,.44)", txt4: "rgba(255,255,255,.28)",
@@ -144,6 +161,7 @@ function SlackModal({ partner, onClose, isMobile }) {
   const handleCopy = () => {
     navigator.clipboard.writeText(msg).catch(() => {});
     setCopied(true);
+    logSfdc(`Slack drafted: ${partner.pm} re: Marriott`);
     setTimeout(() => setStep("reminder"), 800);
   };
 
@@ -491,23 +509,27 @@ function MobileView({ navigate }) {
       <Grain />
 
       {/* Mobile nav */}
-      <div style={{ position:"sticky",top:0,zIndex:100,height:52,display:"flex",alignItems:"center",
-        justifyContent:"space-between",padding:"0 16px",
-        background:"rgba(10,11,16,.88)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
-        borderBottom:"1px solid rgba(255,255,255,.08)" }}>
-        <button onClick={() => navigate("/")} style={{ display:"flex",alignItems:"center",gap:5,
-          background:"none",border:"none",cursor:"pointer",fontFamily:"Jost,sans-serif",
-          fontSize:11,color:"rgba(255,255,255,.45)",letterSpacing:".08em",padding:"4px 0" }}>
-          ← Back
-        </button>
-        <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:400,letterSpacing:".02em",color:T.txt }}>
-          Marriott <span style={{ color:"rgba(255,255,255,.2)",margin:"0 4px" }}>/</span> Intelligence
+      <div style={{ position:"sticky",top:0,zIndex:100 }}>
+        <div style={{ height:52,display:"flex",alignItems:"center",
+          justifyContent:"space-between",padding:"0 16px",
+          background:"rgba(10,11,16,.88)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
+          borderBottom:"1px solid rgba(255,255,255,.08)" }}>
+          <button onClick={() => navigate("/")} style={{ display:"flex",alignItems:"center",gap:5,
+            background:"none",border:"none",cursor:"pointer",fontFamily:"Jost,sans-serif",
+            fontSize:11,color:"rgba(255,255,255,.45)",letterSpacing:".08em",padding:"4px 0" }}>
+            ← Back
+          </button>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:400,letterSpacing:".02em",color:T.txt }}>
+            Marriott <span style={{ color:"rgba(255,255,255,.2)",margin:"0 4px" }}>/</span> Intelligence
+          </div>
+          <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em" }}>
+            <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />
+            LIVE
+          </div>
         </div>
-        <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em" }}>
-          <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />
-          LIVE
-        </div>
+        <DisclaimerTicker />
       </div>
+      <SfdcFloater />
 
       {/* Scrollable content */}
       <div style={{ position:"relative",zIndex:1,padding:"16px 14px 40px",display:"flex",flexDirection:"column",gap:14 }}>
@@ -681,6 +703,122 @@ function MobileView({ navigate }) {
   );
 }
 
+// ── DISCLAIMER TICKER ──
+function DisclaimerTicker() {
+  const text = "All information is publicly available — no proprietary data, internal systems, or confidential insights from Block / Square have been used. Built for demonstration purposes only.";
+  return (
+    <div style={{
+      position:"relative", overflow:"hidden",
+      borderBottom:"1px solid rgba(255,255,255,.05)",
+      background:"rgba(255,255,255,.018)",
+      height:26, display:"flex", alignItems:"center",
+    }}>
+      <div style={{
+        display:"flex", whiteSpace:"nowrap",
+        animation:"tickerScroll 38s linear infinite",
+      }}>
+        {[0,1,2].map(i => (
+          <span key={i} style={{
+            fontSize:8.5, color:"rgba(255,255,255,.28)",
+            letterSpacing:".07em", padding:"0 60px",
+            fontFamily:"Jost,sans-serif", fontWeight:300,
+          }}>
+            {text}
+            <span style={{ color:"rgba(255,255,255,.12)", margin:"0 20px" }}>·</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── SFDC MICRO LOG BUTTON ──
+function SfdcMicroLog({ label, small }) {
+  const [logged, setLogged] = useState(false);
+  const handle = (e) => {
+    e.stopPropagation();
+    if (logged) return;
+    setLogged(true);
+    logSfdc(label);
+  };
+  return (
+    <button onClick={handle} title={`Log to SFDC: ${label}`} style={{
+      display:"flex", alignItems:"center", gap:3,
+      padding: small ? "2px 6px" : "3px 8px",
+      background: logged ? "rgba(74,222,128,.10)" : "rgba(255,255,255,.04)",
+      border: logged ? "1px solid rgba(74,222,128,.22)" : "1px solid rgba(255,255,255,.08)",
+      borderRadius:5, cursor: logged ? "default" : "pointer",
+      fontFamily:"Jost,sans-serif",
+      fontSize: small ? 7.5 : 8.5,
+      color: logged ? T.green : "rgba(255,255,255,.28)",
+      letterSpacing:".05em", transition:"all .2s",
+      flexShrink:0,
+    }}>
+      <span style={{ fontSize: small ? 8 : 9 }}>{logged ? "✓" : "📊"}</span>
+      {logged ? "Logged" : "SFDC"}
+    </button>
+  );
+}
+
+// ── FLOATING SFDC COUNTER ──
+function SfdcFloater() {
+  const count = useSfdcCount();
+  const [showLog, setShowLog] = useState(false);
+  if (count === 0) return null;
+  return (
+    <div style={{
+      position:"fixed", bottom:20, right:20, zIndex:150,
+    }}>
+      {showLog && (
+        <div style={{
+          position:"absolute", bottom:44, right:0, width:260,
+          background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.09) 0%,transparent 65%),#0f1018",
+          border:"1px solid rgba(255,255,255,.14)", borderRadius:12,
+          boxShadow:"0 16px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12)",
+          padding:"12px 14px", animation:"gateIn .25s ease both",
+        }}>
+          <div style={{ fontSize:8.5,fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",
+            color:"rgba(255,255,255,.4)",marginBottom:10 }}>Logged Activities</div>
+          {sfdcLog.items.map((item,i) => (
+            <div key={i} style={{ display:"flex",justifyContent:"space-between",
+              padding:"4px 0",borderBottom:"1px solid rgba(255,255,255,.05)",
+              fontSize:9.5,color:T.txt2 }}>
+              <span>{item.action}</span>
+              <span style={{ color:T.txt4,fontSize:8.5,fontFamily:"monospace" }}>
+                {item.time.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}
+              </span>
+            </div>
+          ))}
+          <div style={{ marginTop:10,fontSize:9,color:T.txt3,textAlign:"center" }}>
+            Tap "Batch Log" to push all to SFDC
+          </div>
+          <button style={{ width:"100%",marginTop:6,padding:"6px 0",
+            background:"rgba(74,222,128,.10)",border:"1px solid rgba(74,222,128,.22)",
+            borderRadius:7,cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:9,
+            fontWeight:500,color:T.green,letterSpacing:".06em" }}>
+            Batch Log to SFDC ({count})
+          </button>
+        </div>
+      )}
+      <button onClick={() => setShowLog(!showLog)} style={{
+        display:"flex",alignItems:"center",gap:7,
+        padding:"8px 14px",
+        background:"radial-gradient(ellipse at 30% 0%,rgba(74,222,128,.18),rgba(13,14,19,.95))",
+        border:"1px solid rgba(74,222,128,.3)",borderRadius:100,
+        boxShadow:"0 4px 20px rgba(0,0,0,.4),0 0 16px rgba(74,222,128,.12)",
+        cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,
+        color:T.green,letterSpacing:".06em",backdropFilter:"blur(12px)",
+        animation:"floaterPulse 3s ease-in-out infinite",
+      }}>
+        <span style={{ fontSize:12 }}>📊</span>
+        {count} unlogged · SFDC
+        <div style={{ width:6,height:6,borderRadius:"50%",background:T.green,
+          boxShadow:"0 0 6px rgba(74,222,128,.8)",flexShrink:0 }} />
+      </button>
+    </div>
+  );
+}
+
 function ThesisCard({ isMobile }) {
   const [expanded, setExpanded] = useState(false);
   const PREVIEW_HEIGHT = 72; // px — shows ~2 lines, always visible
@@ -767,10 +905,21 @@ function ThesisCard({ isMobile }) {
 
 function OwnerRow({ o }) {
   const [open, setOpen] = useState(false);
+  const [hov, setHov] = useState(false);
   return (
-    <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.05) 0%,transparent 65%)",
-      border:`1px solid ${open?"rgba(255,255,255,.13)":"rgba(255,255,255,.08)"}`,
-      borderLeft:`2px solid ${o.border}`,borderRadius:10,marginBottom:5,overflow:"hidden",transition:"border-color .2s" }}>
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        background: hov
+          ? "radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.08) 0%,transparent 65%)"
+          : "radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.05) 0%,transparent 65%)",
+        border:`1px solid ${open||hov?"rgba(255,255,255,.14)":"rgba(255,255,255,.08)"}`,
+        borderLeft:`2px solid ${o.border}`,borderRadius:10,marginBottom:5,overflow:"hidden",
+        transition:"all .22s",
+        transform: hov ? "translateY(-1px)" : "none",
+        boxShadow: hov ? `0 6px 20px rgba(0,0,0,.35),0 0 12px ${o.border}18` : "0 2px 8px rgba(0,0,0,.2)",
+      }}>
       <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"8px 12px",cursor:"pointer" }}>
         <div style={{ flex:1,display:"flex",alignItems:"center",gap:8,minWidth:0 }}>
           <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>
@@ -778,6 +927,7 @@ function OwnerRow({ o }) {
           </div>
           <div style={{ fontSize:9,color:T.txt3,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{o.role}</div>
         </div>
+        <SfdcMicroLog label={`Contact touched: ${o.name}`} small={true} />
         <span style={{ fontSize:8,fontWeight:500,letterSpacing:".08em",padding:"2px 7px",borderRadius:3,
           color:o.sigColor,background:o.sigBg,flexShrink:0 }}>{o.sig}</span>
         <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
@@ -797,10 +947,18 @@ function OwnerRow({ o }) {
 
 function ExecRow({ e }) {
   const [open, setOpen] = useState(false);
+  const [hov, setHov] = useState(false);
   return (
-    <div style={{ background:"rgba(255,255,255,.03)",
-      border:`1px solid ${open?"rgba(255,255,255,.13)":"rgba(255,255,255,.07)"}`,
-      borderRadius:9,marginBottom:5,overflow:"hidden",transition:"border-color .2s" }}>
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        background: hov ? "rgba(255,255,255,.05)" : "rgba(255,255,255,.03)",
+        border:`1px solid ${open||hov?"rgba(255,255,255,.13)":"rgba(255,255,255,.07)"}`,
+        borderRadius:9,marginBottom:5,overflow:"hidden",transition:"all .22s",
+        transform: hov ? "translateY(-1px)" : "none",
+        boxShadow: hov ? "0 6px 20px rgba(0,0,0,.3)" : "none",
+      }}>
       <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"8px 12px",cursor:"pointer" }}>
         <div style={{ flex:1,display:"flex",alignItems:"center",gap:8,minWidth:0 }}>
           <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>
@@ -808,6 +966,7 @@ function ExecRow({ e }) {
           </div>
           <div style={{ fontSize:9,color:T.txt3,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{e.title}</div>
         </div>
+        <SfdcMicroLog label={`Contact touched: ${e.name}`} small={true} />
         <span style={{ fontSize:8,fontWeight:500,letterSpacing:".07em",padding:"2px 8px",borderRadius:3,
           whiteSpace:"nowrap",flexShrink:0,color:e.bc,background:e.bb,border:`1px solid ${e.bbr}` }}>{e.badge}</span>
         <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
@@ -850,34 +1009,39 @@ function DesktopView({ navigate }) {
       <Grain />
 
       {/* NAV */}
-      <div style={{ position:"fixed",top:0,left:0,right:0,zIndex:100,height:52,display:"flex",
-        alignItems:"center",justifyContent:"space-between",padding:"0 32px",
-        background:"rgba(10,11,16,.82)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
-        borderBottom:"1px solid rgba(255,255,255,.08)",
-        boxShadow:"0 1px 0 rgba(255,255,255,.06),0 8px 24px rgba(0,0,0,.3)" }}>
-        <div style={{ fontFamily:"Georgia,serif",fontSize:15.5,fontWeight:400,letterSpacing:".04em" }}>
-          Joseph <span style={{ color:"rgba(255,255,255,.2)",margin:"0 6px" }}>/</span> Amari
-        </div>
-        <div style={{ display:"flex",alignItems:"center",gap:10 }}>
-          <button onClick={() => navigate("/")} style={{ fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,
-            letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",background:"none",
-            border:"none",cursor:"pointer",padding:"5px 16px",borderRadius:100,transition:"color .2s" }}>← Back</button>
-          <div style={{ display:"flex",alignItems:"center",gap:8,padding:"4px 14px",borderRadius:100,
-            background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.12)" }}>
-            <span style={{ fontSize:10,fontWeight:500,letterSpacing:".08em",textTransform:"uppercase",color:"rgba(255,255,255,.96)" }}>Enterprise Intelligence</span>
+      <div style={{ position:"fixed",top:0,left:0,right:0,zIndex:100 }}>
+        <div style={{ height:52,display:"flex",
+          alignItems:"center",justifyContent:"space-between",padding:"0 32px",
+          background:"rgba(10,11,16,.82)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
+          borderBottom:"1px solid rgba(255,255,255,.08)",
+          boxShadow:"0 1px 0 rgba(255,255,255,.06),0 8px 24px rgba(0,0,0,.3)" }}>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:15.5,fontWeight:400,letterSpacing:".04em" }}>
+            Joseph <span style={{ color:"rgba(255,255,255,.2)",margin:"0 6px" }}>/</span> Amari
+          </div>
+          <div style={{ display:"flex",alignItems:"center",gap:10 }}>
+            <button onClick={() => navigate("/")} style={{ fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,
+              letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",background:"none",
+              border:"none",cursor:"pointer",padding:"5px 16px",borderRadius:100,transition:"color .2s" }}>← Back</button>
+            <div style={{ display:"flex",alignItems:"center",gap:8,padding:"4px 14px",borderRadius:100,
+              background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.12)" }}>
+              <span style={{ fontSize:10,fontWeight:500,letterSpacing:".08em",textTransform:"uppercase",color:"rgba(255,255,255,.96)" }}>Enterprise Intelligence</span>
+            </div>
+          </div>
+          <div style={{ display:"flex",alignItems:"center",gap:14 }}>
+            <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em",fontWeight:500 }}>
+              <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
+            </div>
+            <div style={{ fontSize:9.5,color:T.txt3,letterSpacing:".04em",fontFamily:"monospace" }}>{clock}</div>
           </div>
         </div>
-        <div style={{ display:"flex",alignItems:"center",gap:14 }}>
-          <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em",fontWeight:500 }}>
-            <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
-          </div>
-          <div style={{ fontSize:9.5,color:T.txt3,letterSpacing:".04em",fontFamily:"monospace" }}>{clock}</div>
-        </div>
+        <DisclaimerTicker />
       </div>
 
+      <SfdcFloater />
+
       {/* 3-COL */}
-      <div style={{ position:"relative",zIndex:1,paddingTop:52,display:"grid",
-        gridTemplateColumns:"220px 1fr 268px",height:"calc(100vh - 52px)",overflow:"hidden" }}>
+      <div style={{ position:"relative",zIndex:1,paddingTop:78,display:"grid",
+        gridTemplateColumns:"220px 1fr 268px",height:"calc(100vh - 78px)",overflow:"hidden" }}>
 
         {/* LEFT COL */}
         <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16 }}>
@@ -929,8 +1093,12 @@ function DesktopView({ navigate }) {
         {/* MAIN COL */}
         <div style={{ padding:"20px 24px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14 }}>
           <Reveal delay={40}>
-            <div style={{ ...CARD,padding:16 }} className="living-card">
+            <div style={{ ...CARD,padding:16,position:"relative",overflow:"hidden" }} className="living-card hover-lift">
               <Sheen />
+              {/* Shimmer sweep on load */}
+              <div style={{ position:"absolute",top:0,bottom:0,width:"40%",
+                background:"linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent)",
+                animation:"shimmer 1.8s .3s ease forwards",pointerEvents:"none",zIndex:3 }} />
               <SecHdr label="Strategic Overview" />
               <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:10 }}>
                 <div>
@@ -1093,7 +1261,11 @@ export default function Intelligence() {
         @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
         @keyframes gateIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
         @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        .living-card{animation:borderGlow 4s ease-in-out infinite;}
+        @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-33.33%)}}
+        @keyframes floaterPulse{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 16px rgba(74,222,128,.12);}50%{box-shadow:0 4px 24px rgba(0,0,0,.5),0 0 24px rgba(74,222,128,.22);}}
+        @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+        .hover-lift{transition:transform .22s ease,box-shadow .22s ease;}
+        .hover-lift:hover{transform:translateY(-2px);}
       `}</style>
       {!unlocked
         ? <PasswordGate onUnlock={handleUnlock} />
