@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Intelligence from "./Intelligence.jsx";
+import DealDashboard from "./DealDashboard.jsx";
 
 function useInView(threshold = 0.12) {
   const ref = useRef(null);
@@ -183,14 +184,15 @@ function BuildCard({ b, bi = 0, isMobile, delay = 0, enterClass = "" }) {
             </button>
           )}
           {isDealDashboard && (
-            <a href="/deal/" onClick={e => e.stopPropagation()}
+            <button
+              onClick={(e) => { e.stopPropagation(); navigate("/deal"); }}
               style={{ display:"flex",alignItems:"center",gap:6,marginTop:4,padding:"7px 14px",
                 background:`${b.color}14`,border:`1px solid ${b.color}44`,borderRadius:8,
                 cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,
-                color:b.color,letterSpacing:".06em",textDecoration:"none",width:"fit-content",
+                color:b.color,letterSpacing:".06em",width:"fit-content",
               }}>
               View Live →
-            </a>
+            </button>
           )}
         </div>
       )}
@@ -517,6 +519,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Portfolio />} />
         <Route path="/intelligence" element={<Intelligence />} />
+        <Route path="/deal" element={<DealDashboard />} />
       </Routes>
     </BrowserRouter>
   );
