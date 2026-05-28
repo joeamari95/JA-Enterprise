@@ -932,11 +932,7 @@ function ThesisCard({ isMobile }) {
 
   return (
     <div style={{
-      background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%),rgba(13,14,19,.6)",
-      backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",
-      border:"1px solid rgba(255,255,255,.10)",borderRadius:16,
-      boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.18)",
-      padding:16,position:"relative" }}>
+      ...CARD, padding:16 }}>
       <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
         background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",pointerEvents:"none" }} />
 
@@ -1189,16 +1185,29 @@ function OverviewCard() {
       </div>
 
       {/* Expandable body */}
-      <div style={{ maxHeight:open?"220px":"0px", overflow:"hidden",
+      <div style={{ maxHeight:open?"320px":"0px", overflow:"hidden",
         transition:"max-height .4s cubic-bezier(.4,0,.2,1)" }}>
         <div style={{ paddingTop:12,fontSize:11,color:T.txt2,lineHeight:1.68,marginBottom:10,fontWeight:300 }}>
           World's largest hotel company. Hybrid franchise-managed model with complex F&B at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance. $1.1B tech investment in 2026 with PMS replatform in active deployment.
         </div>
-        <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,paddingBottom:4 }}>
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:12,paddingBottom:0 }}>
           {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
             <div key={l}>
               <div style={{ fontSize:8,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
               <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize:8,color:T.txt4,letterSpacing:".1em",textTransform:"uppercase",marginBottom:6 }}>Institutional Investors</div>
+        <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:5,paddingBottom:4 }}>
+          {[["Vanguard Group","8.9%","Index / Passive"],["BlackRock","7.2%","Index / Passive"],["State Street","4.1%","Index / Passive"],["Capital Group","3.8%","Active"]].map(([n,s,t]) => (
+            <div key={n} style={{ padding:"5px 8px",background:"rgba(255,255,255,.03)",
+              border:"1px solid rgba(255,255,255,.07)",borderRadius:7 }}>
+              <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:1 }}>
+                <span style={{ fontSize:9.5,color:T.txt,fontWeight:400 }}>{n}</span>
+                <span style={{ fontSize:9,color:T.blue,fontFamily:"monospace" }}>{s}</span>
+              </div>
+              <div style={{ fontSize:7.5,color:T.txt4 }}>{t}</div>
             </div>
           ))}
         </div>
@@ -1344,11 +1353,19 @@ function DesktopView({ navigate }) {
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
                 <SecHdr label="Key Stakeholders" />
-                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
+                <div style={{ height:360,overflowY:"auto",display:"flex",flexDirection:"column",gap:4,
+                  scrollbarWidth:"thin",paddingRight:2 }}>
                   {[
-                    { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
-                    { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
-                    { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction.",stakeholders:"Board-level influence",prior:"No direct engagement",sentiment:"Margin-focused",sentimentColor:T.blue },
+                    { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate. Ultimate economic buyer. Has referenced 2022 Square eval publicly.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
+                    { name:"Drew Pinto",href:"#",role:"EVP & Chief Revenue + Technology Officer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022 — that no was not his. Active tech rationalization mandate.",action:"→ Primary re-engagement. He knows Square. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
+                    { name:"Leeny Oberg",href:"#",role:"EVP & CFO",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Controls capex. Lead with per-property TCO reduction and Square ↔ NetSuite reconciliation story.",action:"→ ROI narrative. Per-property cost reduction.",stakeholders:"Finance team",prior:"No direct engagement",sentiment:"ROI-focused",sentimentColor:T.blue },
+                    { name:"Naveen Manga",href:"#",role:"Global Chief Information Officer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"2026 is 'a year for scale.' Cited front desk systems complexity publicly — exact Square F&B pain point.",action:"→ Systems consolidation narrative. Direct Square angle.",stakeholders:"IT + Ops teams",prior:"No prior engagement",sentiment:"Active",sentimentColor:T.green },
+                    { name:"Julius Robinson",href:"#",role:"Chief Sales & Marketing Officer",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Oversees commercial performance across all brands. F&B revenue modernization ties directly to RevPAR improvement.",action:"→ Revenue performance narrative.",stakeholders:"Commercial team",prior:"No prior engagement",sentiment:"Neutral",sentimentColor:T.txt3 },
+                    { name:"VP F&B Americas",href:"#",role:"Active Search — Role Open",sig:"GAP",sigColor:T.amber,sigBg:"rgba(245,166,35,.13)",border:T.amber,body:"Key buyer seat is vacant. Engage before new exec is fully onboarded — clean slate opportunity.",action:"→ Engage now during transition window.",stakeholders:"F&B ops team",prior:"Prior pilot champion",sentiment:"Transition",sentimentColor:T.amber },
+                    { name:"David Grissen",href:"#",role:"Group President, Americas",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Owns P&L across Americas portfolio. F&B modernization at property level directly impacts his margins.",action:"→ Americas-first pilot expansion narrative.",stakeholders:"Americas GMs",prior:"No prior engagement",sentiment:"Receptive",sentimentColor:T.green },
+                    { name:"Brian King",href:"#",role:"President, Global Ops & Development",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Oversees franchise relationships and property development. Top-down vs. franchisee motion question runs through him.",action:"→ Franchise authority clarity needed.",stakeholders:"Franchise network",prior:"No prior engagement",sentiment:"Neutral",sentimentColor:T.txt3 },
+                    { name:"Tina Edmundson",href:"#",role:"President, Luxury & Premium Brands",sig:"LOW",sigColor:T.txt3,sigBg:"rgba(255,255,255,.05)",border:"rgba(255,255,255,.2)",body:"Full-service F&B is concentrated in luxury tier. Indirect buyer — brand standards flow through her org.",action:"→ Luxury brand F&B differentiation angle.",stakeholders:"Brand leadership",prior:"No prior engagement",sentiment:"Indirect",sentimentColor:T.txt4 },
+                    { name:"Courtyard GM Network",href:"#",role:"NYC + Boston Pilot Properties",sig:"WARM",sigColor:T.green,sigBg:"rgba(74,222,128,.13)",border:T.green,body:"Live Square performance data from 2022 pilot. Can advocate upward to Pinto's team.",action:"→ Re-engage via Christine McVie for referral + testimonial.",stakeholders:"NYC + Boston GMs",prior:"2022 live pilot",sentiment:"Active Ref",sentimentColor:T.green },
                   ].map(o => <OwnerRow key={o.name} o={o} />)}
                 </div>
               </div>
