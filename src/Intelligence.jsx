@@ -51,10 +51,10 @@ const T = {
 };
 
 const CARD = {
-  background: "radial-gradient(ellipse 65% 55% at 12% 0%, rgba(255,255,255,.08) 0%, transparent 65%), radial-gradient(ellipse 55% 45% at 88% 100%, rgba(255,255,255,.05) 0%, transparent 60%)",
-  backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
-  border: "1px solid rgba(255,255,255,.10)", borderRadius: 16,
-  boxShadow: "0 4px 6px rgba(0,0,0,.2), 0 12px 32px rgba(0,0,0,.45), 0 24px 48px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.04), inset 1px 0 0 rgba(255,255,255,.06), inset -1px 0 0 rgba(255,255,255,.03)",
+  background: "radial-gradient(ellipse 70% 50% at 15% 0%, rgba(255,255,255,.09) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 85% 100%, rgba(255,255,255,.05) 0%, transparent 55%)",
+  backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+  border: "1px solid rgba(255,255,255,.11)", borderRadius: 16,
+  boxShadow: "0 2px 4px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.5), 0 20px 48px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.20), inset 0 -1px 0 rgba(255,255,255,.03), inset 1px 0 0 rgba(255,255,255,.05), inset -1px 0 0 rgba(255,255,255,.02)",
   position: "relative", overflow: "hidden",
 };
 
@@ -947,7 +947,22 @@ function OwnerRow({ o }) {
       </div>
       {open && (
         <div style={{ padding:"0 12px 10px",borderTop:"1px solid rgba(255,255,255,.06)" }}>
-          <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.58,paddingTop:8,marginBottom:6 }}>{o.body}</div>
+          <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.58,paddingTop:8,marginBottom:8 }}>{o.body}</div>
+          {/* Stakeholder meta row */}
+          <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:7 }}>
+            <div style={{ padding:"5px 8px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",borderRadius:7 }}>
+              <div style={{ fontSize:7.5,color:T.txt4,letterSpacing:".08em",textTransform:"uppercase",marginBottom:2 }}>Stakeholders</div>
+              <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{o.stakeholders || "+12"}</div>
+            </div>
+            <div style={{ padding:"5px 8px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)",borderRadius:7 }}>
+              <div style={{ fontSize:7.5,color:T.txt4,letterSpacing:".08em",textTransform:"uppercase",marginBottom:2 }}>Prior Engagement</div>
+              <div style={{ fontSize:10,color:T.txt2,fontWeight:400,lineHeight:1.3 }}>{o.prior || "2022 pilot eval"}</div>
+            </div>
+            <div style={{ padding:"5px 8px",background:"rgba(255,255,255,.03)",border:`1px solid ${o.sentimentColor||"rgba(255,255,255,.06)"}44`,borderRadius:7 }}>
+              <div style={{ fontSize:7.5,color:T.txt4,letterSpacing:".08em",textTransform:"uppercase",marginBottom:2 }}>Sentiment</div>
+              <div style={{ fontSize:10,color:o.sentimentColor||T.txt2,fontWeight:400 }}>{o.sentiment || "Warm"}</div>
+            </div>
+          </div>
           <div style={{ fontSize:9.5,color:T.teal,fontStyle:"italic" }}>{o.action}</div>
         </div>
       )}
@@ -1051,6 +1066,8 @@ function ChangedRow({ item }) {
 // ── OVERVIEW CARD — collapsible ──
 function OverviewCard() {
   const [open, setOpen] = useState(false);
+  const BG = "#0d0e13";
+
   return (
     <div style={{ ...CARD, padding:16, position:"relative" }} className="living-card hover-lift">
       <Sheen />
@@ -1058,57 +1075,36 @@ function OverviewCard() {
         background:"linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent)",
         animation:"shimmer 1.8s .3s ease forwards",pointerEvents:"none",zIndex:3 }} />
 
-      {/* Always visible: title + badges + stat bar */}
-      <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:10 }}>
-        <div>
-          <div style={{ fontFamily:"Georgia,serif",fontSize:20,fontWeight:300,lineHeight:1.05 }}>Marriott International</div>
-          <div style={{ fontSize:10,color:T.txt3,letterSpacing:".03em",marginTop:3 }}>Global Hospitality · Est. 1927 · 30 brands · 141 countries · NYSE: MAR</div>
-        </div>
-        <div style={{ display:"flex",flexWrap:"wrap",gap:4,justifyContent:"flex-end" }}>
-          {tag("HOSPITALITY",T.blue,"rgba(100,145,255,.12)","rgba(100,145,255,.22)")}
-          {tag("🔥 ACTIVE SIGNAL",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)")}
-          {tag("★ IDEAL ICP",T.green,"rgba(74,222,128,.10)","rgba(74,222,128,.2)")}
+      {/* Title only — no badges */}
+      <div style={{ marginBottom:10 }}>
+        <div style={{ fontFamily:"Georgia,serif",fontSize:20,fontWeight:300,lineHeight:1.05 }}>Marriott International</div>
+        <div style={{ fontSize:9.5,color:T.txt3,letterSpacing:".04em",marginTop:3 }}>
+          NYSE: MAR · Global Hospitality · Est. 1927 · 30 Brands · 141 Countries
         </div>
       </div>
 
-      {/* Key Metrics — replaces flat stat bar */}
-      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:6,marginBottom:0 }}>
-        {[["8,785",T.teal,"Properties"],["141",T.blue,"Countries"],["~418k",T.txt2,"Employees"],["$23.7B",T.green,"Revenue '24"],["2022",T.amber,"Prior Eval"]].map(([v,c,l]) => (
-          <div key={l} style={{ padding:"8px 10px",background:"rgba(255,255,255,.04)",
-            border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
-            <div style={{ fontFamily:"Georgia,serif",fontSize:15,fontWeight:300,color:c,lineHeight:1,marginBottom:3 }}>{v}</div>
-            <div style={{ fontSize:7.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Expandable body — with gradient fade overlay when collapsed */}
+      {/* Key Metrics — always visible, with gradient + arrow overlay when collapsed */}
       <div style={{ position:"relative" }}>
-        <div style={{ maxHeight:open?"220px":"0px", overflow:"hidden",
-          transition:"max-height .4s cubic-bezier(.4,0,.2,1)" }}>
-          <div style={{ paddingTop:12,fontSize:11.5,color:T.txt2,lineHeight:1.68,marginBottom:12,fontWeight:300 }}>
-            World's largest hotel company. Hybrid franchise-managed model with complex F&B spanning full-service restaurants, bars, banquet & catering at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance — blocked by enterprise infrastructure gaps that no longer exist. $1.1B tech investment committed in 2026 with PMS replatform in live deployment. The window is now.
-          </div>
-          <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,paddingBottom:8 }}>
-            {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
-              <div key={l}>
-                <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
-                <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:5 }}>
+          {[["8,785",T.teal,"Properties"],["141",T.blue,"Countries"],["~418k",T.txt2,"Employees"],["$23.7B",T.green,"Revenue '24"],["2022",T.amber,"Prior Eval"]].map(([v,c,l]) => (
+            <div key={l} style={{ padding:"8px 10px",background:"rgba(255,255,255,.04)",
+              border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
+              <div style={{ fontFamily:"Georgia,serif",fontSize:15,fontWeight:300,color:c,lineHeight:1,marginBottom:3 }}>{v}</div>
+              <div style={{ fontSize:7.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
+            </div>
+          ))}
         </div>
 
-        {/* Dark gradient + bouncing arrow when collapsed */}
+        {/* Gradient fade + arrow sits over the bottom of the metrics row when collapsed */}
         {!open && (
           <div onClick={() => setOpen(true)} style={{
-            position:"absolute", bottom:0, left:0, right:0, height:32,
-            background:"linear-gradient(to bottom, transparent 0%, rgba(8,9,16,.82) 45%, rgba(8,9,16,.96) 100%)",
+            position:"absolute", bottom:0, left:-16, right:-16, height:44,
+            background:`linear-gradient(to bottom, transparent 0%, ${BG}bb 50%, ${BG}ee 100%)`,
             cursor:"pointer", display:"flex", alignItems:"flex-end", justifyContent:"center",
-            paddingBottom:2,
+            paddingBottom:5, zIndex:4,
           }}>
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
-              stroke="rgba(255,255,255,.28)" strokeWidth="1.5"
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+              stroke="rgba(255,255,255,.32)" strokeWidth="1.5"
               style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
               <path d="M2 4l4 4 4-4"/>
             </svg>
@@ -1116,14 +1112,29 @@ function OverviewCard() {
         )}
       </div>
 
+      {/* Expandable body */}
+      <div style={{ maxHeight:open?"220px":"0px", overflow:"hidden",
+        transition:"max-height .4s cubic-bezier(.4,0,.2,1)" }}>
+        <div style={{ paddingTop:12,fontSize:11,color:T.txt2,lineHeight:1.68,marginBottom:10,fontWeight:300 }}>
+          World's largest hotel company. Hybrid franchise-managed model with complex F&B at every property tier. 2022 Square pilot in Courtyard NYC/Boston proved unit-level performance. $1.1B tech investment in 2026 with PMS replatform in active deployment.
+        </div>
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,paddingBottom:4 }}>
+          {[["Tech Investment","$1.1B in 2026"],["Re-Engage Trigger","MICROS EOL → Now"],["Parent","Public — MAR"]].map(([l,v]) => (
+            <div key={l}>
+              <div style={{ fontSize:8,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:3 }}>{l}</div>
+              <div style={{ fontSize:11,color:T.txt,fontWeight:400 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Collapse arrow when open */}
       {open && (
         <button onClick={() => setOpen(false)} style={{
           display:"flex",alignItems:"center",justifyContent:"center",
-          width:"100%",paddingTop:6,background:"none",border:"none",cursor:"pointer" }}>
+          width:"100%",paddingTop:8,background:"none",border:"none",cursor:"pointer" }}>
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
-            stroke="rgba(255,255,255,.22)" strokeWidth="1.5"
-            style={{ transform:"rotate(180deg)" }}>
+            stroke="rgba(255,255,255,.2)" strokeWidth="1.5" style={{ transform:"rotate(180deg)" }}>
             <path d="M2 4l4 4 4-4"/>
           </svg>
         </button>
@@ -1251,9 +1262,9 @@ function DesktopView({ navigate }) {
                 <SecHdr label="Key Stakeholders" />
                 <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
                   {[
-                    { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
-                    { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
-                    { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
+                    { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
+                    { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
+                    { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction.",stakeholders:"Board-level influence",prior:"No direct engagement",sentiment:"Margin-focused",sentimentColor:T.blue },
                   ].map(o => <OwnerRow key={o.name} o={o} />)}
                 </div>
               </div>
