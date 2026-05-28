@@ -508,6 +508,10 @@ function PasswordGate({ onUnlock }) {
 // ── MOBILE VIEW ──
 function MobileView({ navigate }) {
   const dotColors = { red:T.red, green:T.green, amber:T.amber, blue:T.blue };
+  const [activeSignal, setActiveSignal] = useState(null);
+  const [expandedSection, setExpandedSection] = useState(null);
+
+  const toggle = (s) => setExpandedSection(expandedSection === s ? null : s);
 
   return (
     <div style={{ background:T.bg,minHeight:"100vh",fontFamily:"Jost,sans-serif",color:T.txt,position:"relative",WebkitFontSmoothing:"antialiased" }}>
@@ -517,18 +521,19 @@ function MobileView({ navigate }) {
         <div style={{ position:"absolute",width:300,height:300,bottom:"-5%",left:"20%",borderRadius:"50%",background:"radial-gradient(ellipse,rgba(10,130,110,.08),transparent 65%)",filter:"blur(70px)",animation:"drift3 38s ease-in-out infinite" }} />
       </div>
       <Grain />
+      {activeSignal && <SignalPreviewModal signal={activeSignal} onClose={() => setActiveSignal(null)} />}
 
       {/* Nav */}
       <div style={{ position:"sticky",top:0,zIndex:100 }}>
-        <div style={{ height:50,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px",
-          background:"rgba(10,11,16,.92)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
+        <div style={{ height:48,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 14px",
+          background:"rgba(10,11,16,.94)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
           borderBottom:"1px solid rgba(255,255,255,.07)" }}>
           <button onClick={() => navigate("/")} style={{ background:"none",border:"none",cursor:"pointer",
-            fontFamily:"Jost,sans-serif",fontSize:11,color:"rgba(255,255,255,.4)",letterSpacing:".08em" }}>← Back</button>
-          <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:400,color:T.txt }}>
+            fontFamily:"Jost,sans-serif",fontSize:10,color:"rgba(255,255,255,.38)",letterSpacing:".08em" }}>← Back</button>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:400,color:T.txt }}>
             Marriott <span style={{ color:"rgba(255,255,255,.18)",margin:"0 4px" }}>/</span> Intelligence
           </div>
-          <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:8.5,color:T.green,letterSpacing:".08em" }}>
+          <div style={{ display:"flex",alignItems:"center",gap:4,fontSize:8,color:T.green,letterSpacing:".08em" }}>
             <div style={{ width:4,height:4,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
           </div>
         </div>
@@ -536,170 +541,174 @@ function MobileView({ navigate }) {
       </div>
       <SfdcFloater />
 
-      <div style={{ position:"relative",zIndex:1,padding:"12px 12px 60px",display:"flex",flexDirection:"column",gap:10 }}>
+      <div style={{ position:"relative",zIndex:1,padding:"10px 10px 60px",display:"flex",flexDirection:"column",gap:8 }}>
 
-        {/* ── PRIORITY 1: Company card ── */}
-        <div style={{ ...CARD,padding:"14px 14px 12px" }}>
+        {/* Company header */}
+        <div style={{ ...CARD,padding:"12px 14px" }}>
           <Sheen />
-          <div style={{ marginBottom:10 }}>
-            <div style={{ fontFamily:"Georgia,serif",fontSize:20,fontWeight:300,lineHeight:1.05,marginBottom:3 }}>Marriott International</div>
-            <div style={{ fontSize:8.5,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands · 141 Countries</div>
+          <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:8 }}>
+            <div>
+              <div style={{ fontFamily:"Georgia,serif",fontSize:19,fontWeight:300,lineHeight:1.05,marginBottom:2 }}>Marriott International</div>
+              <div style={{ fontSize:8,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands · 141 Countries</div>
+            </div>
+            <div style={{ display:"flex",alignItems:"center",gap:4,fontSize:8,color:T.amber,letterSpacing:".06em",marginTop:2 }}>
+              <div style={{ width:4,height:4,borderRadius:"50%",background:T.amber }} />MICROS EOL
+            </div>
           </div>
           <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:4 }}>
             {[["8,785",T.teal,"Props"],["141",T.blue,"Ctries"],["~418k",T.txt2,"Staff"],["$23.7B",T.green,"Rev"],["2022",T.amber,"Eval"]].map(([v,c,l]) => (
-              <div key={l} style={{ padding:"6px 4px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:7,textAlign:"center" }}>
-                <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:c,lineHeight:1,marginBottom:2 }}>{v}</div>
+              <div key={l} style={{ padding:"5px 4px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:7,textAlign:"center" }}>
+                <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:c,lineHeight:1,marginBottom:1 }}>{v}</div>
                 <div style={{ fontSize:6,color:T.txt4,letterSpacing:".06em",textTransform:"uppercase" }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── PRIORITY 2: Core Thesis ── */}
+        {/* Core Thesis */}
         <ThesisCard isMobile={true} />
 
-        {/* ── PRIORITY 3: What's Changed + Key Stakeholders side by side ── */}
+        {/* 2-col widget row: What's Changed + Stakeholders */}
         <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:8 }}>
-          {/* What's Changed — compact left */}
-          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px",display:"flex",flexDirection:"column" }}>
-            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>What's Changed</div>
-            {[
-              [T.green,"MICROS EOL"],
-              [T.green,"Enterprise KDS"],
-              [T.green,"Open APIs"],
-              [T.blue,"New CTO"],
-              [T.teal,"Multi-brand Menu"],
-            ].map(([c,t]) => (
-              <div key={t} style={{ display:"flex",alignItems:"center",gap:6,marginBottom:5 }}>
-                <div style={{ width:4,height:4,borderRadius:"50%",background:c,flexShrink:0,boxShadow:`0 0 4px ${c}88` }} />
-                <span style={{ fontSize:9.5,color:T.txt2,lineHeight:1.3 }}>{t}</span>
+          <div onClick={() => toggle("changed")} style={{ ...CARD,padding:"10px 11px",cursor:"pointer" }}>
+            <Sheen />
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:T.teal,marginBottom:7 }}>What's Changed</div>
+            {[[T.green,"MICROS EOL"],[T.green,"Enterprise KDS"],[T.green,"Open APIs"],[T.blue,"New CTO"],[T.teal,"Menu Mgmt"]].map(([c,t]) => (
+              <div key={t} style={{ display:"flex",alignItems:"center",gap:5,marginBottom:4 }}>
+                <div style={{ width:4,height:4,borderRadius:"50%",background:c,flexShrink:0 }} />
+                <span style={{ fontSize:9,color:T.txt2 }}>{t}</span>
               </div>
             ))}
+            <div style={{ marginTop:6,fontSize:7.5,color:T.txt4 }}>tap to expand ↓</div>
           </div>
-
-          {/* Key Stakeholders — compact right */}
-          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px",display:"flex",flexDirection:"column" }}>
-            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>Stakeholders</div>
-            {[
-              [T.red,"Capuano","CEO"],
-              [T.red,"D. Pinto","CTO"],
-              [T.blue,"Oberg","CFO"],
-              [T.red,"Manga","CIO"],
-              [T.amber,"VP F&B","Open"],
-            ].map(([c,n,r]) => (
-              <div key={n} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:5 }}>
+          <div onClick={() => toggle("stakeholders")} style={{ ...CARD,padding:"10px 11px",cursor:"pointer" }}>
+            <Sheen />
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:T.blue,marginBottom:7 }}>Stakeholders</div>
+            {[[T.red,"Capuano","HIGH"],[T.red,"D. Pinto","HIGH"],[T.blue,"Oberg","MED"],[T.red,"Manga","HIGH"],[T.amber,"VP F&B","GAP"]].map(([c,n,s]) => (
+              <div key={n} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4 }}>
                 <div style={{ display:"flex",alignItems:"center",gap:5 }}>
-                  <div style={{ width:2,height:14,background:c,borderRadius:1,flexShrink:0 }} />
-                  <span style={{ fontSize:10,color:T.txt,fontFamily:"Georgia,serif",fontWeight:300 }}>{n}</span>
+                  <div style={{ width:2,height:12,background:c,borderRadius:1,flexShrink:0 }} />
+                  <span style={{ fontSize:9.5,color:T.txt,fontFamily:"Georgia,serif",fontWeight:300 }}>{n}</span>
                 </div>
-                <span style={{ fontSize:8,color:T.txt4 }}>{r}</span>
+                <span style={{ fontSize:7,color:c,background:`${c}18`,padding:"1px 5px",borderRadius:3 }}>{s}</span>
               </div>
             ))}
+            <div style={{ marginTop:6,fontSize:7.5,color:T.txt4 }}>tap to expand ↓</div>
           </div>
         </div>
 
-        {/* ── PRIORITY 4: Partners + Re-engagement side by side ── */}
+        {expandedSection === "changed" && (
+          <div style={{ ...CARD,padding:"12px 12px" }}>
+            <Sheen />
+            {[{rank:1,color:T.green,bg:"rgba(74,222,128,.08)",border:"rgba(74,222,128,.18)",title:"MICROS EOL — Forced Migration",change:"Oracle confirmed MICROS 3700 end-of-life.",why:"The 2022 objection is gone.",buyer:"Drew Pinto (CTO)"},
+              {rank:2,color:T.green,bg:"rgba(74,222,128,.08)",border:"rgba(74,222,128,.18)",title:"Enterprise KDS Now Live",change:"Square's enterprise KDS at scale.",why:"VP F&B objection closed.",buyer:"VP F&B Americas"},
+              {rank:3,color:T.green,bg:"rgba(74,222,128,.08)",border:"rgba(74,222,128,.18)",title:"Open APIs — Opera + Bonvoy",change:"Native PMS + loyalty integration live.",why:"2022 blocker is gone.",buyer:"Drew Pinto + IT"},
+              {rank:4,color:T.blue,bg:"rgba(100,145,255,.08)",border:"rgba(100,145,255,.18)",title:"New CTO — Fresh Mandate",change:"Drew Pinto joined 2023.",why:"The 2022 no was not his decision.",buyer:"All stakeholders"},
+              {rank:5,color:T.teal,bg:"rgba(45,212,180,.07)",border:"rgba(45,212,180,.15)",title:"Multi-brand Menu Management",change:"Centralized menu control live.",why:"Franchise variance now solvable.",buyer:"Operations + Franchise"},
+            ].map(item => <ChangedRow key={item.rank} item={item} defaultOpen={item.rank===1} />)}
+          </div>
+        )}
+
+        {expandedSection === "stakeholders" && (
+          <div style={{ ...CARD,padding:"12px 12px" }}>
+            <Sheen />
+            {[
+              {name:"Anthony Capuano",href:"#",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate.",action:"→ Economic buyer.",stakeholders:"+12",prior:"2022 eval reference",sentiment:"Receptive",sentimentColor:T.green},
+              {name:"Drew Pinto",href:"#",role:"EVP & CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"2022 no was not his.",action:"→ Primary re-engagement.",stakeholders:"+12",prior:"2022 decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber},
+              {name:"Leeny Oberg",href:"#",role:"EVP & CFO",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Controls capex.",action:"→ ROI narrative.",stakeholders:"Finance",prior:"No engagement",sentiment:"ROI-focused",sentimentColor:T.blue},
+              {name:"Naveen Manga",href:"#",role:"Global CIO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"2026 is 'a year for scale.'",action:"→ Consolidation narrative.",stakeholders:"IT + Ops",prior:"No engagement",sentiment:"Active",sentimentColor:T.green},
+              {name:"VP F&B Americas",href:"#",role:"Role Open",sig:"GAP",sigColor:T.amber,sigBg:"rgba(245,166,35,.13)",border:T.amber,body:"Key buyer seat vacant.",action:"→ Engage now.",stakeholders:"F&B ops",prior:"Pilot champion",sentiment:"Transition",sentimentColor:T.amber},
+            ].map(o => <OwnerRow key={o.name} o={o} />)}
+          </div>
+        )}
+
+        {/* Partners + Re-engagement */}
         <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:8 }}>
-          {/* Partners */}
-          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px" }}>
-            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>Partners</div>
+          <div style={{ ...CARD,padding:"10px 11px" }}>
+            <Sheen />
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8 }}>Partners</div>
             {PARTNERS.map(p => (
-              <div key={p.id} style={{ marginBottom:8 }}>
-                <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,marginBottom:3 }}>{p.name}</div>
-                <button onClick={() => {}} style={{
-                  width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:4,
-                  padding:"4px 0",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",
-                  borderRadius:6,cursor:"pointer",fontFamily:"Jost,sans-serif",
-                  fontSize:7.5,fontWeight:400,color:"rgba(255,255,255,.38)",letterSpacing:".04em" }}>
-                  <svg width="8" height="8" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" style={{flexShrink:0}}>
+              <div key={p.id} style={{ marginBottom:8,paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,.05)" }}>
+                <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,marginBottom:4 }}>{p.name}</div>
+                <div style={{ display:"flex",alignItems:"center",justifyContent:"center",gap:5,padding:"4px 0",
+                  background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:6,
+                  fontSize:8,color:"rgba(255,255,255,.35)",letterSpacing:".04em" }}>
+                  <svg width="8" height="8" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
                     <rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 5l7 5 7-5"/>
                   </svg>
                   Message on Slack
-                </button>
+                </div>
               </div>
             ))}
           </div>
-
-          {/* Re-engagement */}
-          <div style={{ background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:12,padding:"10px 10px" }}>
-            <div style={{ fontSize:8,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8,fontFamily:"Jost,sans-serif" }}>Re-Engagement</div>
-            {[["#1","Pinto Direct"],["#2","Oracle Path"],["#3","GM Loop"]].map(([n,t]) => (
-              <div key={n} style={{ display:"flex",alignItems:"center",gap:6,marginBottom:7 }}>
-                <span style={{ fontSize:8,color:T.blue,fontFamily:"monospace",flexShrink:0 }}>{n}</span>
-                <span style={{ fontSize:10,color:T.txt2,fontFamily:"Georgia,serif",fontWeight:300,lineHeight:1.3 }}>{t}</span>
+          <div style={{ ...CARD,padding:"10px 11px" }}>
+            <Sheen />
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8 }}>Re-Engagement</div>
+            {[["#1","Pinto Direct","'What's Changed' framing. MICROS pressure."],
+              ["#2","Oracle Path","Stevie Nicks. Co-sell EOL."],
+              ["#3","GM Loop","Christine McVie. 2022 refs."]].map(([n,t,b]) => (
+              <div key={n} style={{ marginBottom:8 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:5,marginBottom:2 }}>
+                  <span style={{ fontSize:7.5,color:T.blue,fontFamily:"monospace" }}>{n}</span>
+                  <span style={{ fontSize:10,color:T.txt,fontFamily:"Georgia,serif",fontWeight:300 }}>{t}</span>
+                </div>
+                <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.4,paddingLeft:16 }}>{b}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── PRIORITY 5: Live Signals ── */}
-        <div>
-          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
-            <SecHdr label="Live Signals" />
-            <div style={{ display:"flex",alignItems:"center",gap:4,fontSize:8.5,color:T.green,letterSpacing:".08em",marginBottom:10 }}>
+        {/* Live Signals */}
+        <div style={{ ...CARD,padding:"12px 12px" }}>
+          <Sheen />
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)" }}>Live Signals</div>
+            <div style={{ display:"flex",alignItems:"center",gap:4,fontSize:8,color:T.green,letterSpacing:".08em" }}>
               <div style={{ width:4,height:4,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
             </div>
           </div>
           {SIGNALS.map(s => (
-            <a key={s.title} href={s.url} target="_blank" rel="noreferrer" style={{ textDecoration:"none",display:"block",marginBottom:5 }}>
-              <div style={{ padding:"8px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:2 }}>
-                  <div style={{ width:4,height:4,borderRadius:"50%",flexShrink:0,background:dotColors[s.dot],boxShadow:`0 0 5px ${dotColors[s.dot]}88` }} />
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,lineHeight:1.3,flex:1 }}>{s.title}</div>
-                  <span style={{ fontSize:8.5,color:T.txt4,flexShrink:0 }}>↗</span>
-                </div>
-                <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:10 }}>{s.body}</div>
-                <div style={{ fontSize:7.5,color:T.blue,marginTop:2,paddingLeft:10,letterSpacing:".03em" }}>{s.meta}</div>
+            <div key={s.title} onClick={() => setActiveSignal(s)} style={{
+              display:"flex",alignItems:"center",gap:8,padding:"7px 9px",marginBottom:5,
+              background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:8,cursor:"pointer" }}>
+              <div style={{ width:5,height:5,borderRadius:"50%",flexShrink:0,background:dotColors[s.dot],boxShadow:`0 0 5px ${dotColors[s.dot]}88` }} />
+              <div style={{ flex:1,minWidth:0 }}>
+                <div style={{ fontFamily:"Georgia,serif",fontSize:10.5,fontWeight:300,color:T.txt,lineHeight:1.2,marginBottom:1 }}>{s.title}</div>
+                <div style={{ fontSize:7.5,color:T.blue }}>{s.meta}</div>
               </div>
-            </a>
+              <span style={{ fontSize:9,color:T.txt4,flexShrink:0 }}>⊕</span>
+            </div>
           ))}
         </div>
 
-        {/* ── BELOW FOLD: Full Stakeholders ── */}
-        <SecHdr label="Key Stakeholders · Full" />
-        {[
-          { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate. Ultimate economic buyer.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
-          { name:"Drew Pinto",href:"#",role:"EVP & Chief Revenue + Technology Officer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech. Evaluated Square in 2022 — that no was not his.",action:"→ Primary re-engagement. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
-          { name:"Leeny Oberg",href:"#",role:"EVP & CFO",sig:"MED",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Controls capex. Lead with per-property TCO reduction.",action:"→ ROI narrative.",stakeholders:"Finance team",prior:"No direct engagement",sentiment:"ROI-focused",sentimentColor:T.blue },
-          { name:"Naveen Manga",href:"#",role:"Global CIO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"2026 is 'a year for scale.' Cited front desk systems complexity.",action:"→ Systems consolidation narrative.",stakeholders:"IT + Ops teams",prior:"No prior engagement",sentiment:"Active",sentimentColor:T.green },
-          { name:"VP F&B Americas",href:"#",role:"Active Search — Role Open",sig:"GAP",sigColor:T.amber,sigBg:"rgba(245,166,35,.13)",border:T.amber,body:"Key buyer seat is vacant. Engage before new exec is onboarded.",action:"→ Engage now during transition.",stakeholders:"F&B ops team",prior:"Prior pilot champion",sentiment:"Transition",sentimentColor:T.amber },
-        ].map(o => <OwnerRow key={o.name} o={o} />)}
-
-        {/* ── BELOW FOLD: What's Changed full ── */}
-        <SecHdr label="What's Changed Since 2022" />
-        {[
-          { rank:1, color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"MICROS EOL — Forced Migration", change:"Oracle confirmed MICROS 3700 end-of-life.", why:"The 2022 objection is gone — they have to move.", buyer:"Drew Pinto (CTO)" },
-          { rank:2, color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Enterprise KDS Now Live", change:"Square's enterprise KDS deployed at scale.", why:"VP F&B's primary technical objection is closed.", buyer:"VP F&B Americas" },
-          { rank:3, color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Open APIs — Opera + Bonvoy", change:"Native PMS and loyalty integration live.", why:"The 2022 integration blocker is gone.", buyer:"Drew Pinto + IT" },
-          { rank:4, color:T.blue, bg:"rgba(100,145,255,.08)", border:"rgba(100,145,255,.18)", title:"New CTO — Fresh Mandate", change:"Drew Pinto joined 2023 with rationalization mandate.", why:"The 2022 'no' was not his decision.", buyer:"All stakeholders" },
-          { rank:5, color:T.teal, bg:"rgba(45,212,180,.07)", border:"rgba(45,212,180,.15)", title:"Multi-brand Menu Management", change:"Centralized menu control with per-location overrides.", why:"Franchise variance now solvable.", buyer:"Operations + Franchise" },
-        ].map(item => <ChangedRow key={item.rank} item={item} defaultOpen={item.rank===1} />)}
-
-        {/* ── BELOW FOLD: Discovery ── */}
-        <SecHdr label="Discovery Priorities" />
-        {[["01","Why the 2022 Pilot Stalled","API gaps, multi-brand complexity, or champion loss?"],
-          ["02","MICROS Migration Timeline","Which brands are replacing. Urgency determines entry point."],
-          ["03","Franchise vs. Corporate","Top-down mandate or franchisee-by-franchisee?"],
-          ["04","PMS + Loyalty Integration","Opera Cloud + Bonvoy API coverage?"]].map(([n,t,b]) => (
-          <div key={n} style={{ display:"flex",gap:9,padding:"9px 11px",background:"rgba(255,255,255,.03)",
-            border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
-            <div style={{ fontSize:8.5,color:T.txt4,flexShrink:0,paddingTop:1,fontFamily:"monospace" }}>{n}</div>
-            <div>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,marginBottom:2 }}>{t}</div>
-              <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.5 }}>{b}</div>
-            </div>
+        {/* Discovery + SFDC */}
+        <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:8 }}>
+          <div style={{ ...CARD,padding:"10px 11px" }}>
+            <Sheen />
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8 }}>Discovery</div>
+            {[["01","Why 2022 stalled?"],["02","MICROS timeline?"],["03","Franchise vs. corp?"],["04","PMS + Bonvoy?"]].map(([n,t]) => (
+              <div key={n} style={{ display:"flex",alignItems:"baseline",gap:6,marginBottom:6 }}>
+                <span style={{ fontSize:7.5,color:T.txt4,fontFamily:"monospace",flexShrink:0 }}>{n}</span>
+                <span style={{ fontSize:9.5,color:T.txt2,lineHeight:1.3 }}>{t}</span>
+              </div>
+            ))}
           </div>
-        ))}
-
-        {/* ── BELOW FOLD: SFDC ── */}
-        <SfdcWidget isMobile={true} />
+          <div style={{ ...CARD,padding:"10px 11px" }}>
+            <Sheen />
+            <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.38)",marginBottom:8 }}>SFDC</div>
+            {[["Stage","Discovery",T.blue],["Owner","Joey Amari",T.txt2],["Trigger","MICROS EOL",T.amber],["Signal","HIGH",T.red]].map(([l,v,c]) => (
+              <div key={l} style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5 }}>
+                <span style={{ fontSize:8,color:T.txt4 }}>{l}</span>
+                <span style={{ fontSize:8.5,color:c }}>{v}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
       </div>
     </div>
   );
 }
-
-// ── LIVE SIGNALS LIST — with modal ──
 function LiveSignalsList({ dotColors, compact }) {
   const [active, setActive] = useState(null);
   const dc = dotColors || { red:T.red, green:T.green, amber:T.amber, blue:T.blue };
