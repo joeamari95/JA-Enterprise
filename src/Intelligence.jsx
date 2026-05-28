@@ -67,15 +67,15 @@ const SIGNALS = [
 ];
 
 const SLACK_MESSAGES = {
-  oracle: `Hey Hayley — reaching out on a Marriott re-engagement. We have a strong opportunity with their CTO (Drew Pinto) given the MICROS EOL timing and I'd love to coordinate. Would you be open to a quick sync this week, or can you connect me to your Marriott account lead?`,
-  netsuite: `Hey Gerard — looping you in on a Marriott opportunity. They run NetSuite across managed properties and we have an active re-engagement with their CFO team. Would love to bring you into the conversation given the Square ↔ NetSuite integration story. Are you free this week?`,
-  courtyard: `Hey Stevie — hoping you can help. I'm re-engaging Marriott corporate on the Square opportunity and would love to get updated testimonials from the Courtyard NYC/Boston GMs who were on the 2022 pilot. Can you connect me or share their current contacts?`,
+  oracle: `Hey Stevie — reaching out on a Marriott re-engagement. We have a strong opportunity with their CTO (Drew Pinto) given the MICROS EOL timing and I'd love to coordinate. Would you be open to a quick sync this week, or can you connect me to your Marriott account lead?`,
+  netsuite: `Hey Lindsey — looping you in on a Marriott opportunity. They run NetSuite across managed properties and we have an active re-engagement with their CFO team. Would love to bring you into the conversation given the Square ↔ NetSuite integration story. Are you free this week?`,
+  courtyard: `Hey Christine — hoping you can help. I'm re-engaging Marriott corporate on the Square opportunity and would love to get updated testimonials from the Courtyard NYC/Boston GMs who were on the 2022 pilot. Can you connect me or share their current contacts?`,
 };
 
 const PARTNERS = [
-  { name:"Oracle", badge:"POS / MICROS", badgeC:T.red, badgeBg:"rgba(255,96,96,.12)", badgeBr:"rgba(255,96,96,.2)", confirmed:true, role:"Enterprise Tech Partner — MICROS + Opera Cloud Integration", body:"Confirmed partner. MICROS EOL creates a joint replacement narrative. Opera Cloud API integration is live — leverage to accelerate Marriott CTO credibility.", action:"→ Use MICROS EOL as shared urgency. Co-sell the migration story.", pm:"Hayley Williams", pmTitle:"Partner Manager, Oracle Hospitality", id:"oracle" },
-  { name:"NetSuite", badge:"ERP / FINANCE", badgeC:T.blue, badgeBg:"rgba(100,145,255,.12)", badgeBr:"rgba(100,145,255,.22)", confirmed:true, role:"Enterprise Finance Partner — ERP + Financial Reporting", body:"Marriott runs NetSuite across managed properties. Square ↔ NetSuite integration eliminates manual reconciliation across 8,785 properties.", action:"→ Joint CFO story. Gerard has existing Marriott finance team relationship.", pm:"Gerard Way", pmTitle:"Partner Manager, NetSuite Enterprise", id:"netsuite" },
-  { name:"Courtyard GM Network", badge:"CHAMPIONS", badgeC:T.green, badgeBg:"rgba(74,222,128,.10)", badgeBr:"rgba(74,222,128,.18)", confirmed:false, role:"Internal Advocates — 2022 Pilot GMs, NYC + Boston", body:"GMs with live Square performance data. Can advocate upward to Marriott corporate tech team.", action:"→ Re-engage for updated case study + corporate referral to Drew Pinto's team.", pm:"Stevie Nicks", pmTitle:"Account Manager, Hospitality", id:"courtyard" },
+  { name:"Oracle", confirmed:true, role:"Enterprise Tech Partner — MICROS + Opera Cloud Integration", body:"Confirmed partner. MICROS EOL creates a joint replacement narrative. Opera Cloud API integration is live — leverage to accelerate Marriott CTO credibility.", action:"→ Use MICROS EOL as shared urgency. Co-sell the migration story.", pm:"Stevie Nicks", pmTitle:"Partner Manager, Oracle Hospitality", id:"oracle" },
+  { name:"NetSuite", confirmed:true, role:"Enterprise Finance Partner — ERP + Financial Reporting", body:"Marriott runs NetSuite across managed properties. Square ↔ NetSuite integration eliminates manual reconciliation across 8,785 properties.", action:"→ Joint CFO story. Lindsey has existing Marriott finance team relationship.", pm:"Lindsey Buckingham", pmTitle:"Partner Manager, NetSuite Enterprise", id:"netsuite" },
+  { name:"Courtyard GM Network", confirmed:false, role:"Internal Advocates — 2022 Pilot GMs, NYC + Boston", body:"GMs with live Square performance data. Can advocate upward to Marriott corporate tech team.", action:"→ Re-engage for updated case study + corporate referral to Drew Pinto's team.", pm:"Christine McVie", pmTitle:"Account Manager, Hospitality", id:"courtyard" },
 ];
 
 function Grain() {
@@ -338,31 +338,43 @@ function PartnerCard({ p, isMobile }) {
 
         {/* Always-visible collapsed row */}
         <div style={{ padding:"10px 12px",cursor:"pointer" }} onClick={() => setOpen(!open)}>
-          {/* Row 1: name + badge + chevron */}
+          {/* Row 1: name + chevron */}
           <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6 }}>
-            <div style={{ display:"flex",alignItems:"center",gap:6,minWidth:0 }}>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>{p.name}</div>
-              <span style={{ fontSize:7.5,fontWeight:500,letterSpacing:".07em",padding:"1px 6px",borderRadius:3,
-                color:p.badgeC,background:p.badgeBg,border:`1px solid ${p.badgeBr}`,flexShrink:0,whiteSpace:"nowrap" }}>{p.badge}</span>
-            </div>
+            <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:T.txt }}>{p.name}</div>
             <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
-              style={{ transition:"transform .22s",transform:open?"rotate(180deg)":"none",flexShrink:0,marginLeft:8 }}>
+              style={{ transition:"transform .22s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </div>
-          {/* Row 2: Slack button full width */}
+          {/* Row 2: envelope message button full width */}
           <button onClick={e => { e.stopPropagation(); setModal(true); }} style={{
-            width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:5,
-            padding:isMobile?"7px 0":"5px 0",
-            background:messaged?"rgba(245,166,35,.12)":"rgba(122,168,255,.10)",
-            border:messaged?"1px solid rgba(245,166,35,.3)":"1px solid rgba(122,168,255,.25)",
+            width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:6,
+            padding:isMobile?"8px 0":"6px 0",
+            background:messaged?"rgba(245,166,35,.08)":"rgba(255,255,255,.04)",
+            border:messaged?"1px solid rgba(245,166,35,.2)":"1px solid rgba(255,255,255,.09)",
             borderRadius:8,cursor:"pointer",fontFamily:"Jost,sans-serif",
-            fontSize:isMobile?10:9,fontWeight:500,
-            color:messaged?T.amber:T.blue,letterSpacing:".05em",transition:"all .2s",
-            boxShadow:messaged?"none":"0 0 8px rgba(122,168,255,.15)",
-            animation:messaged?"none":"slackGlow 2.5s ease-in-out infinite" }}>
-            <span style={{ fontSize:isMobile?13:12 }}>⚡</span>
-            {messaged ? `Sent ${messagedDate}` : `Message ${p.pm.split(" ")[0]}`}
+            fontSize:isMobile?10:9,fontWeight:400,
+            color:messaged?T.amber:"rgba(255,255,255,.45)",
+            letterSpacing:".06em",transition:"all .2s" }}>
+            {/* Envelope with arrow icon */}
+            {messaged ? (
+              <>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
+                  <rect x="1" y="3" width="14" height="10" rx="1.5"/>
+                  <path d="M1 5l7 5 7-5"/>
+                </svg>
+                <span>Sent {messagedDate}</span>
+              </>
+            ) : (
+              <>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
+                  <rect x="1" y="3" width="11" height="9" rx="1.5"/>
+                  <path d="M1 5l5.5 4 5.5-4"/>
+                  <path d="M13 7l2.5-2.5M13 7h2M13 7v-2" strokeWidth="1.2"/>
+                </svg>
+                <span>Message {p.pm.split(" ")[0]} {p.pm.split(" ")[1]}</span>
+              </>
+            )}
           </button>
         </div>
 
