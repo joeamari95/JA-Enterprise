@@ -1292,7 +1292,9 @@ function DesktopView({ navigate }) {
         gridTemplateColumns:"220px 1fr 268px",height:"calc(100vh - 78px)",overflow:"hidden" }}>
 
         {/* LEFT COL */}
-        <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16 }}>
+        <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16,
+          maskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
+          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)" }}>
           <Reveal delay={0}>
             <div style={{ paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
               <div style={{ fontFamily:"Georgia,serif",fontSize:17,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
@@ -1437,7 +1439,9 @@ function DesktopView({ navigate }) {
         </div>
 
         {/* RIGHT COL */}
-        <div style={{ borderLeft:"1px solid rgba(255,255,255,.07)",padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14 }}>
+        <div style={{ borderLeft:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14,
+          maskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
+          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)" }}>
           <Reveal delay={80}>
             <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
               <SecHdr label="Live Signals" />
