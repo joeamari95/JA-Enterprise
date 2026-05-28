@@ -1004,40 +1004,31 @@ function ThesisCard({ isMobile }) {
 
 function OwnerRow({ o }) {
   const [open, setOpen] = useState(false);
-  const [hov, setHov] = useState(false);
   return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: hov
-          ? "radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.08) 0%,transparent 65%)"
-          : "radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.05) 0%,transparent 65%)",
-        border:`1px solid ${open||hov?"rgba(255,255,255,.14)":"rgba(255,255,255,.08)"}`,
-        borderLeft:`2px solid ${o.border}`,borderRadius:8,marginBottom:3,overflow:"hidden",
-        transition:"all .22s",
-        transform: hov ? "translateY(-1px)" : "none",
-        boxShadow: hov ? `0 6px 20px rgba(0,0,0,.35),0 0 12px ${o.border}18` : "0 2px 8px rgba(0,0,0,.2)",
-      }}>
+    <div style={{
+      background:"rgba(255,255,255,.04)",
+      border:`1px solid rgba(255,255,255,.09)`,
+      borderLeft:`2px solid ${o.border}`,borderRadius:8,marginBottom:3,
+      transition:"border-color .18s",
+    }}>
       <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"7px 12px",cursor:"pointer" }}>
-        <div style={{ flex:1,minWidth:0 }}>
-          <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,color:T.txt,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>
-            <a href={o.href} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} style={{ color:T.txt,textDecoration:"none" }}>{o.name}</a>
+        <div style={{ flex:1,minWidth:0,overflow:"hidden" }}>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:"rgba(255,255,255,.92)",whiteSpace:"nowrap",textOverflow:"ellipsis",overflow:"hidden" }}>
+            {o.name}
           </div>
         </div>
         <span style={{ fontSize:7.5,fontWeight:500,letterSpacing:".07em",padding:"2px 6px",borderRadius:3,
-          color:o.sigColor,background:o.sigBg,flexShrink:0 }}>{o.sig}</span>
-        <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="1.5"
+          color:o.sigColor,background:o.sigBg,flexShrink:0,whiteSpace:"nowrap" }}>{o.sig}</span>
+        <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
           style={{ transition:"transform .2s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
           <path d="M2 4l4 4 4-4"/>
         </svg>
       </div>
       {open && (
         <div style={{ padding:"0 12px 10px",borderTop:"1px solid rgba(255,255,255,.06)" }}>
-          <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.58,paddingTop:8,marginBottom:8 }}>{o.body}</div>
-          {/* Inline scrollable meta strip — no height increase */}
-          <div style={{ display:"flex",gap:8,overflowX:"auto",marginBottom:8,
-            scrollbarWidth:"none",msOverflowStyle:"none",WebkitOverflowScrolling:"touch" }}>
+          <div style={{ fontSize:9,color:"rgba(255,255,255,.5)",fontStyle:"italic",marginBottom:6,paddingTop:6 }}>{o.role}</div>
+          <div style={{ fontSize:10.5,color:"rgba(255,255,255,.72)",lineHeight:1.58,marginBottom:8 }}>{o.body}</div>
+          <div style={{ display:"flex",gap:8,overflowX:"auto",marginBottom:8,scrollbarWidth:"none" }}>
             {[
               ["Stakeholders", o.stakeholders||"+12", T.txt],
               ["Prior", o.prior||"2022 pilot eval", T.txt2],
