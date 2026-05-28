@@ -595,7 +595,7 @@ function MobileView({ navigate }) {
 
         {/* Ownership */}
         <Reveal delay={180}>
-          <SecHdr label="Ownership & Power Structure" />
+          <SecHdr label="Key Stakeholders" />
           {[
             { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO — Economic Buyer",sig:"HIGH",sigC:T.red,border:T.red,body:"Driving tech modernization. F&B transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level mandate." },
             { name:"Drew Pinto",href:"#",role:"EVP & Global CTO — Tech Decision Maker",sig:"HIGH",sigC:T.red,border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — 2022 no was not his.",action:"→ Primary re-engagement. He knows Square." },
@@ -1071,13 +1071,13 @@ function OverviewCard() {
         </div>
       </div>
 
-      {/* Stat bar — always visible */}
-      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:1,
-        background:"rgba(255,255,255,.07)",borderRadius:8,overflow:"hidden" }}>
-        {[["8,785","Properties"],["30","Brands"],["$23.7B","Revenue"],["~418k","Employees"],["2022","Prior Eval"]].map(([v,l]) => (
-          <div key={l} style={{ background:"rgba(13,14,19,.7)",padding:"9px 12px" }}>
-            <div style={{ fontFamily:"Georgia,serif",fontSize:16,fontWeight:300,color:T.txt,lineHeight:1,marginBottom:2 }}>{v}</div>
-            <div style={{ fontSize:8,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
+      {/* Key Metrics — replaces flat stat bar */}
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:6,marginBottom:0 }}>
+        {[["8,785",T.teal,"Properties"],["141",T.blue,"Countries"],["~418k",T.txt2,"Employees"],["$23.7B",T.green,"Revenue '24"],["2022",T.amber,"Prior Eval"]].map(([v,c,l]) => (
+          <div key={l} style={{ padding:"8px 10px",background:"rgba(255,255,255,.04)",
+            border:"1px solid rgba(255,255,255,.07)",borderRadius:9 }}>
+            <div style={{ fontFamily:"Georgia,serif",fontSize:15,fontWeight:300,color:c,lineHeight:1,marginBottom:3 }}>{v}</div>
+            <div style={{ fontSize:7.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
           </div>
         ))}
       </div>
@@ -1207,21 +1207,6 @@ function DesktopView({ navigate }) {
               </div>
             </div>
           </Reveal>
-          <Reveal delay={60}>
-            <SecHdr label="Key Metrics" />
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:5 }}>
-              {[["8,785",T.teal,"Properties"],["141",T.blue,"Countries"],["~418k",T.txt,"Employees"],["$23.7B",T.green,"Revenue '24"]].map(([v,c,l]) => (
-                <div key={l} style={{ padding:"8px 10px",background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%)",border:"1px solid rgba(255,255,255,.08)",borderRadius:10 }}>
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:18,fontWeight:300,color:c,lineHeight:1,marginBottom:3 }}>{v}</div>
-                  <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>{l}</div>
-                </div>
-              ))}
-              <div style={{ gridColumn:"span 2",padding:"8px 10px",background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%)",border:"1px solid rgba(255,255,255,.08)",borderRadius:10 }}>
-                <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:T.amber,lineHeight:1,marginBottom:3 }}>2022 Pilot</div>
-                <div style={{ fontSize:8.5,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase" }}>Prior Square Eval — Courtyard NYC/BOS</div>
-              </div>
-            </div>
-          </Reveal>
           <Reveal delay={100}>
             <SecHdr label="Confirmed Partners" />
             {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={false} />)}
@@ -1263,7 +1248,7 @@ function DesktopView({ navigate }) {
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
-                <SecHdr label="Ownership & Power Structure" />
+                <SecHdr label="Key Stakeholders" />
                 <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
                   {[
                     { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
