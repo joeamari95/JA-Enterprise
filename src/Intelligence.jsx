@@ -834,7 +834,7 @@ function SfdcFloater() { return <SfdcToast />; }
 
 function ThesisCard({ isMobile }) {
   const [expanded, setExpanded] = useState(false);
-  const PREVIEW_HEIGHT = 72; // px — shows ~2 lines, always visible
+  const PREVIEW_HEIGHT = 68;
 
   return (
     <div style={{
@@ -842,7 +842,7 @@ function ThesisCard({ isMobile }) {
       backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",
       border:"1px solid rgba(100,145,255,.22)",borderRadius:16,
       boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
-      padding:16,position:"relative",overflow:"hidden" }}>
+      padding:16,position:"relative" }}>
       {/* Top sheen */}
       <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
         background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)",pointerEvents:"none" }} />
@@ -870,8 +870,9 @@ function ThesisCard({ isMobile }) {
         </div>
       </div>
 
-      {/* Body — clipped with fade, expands on toggle */}
+      {/* Body with gradient overlay and arrow — all in one relative container */}
       <div style={{ position:"relative" }}>
+        {/* Text — clipped by maxHeight */}
         <div style={{
           maxHeight: expanded ? "400px" : `${PREVIEW_HEIGHT}px`,
           overflow:"hidden",
@@ -887,33 +888,24 @@ function ThesisCard({ isMobile }) {
           )}
         </div>
 
-        {/* Fade gradient — only when collapsed */}
+        {/* Dark gradient fade + bouncing arrow — sits on top of clipped text */}
         {!expanded && (
-          <div style={{
-            position:"absolute",bottom:0,left:0,right:0,height:52,
-            background:"linear-gradient(to bottom,transparent 0%,rgba(9,10,18,.7) 40%,rgba(9,10,18,.97) 100%)",
-            pointerEvents:"none",
-          }} />
+          <div
+            onClick={() => setExpanded(true)}
+            style={{
+              position:"absolute", bottom:0, left:0, right:0, height:56,
+              background:"linear-gradient(to bottom, transparent 0%, rgba(8,9,16,.82) 45%, rgba(8,9,16,.97) 100%)",
+              cursor:"pointer", display:"flex", alignItems:"flex-end", justifyContent:"center",
+              paddingBottom:4,
+            }}>
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"
+              stroke="rgba(255,255,255,.28)" strokeWidth="1.5"
+              style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </div>
         )}
       </div>
-
-      {/* Animated arrow expand hint — only when collapsed */}
-      {!expanded && (
-        <button onClick={() => setExpanded(true)} style={{
-          display:"flex",alignItems:"center",justifyContent:"center",
-          width:"100%",paddingTop:4,paddingBottom:0,marginTop:-8,
-          background:"none",border:"none",cursor:"pointer",gap:4,
-          fontFamily:"Jost,sans-serif",fontSize:8.5,color:"rgba(255,255,255,.22)",
-          letterSpacing:".1em",transition:"color .2s",position:"relative",zIndex:2 }}
-          onMouseEnter={e=>e.currentTarget.style.color=T.teal}
-          onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,.22)"}>
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
-            stroke="currentColor" strokeWidth="1.5"
-            style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
-            <path d="M2 4l4 4 4-4"/>
-          </svg>
-        </button>
-      )}
 
       {expanded && <RefreshBtn isMobile={isMobile} />}
     </div>
