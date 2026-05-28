@@ -618,7 +618,7 @@ function MobileView({ navigate }) {
             { rank:3, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Open APIs — Opera + Bonvoy", change:"Native PMS and loyalty integration now fully supported. The 2022 blocker is gone.", why:"Pinto's IT team blocked on integration gaps. Those gaps no longer exist.", buyer:"Drew Pinto + IT" },
             { rank:4, icon:"→", color:T.blue, bg:"rgba(100,145,255,.08)", border:"rgba(100,145,255,.18)", title:"New CTO — Fresh Mandate", change:"Drew Pinto joined 2023 with an active tech rationalization mandate.", why:"The 2022 'no' was not his decision. He evaluates Square with fresh eyes.", buyer:"All stakeholders" },
             { rank:5, icon:"✓", color:T.teal, bg:"rgba(45,212,180,.07)", border:"rgba(45,212,180,.15)", title:"Multi-brand Menu Management", change:"Centralized menu control with per-location overrides now live.", why:"Franchise variance was the ops objection. Now solvable with a single platform.", buyer:"Operations + Franchise" },
-          ].map(item => <ChangedRow key={item.rank} item={item} />)}
+          ].map(item => <ChangedRow key={item.rank} item={item} defaultOpen={item.rank===1} />)}
         </Reveal>
 
         {/* Discovery */}
@@ -1087,8 +1087,8 @@ function ExecRow({ e }) {
 }
 
 // ── WHAT'S CHANGED ROW — expandable ──
-function ChangedRow({ item }) {
-  const [open, setOpen] = useState(false);
+function ChangedRow({ item, defaultOpen=false }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [hov, setHov] = useState(false);
   return (
     <div
@@ -1382,7 +1382,7 @@ function DesktopView({ navigate }) {
                     { rank:4, icon:"→", color:T.blue, bg:"rgba(100,145,255,.08)", border:"rgba(100,145,255,.18)", title:"New CTO — Fresh Mandate", change:"Drew Pinto joined 2023 with an active tech rationalization mandate.", why:"The 2022 'no' was not his decision. He evaluates Square with fresh eyes.", buyer:"All stakeholders" },
                     { rank:5, icon:"✓", color:T.teal, bg:"rgba(45,212,180,.07)", border:"rgba(45,212,180,.15)", title:"Multi-brand Menu Management", change:"Centralized menu control with per-location overrides now live.", why:"Franchise variance was the ops objection. Now solvable with a single platform.", buyer:"Operations + Franchise" },
                   ].map((item) => (
-                    <ChangedRow key={item.rank} item={item} />
+                    <ChangedRow key={item.rank} item={item} defaultOpen={item.rank===1} />
                   ))}
                 </div>
               </div>
