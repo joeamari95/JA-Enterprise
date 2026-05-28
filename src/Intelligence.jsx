@@ -364,7 +364,7 @@ function PartnerCard({ p, isMobile }) {
             ) : (
               <>
                 <span style={{ fontSize:11,lineHeight:1,display:"flex",alignItems:"center" }}>📩</span>
-                <span style={{ lineHeight:1 }}>↗ Message Partner Manager on Slack {p.id==="oracle"?"(@stevienicks)":"(@cmcvie)"}</span>
+                <span style={{ lineHeight:1 }}>Message Partner Manager on Slack {p.id==="oracle"?"(@stevienicks)":"(@cmcvie)"}</span>
               </>
             )}
           </button>
