@@ -372,7 +372,7 @@ function PartnerCard({ p, isMobile }) {
                   <path d="M1 5l5.5 4 5.5-4"/>
                   <path d="M13 7l2.5-2.5M13 7h2M13 7v-2" strokeWidth="1.2"/>
                 </svg>
-                <span>Message {p.pm.split(" ")[0]} on Slack</span>
+                <span>Message Partner Manager on Slack {p.id==="oracle"?"(@stevienicks)":p.id==="netsuite"?"(@lbuckingham)":"(@cmcvie)"}</span>
               </>
             )}
           </button>
