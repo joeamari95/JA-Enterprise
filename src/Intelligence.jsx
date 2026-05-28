@@ -732,7 +732,30 @@ function DisclaimerTicker() {
   );
 }
 
-// ── SFDC MICRO LOG BUTTON ──
+// ── SFDC TOAST ──
+const toastBus = { listeners: [] };
+function showToast(msg) { toastBus.listeners.forEach(fn => fn(msg)); }
+function SfdcToast() {
+  const [msg, setMsg] = useState(null);
+  useEffect(() => {
+    const fn = (m) => { setMsg(m); setTimeout(() => setMsg(null), 2000); };
+    toastBus.listeners.push(fn);
+    return () => { toastBus.listeners = toastBus.listeners.filter(f => f !== fn); };
+  }, []);
+  if (!msg) return null;
+  return (
+    <div style={{ position:"fixed",bottom:24,left:"50%",transform:"translateX(-50%)",zIndex:500,
+      pointerEvents:"none",background:"rgba(11,12,18,.94)",backdropFilter:"blur(16px)",
+      border:"1px solid rgba(255,255,255,.09)",borderRadius:100,padding:"6px 16px",
+      display:"flex",alignItems:"center",gap:8,boxShadow:"0 8px 24px rgba(0,0,0,.4)",
+      animation:"toastIn .25s cubic-bezier(.34,1.2,.64,1) both",whiteSpace:"nowrap" }}>
+      <div style={{ width:4,height:4,borderRadius:"50%",background:T.green,flexShrink:0 }} />
+      <span style={{ fontFamily:"Jost,sans-serif",fontSize:9.5,color:T.txt2,letterSpacing:".04em" }}>{msg}</span>
+    </div>
+  );
+}
+
+// ── SFDC MICRO LOG — minimal ──
 function SfdcMicroLog({ label, small }) {
   const [logged, setLogged] = useState(false);
   const handle = (e) => {
@@ -740,84 +763,74 @@ function SfdcMicroLog({ label, small }) {
     if (logged) return;
     setLogged(true);
     logSfdc(label);
+    showToast(`Logged · ${label}`);
   };
   return (
-    <button onClick={handle} title={`Log to SFDC: ${label}`} style={{
-      display:"flex", alignItems:"center", gap:3,
-      padding: small ? "2px 6px" : "3px 8px",
-      background: logged ? "rgba(74,222,128,.10)" : "rgba(255,255,255,.04)",
-      border: logged ? "1px solid rgba(74,222,128,.22)" : "1px solid rgba(255,255,255,.08)",
-      borderRadius:5, cursor: logged ? "default" : "pointer",
-      fontFamily:"Jost,sans-serif",
-      fontSize: small ? 7.5 : 8.5,
-      color: logged ? T.green : "rgba(255,255,255,.28)",
-      letterSpacing:".05em", transition:"all .2s",
-      flexShrink:0,
+    <button onClick={handle} title={`Log: ${label}`} style={{
+      padding:"2px 7px",
+      background:"transparent",
+      border:`1px solid ${logged?"rgba(74,222,128,.2)":"rgba(255,255,255,.07)"}`,
+      borderRadius:4,cursor:logged?"default":"pointer",
+      fontFamily:"Jost,sans-serif",fontSize:7,
+      color:logged?T.green:"rgba(255,255,255,.22)",
+      letterSpacing:".07em",transition:"all .2s",flexShrink:0,
     }}>
-      <span style={{ fontSize: small ? 8 : 9 }}>{logged ? "✓" : "📊"}</span>
-      {logged ? "Logged" : "SFDC"}
+      {logged ? "✓ logged" : "sfdc"}
     </button>
   );
 }
 
-// ── FLOATING SFDC COUNTER ──
-function SfdcFloater() {
+// ── SFDC NAV PILL ──
+function SfdcNavPill() {
   const count = useSfdcCount();
-  const [showLog, setShowLog] = useState(false);
+  const [open, setOpen] = useState(false);
   if (count === 0) return null;
   return (
-    <div style={{
-      position:"fixed", bottom:20, right:20, zIndex:150,
-    }}>
-      {showLog && (
-        <div style={{
-          position:"absolute", bottom:44, right:0, width:260,
-          background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.09) 0%,transparent 65%),#0f1018",
-          border:"1px solid rgba(255,255,255,.14)", borderRadius:12,
-          boxShadow:"0 16px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.12)",
-          padding:"12px 14px", animation:"gateIn .25s ease both",
-        }}>
-          <div style={{ fontSize:8.5,fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",
-            color:"rgba(255,255,255,.4)",marginBottom:10 }}>Logged Activities</div>
+    <div style={{ position:"relative" }}>
+      <button onClick={() => setOpen(!open)} style={{
+        display:"flex",alignItems:"center",gap:5,padding:"3px 10px",
+        background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",
+        borderRadius:100,cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:8.5,
+        color:"rgba(255,255,255,.38)",letterSpacing:".06em",transition:"all .2s",
+      }}>
+        <span style={{ color:T.green,fontFamily:"monospace" }}>{count}</span>
+        <span>· sfdc</span>
+      </button>
+      {open && (
+        <div onClick={() => setOpen(false)} style={{ position:"fixed",inset:0,zIndex:199 }} />
+      )}
+      {open && (
+        <div style={{ position:"absolute",top:"calc(100% + 8px)",right:0,width:250,zIndex:200,
+          background:"rgba(11,12,18,.96)",backdropFilter:"blur(20px)",
+          border:"1px solid rgba(255,255,255,.09)",borderRadius:12,
+          boxShadow:"0 16px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07)",
+          padding:"12px 14px",animation:"gateIn .2s ease both" }}>
+          <div style={{ fontSize:7.5,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",
+            color:"rgba(255,255,255,.3)",marginBottom:8 }}>Activity Log</div>
           {sfdcLog.items.map((item,i) => (
-            <div key={i} style={{ display:"flex",justifyContent:"space-between",
+            <div key={i} style={{ display:"flex",justifyContent:"space-between",alignItems:"center",
               padding:"4px 0",borderBottom:"1px solid rgba(255,255,255,.05)",
-              fontSize:9.5,color:T.txt2 }}>
-              <span>{item.action}</span>
-              <span style={{ color:T.txt4,fontSize:8.5,fontFamily:"monospace" }}>
+              fontSize:9,color:T.txt2 }}>
+              <span style={{ overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,marginRight:8 }}>{item.action}</span>
+              <span style={{ color:T.txt4,fontSize:7.5,fontFamily:"monospace",flexShrink:0 }}>
                 {item.time.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}
               </span>
             </div>
           ))}
-          <div style={{ marginTop:10,fontSize:9,color:T.txt3,textAlign:"center" }}>
-            Tap "Batch Log" to push all to SFDC
-          </div>
-          <button style={{ width:"100%",marginTop:6,padding:"6px 0",
-            background:"rgba(74,222,128,.10)",border:"1px solid rgba(74,222,128,.22)",
-            borderRadius:7,cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:9,
-            fontWeight:500,color:T.green,letterSpacing:".06em" }}>
-            Batch Log to SFDC ({count})
+          <button style={{ width:"100%",marginTop:8,padding:"5px 0",
+            background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",
+            borderRadius:6,cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:8.5,
+            color:T.txt3,letterSpacing:".06em" }}>
+            Push all to SFDC
           </button>
         </div>
       )}
-      <button onClick={() => setShowLog(!showLog)} style={{
-        display:"flex",alignItems:"center",gap:7,
-        padding:"8px 14px",
-        background:"radial-gradient(ellipse at 30% 0%,rgba(74,222,128,.18),rgba(13,14,19,.95))",
-        border:"1px solid rgba(74,222,128,.3)",borderRadius:100,
-        boxShadow:"0 4px 20px rgba(0,0,0,.4),0 0 16px rgba(74,222,128,.12)",
-        cursor:"pointer",fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,
-        color:T.green,letterSpacing:".06em",backdropFilter:"blur(12px)",
-        animation:"floaterPulse 3s ease-in-out infinite",
-      }}>
-        <span style={{ fontSize:12 }}>📊</span>
-        {count} unlogged · SFDC
-        <div style={{ width:6,height:6,borderRadius:"50%",background:T.green,
-          boxShadow:"0 0 6px rgba(74,222,128,.8)",flexShrink:0 }} />
-      </button>
     </div>
   );
 }
+
+function SfdcFloater() { return <SfdcToast />; }
+
 
 function ThesisCard({ isMobile }) {
   const [expanded, setExpanded] = useState(false);
@@ -989,6 +1002,61 @@ function ExecRow({ e }) {
   );
 }
 
+// ── WHAT'S CHANGED ROW — expandable ──
+function ChangedRow({ item }) {
+  const [open, setOpen] = useState(false);
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      onClick={() => setOpen(!open)}
+      style={{
+        background: hov ? item.bg : "rgba(255,255,255,.025)",
+        border:`1px solid ${hov||open ? item.border : "rgba(255,255,255,.07)"}`,
+        borderLeft:`2px solid ${item.color}`,
+        borderRadius:9,padding:"8px 10px",cursor:"pointer",
+        transition:"all .22s",
+        transform: hov ? "translateY(-1px)" : "none",
+        boxShadow: hov ? `0 4px 16px rgba(0,0,0,.25),0 0 8px ${item.color}18` : "none",
+      }}>
+      {/* Collapsed: rank + icon + title + buyer badge */}
+      <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+        <div style={{ fontFamily:"monospace",fontSize:8,color:item.color,
+          background:item.bg,border:`1px solid ${item.border}`,
+          borderRadius:4,padding:"1px 5px",flexShrink:0,fontWeight:600 }}>
+          #{item.rank}
+        </div>
+        <div style={{ fontSize:10.5,color:T.txt,fontWeight:500,flex:1,lineHeight:1.3 }}>
+          {item.title}
+        </div>
+        <svg width="8" height="8" viewBox="0 0 12 12" fill="none"
+          stroke="rgba(255,255,255,.25)" strokeWidth="1.5"
+          style={{ transition:"transform .2s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
+          <path d="M2 4l4 4 4-4"/>
+        </svg>
+      </div>
+
+      {/* Expanded: change + why + buyer */}
+      {open && (
+        <div style={{ marginTop:8,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.06)" }}>
+          <div style={{ fontSize:10,color:T.txt2,lineHeight:1.6,marginBottom:6 }}>
+            <span style={{ color:item.color,fontWeight:500 }}>What changed: </span>
+            {item.change}
+          </div>
+          <div style={{ fontSize:10,color:T.txt2,lineHeight:1.6,marginBottom:8 }}>
+            <span style={{ color:T.teal,fontWeight:500 }}>Why it matters: </span>
+            {item.why}
+          </div>
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between" }}>
+            <span style={{ fontSize:8.5,color:T.txt3,fontStyle:"italic" }}>Unblocks: {item.buyer}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── OVERVIEW CARD — collapsible ──
 function OverviewCard() {
   const [open, setOpen] = useState(false);
@@ -1100,6 +1168,7 @@ function DesktopView({ navigate }) {
             </div>
           </div>
           <div style={{ display:"flex",alignItems:"center",gap:14 }}>
+            <SfdcNavPill />
             <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em",fontWeight:500 }}>
               <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
             </div>
@@ -1173,23 +1242,51 @@ function DesktopView({ navigate }) {
           </Reveal>
 
           <Reveal delay={160}>
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14 }}>
-              <div>
+            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch" }}>
+              {/* OWNERSHIP */}
+              <div style={{
+                background:"radial-gradient(ellipse 80% 60% at 10% 0%,rgba(255,96,96,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(100,145,255,.04) 0%,transparent 60%)",
+                border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
+                display:"flex",flexDirection:"column",
+                boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)",
+                position:"relative",overflow:"hidden",
+              }}>
+                <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
+                  background:"linear-gradient(90deg,transparent,rgba(255,96,96,.3) 40%,rgba(100,145,255,.2) 70%,transparent)",
+                  pointerEvents:"none" }} />
                 <SecHdr label="Ownership & Power Structure" />
-                {[
-                  { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
-                  { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
-                  { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
-                ].map(o => <OwnerRow key={o.name} o={o} />)}
+                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
+                  {[
+                    { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
+                    { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
+                    { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
+                  ].map(o => <OwnerRow key={o.name} o={o} />)}
+                </div>
               </div>
-              <div>
+
+              {/* WHAT'S CHANGED */}
+              <div style={{
+                background:"radial-gradient(ellipse 80% 60% at 10% 0%,rgba(74,222,128,.05) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(45,212,180,.03) 0%,transparent 60%)",
+                border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
+                display:"flex",flexDirection:"column",
+                boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)",
+                position:"relative",overflow:"hidden",
+              }}>
+                <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
+                  background:"linear-gradient(90deg,transparent,rgba(74,222,128,.25) 40%,rgba(45,212,180,.2) 70%,transparent)",
+                  pointerEvents:"none" }} />
                 <SecHdr label="What's Changed Since 2022" />
-                {[["✓",T.green,"Enterprise KDS live","— was the #1 gap in 2022. Now deployed at scale."],["✓",T.green,"Open APIs mature","— Opera Cloud + Bonvoy fully supported. Blocker gone."],["✓",T.green,"Multi-brand menu mgmt","— centralized with per-location overrides."],["⚡",T.amber,"MICROS EOL confirmed","— Oracle EOL announced. Active search underway."],["→",T.blue,"New CTO in seat 2023","— Drew Pinto. Rationalization mandate. 2022 no was not his."]].map(([icon,c,t,b]) => (
-                  <div key={t} style={{ display:"flex",gap:9,padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:8,marginBottom:4,transition:"all .2s" }}>
-                    <div style={{ fontSize:9,flexShrink:0,paddingTop:2,width:12,color:c }}>{icon}</div>
-                    <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.55 }}><strong style={{ color:T.txt,fontWeight:500 }}>{t}</strong>{b}</div>
-                  </div>
-                ))}
+                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1 }}>
+                  {[
+                    { rank:1, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"MICROS EOL — Forced Migration", change:"Oracle confirmed MICROS 3700 end-of-life. Marriott brands actively evaluating replacements.", why:"The 2022 objection was 'we're not replacing what works.' That's gone — they have to move.", buyer:"Drew Pinto (CTO)" },
+                    { rank:2, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Enterprise KDS Now Live", change:"Square's enterprise kitchen display system is deployed at scale — the #1 gap from 2022.", why:"VP F&B's primary technical objection is closed. Full-service F&B at property scale is proven.", buyer:"VP F&B Americas" },
+                    { rank:3, icon:"✓", color:T.green, bg:"rgba(74,222,128,.08)", border:"rgba(74,222,128,.18)", title:"Open APIs — Opera + Bonvoy", change:"Native PMS and loyalty integration now fully supported. The 2022 blocker is gone.", why:"Pinto's IT team blocked on integration gaps. Those gaps no longer exist.", buyer:"Drew Pinto + IT" },
+                    { rank:4, icon:"→", color:T.blue, bg:"rgba(100,145,255,.08)", border:"rgba(100,145,255,.18)", title:"New CTO — Fresh Mandate", change:"Drew Pinto joined 2023 with an active tech rationalization mandate.", why:"The 2022 'no' was not his decision. He evaluates Square with fresh eyes.", buyer:"All stakeholders" },
+                    { rank:5, icon:"✓", color:T.teal, bg:"rgba(45,212,180,.07)", border:"rgba(45,212,180,.15)", title:"Multi-brand Menu Management", change:"Centralized menu control with per-location overrides now live.", why:"Franchise variance was the ops objection. Now solvable with a single platform.", buyer:"Operations + Franchise" },
+                  ].map((item) => (
+                    <ChangedRow key={item.rank} item={item} />
+                  ))}
+                </div>
               </div>
             </div>
           </Reveal>
@@ -1296,6 +1393,7 @@ export default function Intelligence() {
         @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
         @keyframes gateIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
         @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
         @keyframes arrowBounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(3px);opacity:1}}
         @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-33.33%)}}
         @keyframes floaterPulse{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 16px rgba(74,222,128,.12);}50%{box-shadow:0 4px 24px rgba(0,0,0,.5),0 0 24px rgba(74,222,128,.22);}}
