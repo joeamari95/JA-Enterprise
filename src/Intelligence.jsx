@@ -539,26 +539,7 @@ function MobileView({ navigate }) {
 
         {/* Core Thesis — surfaces first on mobile */}
         <Reveal delay={60}>
-          <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(100,145,255,.10) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(45,212,180,.06) 0%,transparent 60%)",
-            backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",border:"1px solid rgba(100,145,255,.22)",
-            borderRadius:16,boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
-            padding:16,position:"relative",overflow:"hidden" }}>
-            <div style={{ position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)" }} />
-            <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
-              <div style={{ display:"flex",alignItems:"center",gap:7 }}>
-                <div style={{ width:6,height:6,borderRadius:"50%",background:T.teal,boxShadow:"0 0 8px rgba(45,212,180,.8)" }} />
-                <span style={{ fontSize:9,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:T.teal }}>Core Thesis</span>
-              </div>
-              <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
-            </div>
-            <div style={{ fontSize:12.5,color:T.txt,lineHeight:1.75,marginBottom:10,fontWeight:300 }}>
-              Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em>
-            </div>
-            <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
-              Synthesized from: Marriott 2024 AR · Q4 2025 Earnings · Drew Pinto LinkedIn · Oracle MICROS EOL · Reviewed and framed by Joey Amari
-            </div>
-            <RefreshBtn isMobile={true} />
-          </div>
+          <ThesisCard isMobile={true} />
         </Reveal>
 
         {/* Partners */}
@@ -696,6 +677,90 @@ function MobileView({ navigate }) {
         </Reveal>
 
       </div>
+    </div>
+  );
+}
+
+function ThesisCard({ isMobile }) {
+  const [expanded, setExpanded] = useState(false);
+  const PREVIEW_HEIGHT = 72; // px — shows ~2 lines, always visible
+
+  return (
+    <div style={{
+      background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(100,145,255,.10) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(45,212,180,.06) 0%,transparent 60%)",
+      backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",
+      border:"1px solid rgba(100,145,255,.22)",borderRadius:16,
+      boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
+      padding:16,position:"relative",overflow:"hidden" }}>
+      {/* Top sheen */}
+      <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
+        background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)",pointerEvents:"none" }} />
+
+      {/* Header — always visible */}
+      <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
+        <div style={{ display:"flex",alignItems:"center",gap:7 }}>
+          <div style={{ width:6,height:6,borderRadius:"50%",background:T.teal,boxShadow:"0 0 8px rgba(45,212,180,.8)" }} />
+          <span style={{ fontSize:9,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:T.teal }}>Core Thesis</span>
+        </div>
+        <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+          <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",
+            border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
+          <button onClick={() => setExpanded(!expanded)} style={{
+            display:"flex",alignItems:"center",gap:4,
+            background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.12)",
+            borderRadius:6,padding:"3px 8px",cursor:"pointer",fontFamily:"Jost,sans-serif",
+            fontSize:8.5,color:T.txt3,letterSpacing:".06em",transition:"all .2s" }}>
+            <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"
+              style={{ transition:"transform .3s",transform:expanded?"rotate(180deg)":"none" }}>
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+            {expanded ? "Collapse" : "Expand"}
+          </button>
+        </div>
+      </div>
+
+      {/* Body — clipped with fade, expands on toggle */}
+      <div style={{ position:"relative" }}>
+        <div style={{
+          maxHeight: expanded ? "400px" : `${PREVIEW_HEIGHT}px`,
+          overflow:"hidden",
+          transition:"max-height .45s cubic-bezier(.4,0,.2,1)",
+        }}>
+          <div style={{ fontSize:isMobile?12.5:11.5,color:T.txt,lineHeight:1.72,marginBottom:10,fontWeight:300 }}>
+            Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
+          </div>
+          {expanded && (
+            <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
+              Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
+            </div>
+          )}
+        </div>
+
+        {/* Fade gradient — only when collapsed */}
+        {!expanded && (
+          <div style={{
+            position:"absolute",bottom:0,left:0,right:0,height:32,
+            background:"linear-gradient(to bottom,transparent,rgba(9,10,18,.92))",
+            pointerEvents:"none",
+          }} />
+        )}
+      </div>
+
+      {/* Expand hint when collapsed */}
+      {!expanded && (
+        <button onClick={() => setExpanded(true)} style={{
+          marginTop:6,width:"100%",padding:"5px 0",
+          background:"none",border:"none",cursor:"pointer",
+          fontFamily:"Jost,sans-serif",fontSize:9,color:T.txt3,
+          letterSpacing:".06em",transition:"color .2s",display:"flex",
+          alignItems:"center",justifyContent:"center",gap:4 }}
+          onMouseEnter={e=>e.currentTarget.style.color=T.teal}
+          onMouseLeave={e=>e.currentTarget.style.color=T.txt3}>
+          <span>···</span> read full thesis
+        </button>
+      )}
+
+      {expanded && <RefreshBtn isMobile={isMobile} />}
     </div>
   );
 }
@@ -901,6 +966,10 @@ function DesktopView({ navigate }) {
           </Reveal>
 
           <Reveal delay={100}>
+            <ThesisCard isMobile={false} />
+          </Reveal>
+
+          <Reveal delay={160}>
             <SecHdr label="Ownership & Power Structure" />
             {[
               { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
@@ -908,30 +977,6 @@ function DesktopView({ navigate }) {
               { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
             ].map(o => <OwnerRow key={o.name} o={o} />)}
           </Reveal>
-
-          <Reveal delay={280}>
-            <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(100,145,255,.10) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(45,212,180,.06) 0%,transparent 60%)",
-              backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",border:"1px solid rgba(100,145,255,.22)",
-              borderRadius:16,boxShadow:"0 4px 6px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.22)",
-              padding:16,position:"relative",overflow:"hidden" }}>
-              <div style={{ position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,rgba(100,145,255,.45),rgba(45,212,180,.3),transparent)" }} />
-              <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:7 }}>
-                  <div style={{ width:6,height:6,borderRadius:"50%",background:T.teal,boxShadow:"0 0 8px rgba(45,212,180,.8)" }} />
-                  <span style={{ fontSize:9,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:T.teal }}>Core Thesis</span>
-                </div>
-                <span style={{ fontSize:8.5,color:T.txt3,padding:"2px 8px",background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:4 }}>⚡ Joey's read</span>
-              </div>
-              <div style={{ fontSize:11.5,color:T.txt,lineHeight:1.72,marginBottom:10,fontWeight:300 }}>
-                Marriott is a re-engagement play, not a cold pitch. The 2022 Courtyard pilot proved Square works at property level — the blockers were enterprise infrastructure gaps that no longer exist. Oracle MICROS EOL pressure, a new CTO with a fresh mandate, and an open VP F&B seat create a rare simultaneous opening. This is the pitch: <em style={{ color:T.blue }}>"You evaluated us early. Here's what's different."</em> Franchise variance is the only remaining wildcard — determine top-down vs. franchisee motion before committing to a sales play.
-              </div>
-              <div style={{ fontSize:8.5,color:T.txt3,lineHeight:1.65,paddingTop:8,borderTop:"1px solid rgba(255,255,255,.07)" }}>
-                Synthesized from: Marriott 2024 Annual Report · Q4 2025 Earnings · Drew Pinto LinkedIn (Mar 2026) · CIO Dive (Feb 2026) · Hotel Dive (May 2026) · Reviewed and framed by Joey Amari
-              </div>
-              <RefreshBtn isMobile={false} />
-            </div>
-          </Reveal>
-
 
           <Reveal delay={160}>
             <SecHdr label="Executive Leadership" />
