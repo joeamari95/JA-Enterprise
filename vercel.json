@@ -1,1 +1,14 @@
-{"rewrites":[{"source":"/(.*)", "destination":"/"}]}
+{
+  "buildCommand": "npm run build && cd deal-app && npm install && npm run build && cp -r dist ../dist/deal",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/deal/(.*)",
+      "destination": "/deal/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
