@@ -1292,42 +1292,32 @@ function DesktopView({ navigate }) {
 
         {/* LEFT COL */}
         <div style={{ borderRight:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:16,
-          maskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
-          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)" }}>
-          <Reveal delay={0}>
-            <div style={{ paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:17,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
-              <div style={{ fontSize:8.5,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands</div>
+          maskImage:"linear-gradient(to bottom, black 0%, black 88%, transparent 100%)",
+          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 88%, transparent 100%)" }}>
+          <div style={{ paddingBottom:8,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
+            <div style={{ fontFamily:"Georgia,serif",fontSize:17,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
+            <div style={{ fontSize:8.5,color:T.txt4,letterSpacing:".04em" }}>NYSE: MAR · Est. 1927 · 30 Brands</div>
+          </div>
+          <SecHdr label="Confirmed Partners" />
+          {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={false} />)}
+          <SecHdr label="Re-Engagement Strategy" />
+          {[["#1","Drew Pinto Direct","Lead with MICROS pressure. 'What's Changed' framing — capability update, not a cold pitch."],["#2","Oracle Partner Path","Stevie Nicks has active Marriott relationship. Co-sell MICROS EOL through the partner channel."],["#3","Courtyard GM Loop","Re-engage pilot GMs via Christine McVie. Updated testimonials + referral to Drew Pinto's team."]].map(([n,t,b]) => (
+            <div key={n} style={{ padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
+              <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:3 }}>
+                <span style={{ fontFamily:"monospace",fontSize:8.5,color:T.blue,flexShrink:0 }}>{n}</span>
+                <span style={{ fontFamily:"Georgia,serif",fontSize:10.5,fontWeight:300,color:T.txt }}>{t}</span>
+              </div>
+              <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:16 }}>{b}</div>
             </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <SecHdr label="Confirmed Partners" />
-            {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={false} />)}
-          </Reveal>
-          <Reveal delay={120}>
-            <SecHdr label="Re-Engagement Strategy" />
-            {[["#1","Drew Pinto Direct","Lead with MICROS pressure. 'What's Changed' framing — capability update, not a cold pitch."],["#2","Oracle Partner Path","Stevie Nicks has active Marriott relationship. Co-sell MICROS EOL through the partner channel."],["#3","Courtyard GM Loop","Re-engage pilot GMs via Christine McVie. Updated testimonials + referral to Drew Pinto's team."]].map(([n,t,b]) => (
-              <div key={n} style={{ padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:3 }}>
-                  <span style={{ fontFamily:"monospace",fontSize:8.5,color:T.blue,flexShrink:0 }}>{n}</span>
-                  <span style={{ fontFamily:"Georgia,serif",fontSize:10.5,fontWeight:300,color:T.txt }}>{t}</span>
-                </div>
-                <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:16 }}>{b}</div>
-              </div>
-            ))}
-          </Reveal>
-          <Reveal delay={140}>
-            <SecHdr label="F&B Stack" />
-            {[["Oracle MICROS","CURRENT — EOL",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)"],["Agilysys POS","CURRENT",T.txt3,"rgba(255,255,255,.05)","rgba(255,255,255,.08)"],["Square (2022)","PRIOR EVAL",T.amber,"rgba(245,166,35,.10)","rgba(245,166,35,.18)"],["Opera Cloud PMS","INTEG OPP",T.green,"rgba(74,222,128,.08)","rgba(74,222,128,.15)"]].map(([n,s,c,bg,b]) => (
-              <div key={n} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"5px 9px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:7,marginBottom:4 }}>
-                <span style={{ fontSize:10.5,color:T.txt,fontWeight:400 }}>{n}</span>
-                <span style={{ fontSize:8,fontWeight:500,letterSpacing:".06em",padding:"2px 7px",borderRadius:3,color:c,background:bg,border:`1px solid ${b}` }}>{s}</span>
-              </div>
-            ))}
-          </Reveal>
-          <Reveal delay={180}>
-            <SfdcWidget isMobile={false} />
-          </Reveal>
+          ))}
+          <SecHdr label="F&B Stack" />
+          {[["Oracle MICROS","CURRENT — EOL",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)"],["Agilysys POS","CURRENT",T.txt3,"rgba(255,255,255,.05)","rgba(255,255,255,.08)"],["Square (2022)","PRIOR EVAL",T.amber,"rgba(245,166,35,.10)","rgba(245,166,35,.18)"],["Opera Cloud PMS","INTEG OPP",T.green,"rgba(74,222,128,.08)","rgba(74,222,128,.15)"]].map(([n,s,c,bg,b]) => (
+            <div key={n} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"5px 9px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:7,marginBottom:4 }}>
+              <span style={{ fontSize:10.5,color:T.txt,fontWeight:400 }}>{n}</span>
+              <span style={{ fontSize:8,fontWeight:500,letterSpacing:".06em",padding:"2px 7px",borderRadius:3,color:c,background:bg,border:`1px solid ${b}` }}>{s}</span>
+            </div>
+          ))}
+          <SfdcWidget isMobile={false} />
         </div>
 
         {/* MAIN COL */}
@@ -1441,15 +1431,13 @@ function DesktopView({ navigate }) {
         <div style={{ borderLeft:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14,
           maskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
           WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)" }}>
-          <Reveal delay={80}>
-            <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
               <SecHdr label="Live Signals" />
               <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em",fontWeight:500,marginBottom:12 }}>
                 <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
               </div>
             </div>
             <LiveSignalsList dotColors={dotColors} />
-          </Reveal>
 
         </div>
       </div>
