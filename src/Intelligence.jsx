@@ -473,12 +473,16 @@ function PasswordGate({ onUnlock }) {
       <Grain />
       <div style={{ ...CARD,width:"min(340px,90vw)",padding:"36px 32px",textAlign:"center",position:"relative",zIndex:1,animation:"gateIn .5s cubic-bezier(.34,1.2,.64,1) both" }}>
         <Sheen />
-        <div style={{ width:44,height:44,borderRadius:"50%",
-          background:"radial-gradient(ellipse,rgba(122,168,255,.2),rgba(45,212,180,.1))",
-          border:"1px solid rgba(122,168,255,.3)",margin:"0 auto 18px",display:"flex",alignItems:"center",
-          justifyContent:"center",fontSize:18,boxShadow:"0 0 20px rgba(122,168,255,.2),0 0 40px rgba(45,212,180,.1)" }}>🔒</div>
-        <div style={{ fontFamily:"Georgia,serif",fontSize:18,fontWeight:300,color:T.txt,marginBottom:4 }}>Block Intelligence</div>
-        <div style={{ fontSize:10,color:T.txt3,letterSpacing:".08em",textTransform:"uppercase",marginBottom:24 }}>Restricted Access</div>
+        <div style={{ width:36,height:36,borderRadius:"50%",
+          background:"radial-gradient(ellipse,rgba(122,168,255,.15),rgba(45,212,180,.08))",
+          border:"1px solid rgba(255,255,255,.1)",margin:"0 auto 20px",display:"flex",alignItems:"center",
+          justifyContent:"center",boxShadow:"0 0 24px rgba(122,168,255,.15)" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" strokeWidth="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div style={{ fontFamily:"Georgia,serif",fontSize:17,fontWeight:300,color:T.txt,marginBottom:6,letterSpacing:".02em" }}>you've come far enough</div>
+        <div style={{ fontSize:9.5,color:T.txt4,letterSpacing:".12em",textTransform:"uppercase",marginBottom:28 }}>access code required</div>
         <input type="password" value={val} onChange={e => setVal(e.target.value)}
           onKeyDown={e => e.key==="Enter" && tryUnlock()}
           placeholder="Enter access code" autoFocus
