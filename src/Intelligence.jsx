@@ -844,6 +844,10 @@ function DesktopView({ navigate }) {
             </div>
           </Reveal>
           <Reveal delay={100}>
+            <SecHdr label="Confirmed Partners" />
+            {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={false} />)}
+          </Reveal>
+          <Reveal delay={140}>
             <SecHdr label="F&B Stack" />
             {[["Oracle MICROS","CURRENT — EOL",T.red,"rgba(255,96,96,.12)","rgba(255,96,96,.2)"],["Agilysys POS","CURRENT",T.txt3,"rgba(255,255,255,.05)","rgba(255,255,255,.08)"],["Square (2022)","PRIOR EVAL",T.amber,"rgba(245,166,35,.10)","rgba(245,166,35,.18)"],["Opera Cloud PMS","INTEG OPP",T.green,"rgba(74,222,128,.08)","rgba(74,222,128,.15)"]].map(([n,s,c,bg,b]) => (
               <div key={n} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"5px 9px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:7,marginBottom:4 }}>
@@ -851,10 +855,6 @@ function DesktopView({ navigate }) {
                 <span style={{ fontSize:8,fontWeight:500,letterSpacing:".06em",padding:"2px 7px",borderRadius:3,color:c,background:bg,border:`1px solid ${b}` }}>{s}</span>
               </div>
             ))}
-          </Reveal>
-          <Reveal delay={140}>
-            <SecHdr label="Confirmed Partners" />
-            {PARTNERS.map(p => <PartnerCard key={p.id} p={p} isMobile={false} />)}
           </Reveal>
           <Reveal delay={180}>
             <SfdcWidget isMobile={false} />
