@@ -74,7 +74,6 @@ const SLACK_MESSAGES = {
 
 const PARTNERS = [
   { name:"Oracle", confirmed:true, role:"Enterprise Tech Partner — MICROS + Opera Cloud Integration", body:"Confirmed partner. MICROS EOL creates a joint replacement narrative. Opera Cloud API integration is live — leverage to accelerate Marriott CTO credibility.", action:"→ Use MICROS EOL as shared urgency. Co-sell the migration story.", pm:"Stevie Nicks", pmTitle:"Partner Manager, Oracle Hospitality", id:"oracle" },
-  { name:"NetSuite", confirmed:true, role:"Enterprise Finance Partner — ERP + Financial Reporting", body:"Marriott runs NetSuite across managed properties. Square ↔ NetSuite integration eliminates manual reconciliation across 8,785 properties.", action:"→ Joint CFO story. Lindsey has existing Marriott finance team relationship.", pm:"Lindsey Buckingham", pmTitle:"Partner Manager, NetSuite Enterprise", id:"netsuite" },
   { name:"Courtyard GM Network", confirmed:false, role:"Internal Advocates — 2022 Pilot GMs, NYC + Boston", body:"GMs with live Square performance data. Can advocate upward to Marriott corporate tech team.", action:"→ Re-engage for updated case study + corporate referral to Drew Pinto's team.", pm:"Christine McVie", pmTitle:"Account Manager, Hospitality", id:"courtyard" },
 ];
 
@@ -199,15 +198,16 @@ function SlackModal({ partner, onClose, isMobile }) {
   const desktopWrap = {
     position:"fixed", inset:0, zIndex:300,
     display:"flex", alignItems:"center", justifyContent:"center",
-    background:"rgba(4,5,10,.7)", backdropFilter:"blur(12px)", WebkitBackdropFilter:"blur(12px)",
+    background:"rgba(4,5,10,.55)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)",
   };
   const desktopInner = {
-    width:420, position:"relative",
-    background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.09) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.05) 0%,transparent 60%)",
-    backdropFilter:"blur(24px)", WebkitBackdropFilter:"blur(24px)",
-    border:"1px solid rgba(255,255,255,.14)", borderRadius:20,
-    boxShadow:"0 24px 64px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.22)",
+    width:440, position:"relative",
+    background:"radial-gradient(ellipse 65% 45% at 15% 0%,rgba(255,255,255,.09) 0%,transparent 60%),rgba(11,12,18,.88)",
+    backdropFilter:"blur(32px)", WebkitBackdropFilter:"blur(32px)",
+    border:"1px solid rgba(255,255,255,.13)", borderRadius:20,
+    boxShadow:"0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.04) inset,inset 0 1px 0 rgba(255,255,255,.18)",
     overflow:"hidden",
+    animation:"gateIn .28s cubic-bezier(.34,1.1,.64,1) both",
   };
 
   const content = (
@@ -359,7 +359,8 @@ function PartnerCard({ p, isMobile }) {
             {/* Envelope with arrow icon */}
             {messaged ? (
               <>
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3"
+                  style={{ flexShrink:0,marginTop:0 }}>
                   <rect x="1" y="3" width="14" height="10" rx="1.5"/>
                   <path d="M1 5l7 5 7-5"/>
                 </svg>
@@ -367,7 +368,8 @@ function PartnerCard({ p, isMobile }) {
               </>
             ) : (
               <>
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3"
+                  style={{ flexShrink:0,marginTop:0 }}>
                   <rect x="1" y="3" width="11" height="9" rx="1.5"/>
                   <path d="M1 5l5.5 4 5.5-4"/>
                   <path d="M13 7l2.5-2.5M13 7h2M13 7v-2" strokeWidth="1.2"/>
@@ -676,7 +678,133 @@ function MobileView({ navigate }) {
   );
 }
 
-// ── DISCLAIMER TICKER ──
+// ── LIVE SIGNALS LIST — with modal ──
+function LiveSignalsList({ dotColors, compact }) {
+  const [active, setActive] = useState(null);
+  const dc = dotColors || { red:T.red, green:T.green, amber:T.amber, blue:T.blue };
+  return (
+    <>
+      {active && <SignalPreviewModal signal={active} onClose={() => setActive(null)} />}
+      {SIGNALS.map(s => (
+        <div key={s.title} onClick={() => setActive(s)} style={{
+          padding: compact ? "7px 9px" : "9px 11px",
+          background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",
+          borderRadius:10,marginBottom:compact?4:5,cursor:"pointer",transition:"border-color .2s,background .2s" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor="rgba(255,255,255,.13)"; e.currentTarget.style.background="rgba(255,255,255,.05)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,.07)"; e.currentTarget.style.background="rgba(255,255,255,.03)"; }}>
+          <div style={{ display:"flex",alignItems:"center",gap:7,marginBottom:3 }}>
+            <div style={{ width:5,height:5,borderRadius:"50%",flexShrink:0,background:dc[s.dot],boxShadow:`0 0 6px ${dc[s.dot]}99` }} />
+            <div style={{ fontFamily:"Georgia,serif",fontSize:compact?10.5:11,fontWeight:300,color:T.txt,lineHeight:1.3,flex:1 }}>{s.title}</div>
+            <span style={{ fontSize:8.5,color:T.txt4,flexShrink:0 }}>⊕</span>
+          </div>
+          <div style={{ fontSize:compact?9.5:10,color:T.txt2,lineHeight:1.5,paddingLeft:12 }}>{s.body}</div>
+          <div style={{ fontSize:8,color:T.blue,marginTop:2,paddingLeft:12,letterSpacing:".03em" }}>{s.meta}</div>
+        </div>
+      ))}
+    </>
+  );
+}
+
+// ── SIGNAL PREVIEW MODAL ──
+function SignalPreviewModal({ signal, onClose }) {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [iframeError, setIframeError] = useState(false);
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:400,display:"flex",alignItems:"center",justifyContent:"center" }}
+      onClick={onClose}>
+      {/* Blurred backdrop */}
+      <div style={{ position:"absolute",inset:0,background:"rgba(4,5,10,.55)",
+        backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)" }} />
+
+      {/* Glass modal */}
+      <div onClick={e=>e.stopPropagation()} style={{
+        position:"relative",width:"min(640px,92vw)",
+        background:"radial-gradient(ellipse 65% 45% at 15% 0%,rgba(255,255,255,.09) 0%,transparent 60%),rgba(11,12,18,.88)",
+        backdropFilter:"blur(32px)",WebkitBackdropFilter:"blur(32px)",
+        border:"1px solid rgba(255,255,255,.13)",borderRadius:20,overflow:"hidden",
+        boxShadow:"0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.04) inset,inset 0 1px 0 rgba(255,255,255,.18)",
+        animation:"gateIn .28s cubic-bezier(.34,1.1,.64,1) both",
+      }}>
+        {/* Top sheen */}
+        <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
+          background:"linear-gradient(90deg,transparent,rgba(255,255,255,.3) 40%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.3) 60%,transparent)",
+          pointerEvents:"none" }} />
+
+        {/* Header */}
+        <div style={{ padding:"16px 18px 12px",borderBottom:"1px solid rgba(255,255,255,.07)" }}>
+          <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:10 }}>
+            <div style={{ flex:1 }}>
+              <div style={{ fontFamily:"Georgia,serif",fontSize:14,fontWeight:300,color:T.txt,lineHeight:1.3,marginBottom:4 }}>
+                {signal.title}
+              </div>
+              <div style={{ fontSize:8.5,color:T.blue,letterSpacing:".04em" }}>{signal.meta}</div>
+            </div>
+            <button onClick={onClose} style={{ background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",
+              borderRadius:8,padding:"4px 10px",cursor:"pointer",fontSize:11,color:"rgba(255,255,255,.4)",
+              fontFamily:"Jost,sans-serif",flexShrink:0 }}>✕</button>
+          </div>
+        </div>
+
+        {/* Body preview */}
+        <div style={{ padding:"14px 18px" }}>
+          <div style={{ fontSize:11.5,color:T.txt2,lineHeight:1.7,marginBottom:14,fontWeight:300 }}>
+            {signal.body}
+          </div>
+
+          {/* iframe preview attempt */}
+          {!iframeError && (
+            <div style={{ position:"relative",borderRadius:10,overflow:"hidden",
+              border:"1px solid rgba(255,255,255,.08)",marginBottom:12,
+              background:"rgba(255,255,255,.02)",height:200 }}>
+              {!iframeLoaded && (
+                <div style={{ position:"absolute",inset:0,display:"flex",alignItems:"center",
+                  justifyContent:"center",flexDirection:"column",gap:8 }}>
+                  <div style={{ width:18,height:18,border:"1.5px solid rgba(255,255,255,.2)",
+                    borderTopColor:T.blue,borderRadius:"50%",animation:"spin 1s linear infinite" }} />
+                  <span style={{ fontSize:9,color:T.txt4,letterSpacing:".06em" }}>Loading preview</span>
+                </div>
+              )}
+              <iframe
+                src={signal.url}
+                style={{ width:"100%",height:"100%",border:"none",
+                  opacity:iframeLoaded?1:0,transition:"opacity .3s" }}
+                onLoad={() => setIframeLoaded(true)}
+                onError={() => setIframeError(true)}
+                sandbox="allow-scripts allow-same-origin"
+                title={signal.title}
+              />
+            </div>
+          )}
+
+          {/* If iframe blocked, show a rich card */}
+          {iframeError && (
+            <div style={{ padding:"12px 14px",background:"rgba(255,255,255,.03)",
+              border:"1px solid rgba(255,255,255,.07)",borderRadius:10,marginBottom:12 }}>
+              <div style={{ fontSize:9,color:T.txt4,letterSpacing:".06em",marginBottom:6 }}>SOURCE PREVIEW</div>
+              <div style={{ fontSize:10.5,color:T.txt3,lineHeight:1.6 }}>
+                Preview blocked by source. Open the full article to read.
+              </div>
+            </div>
+          )}
+
+          {/* Open full page button */}
+          <a href={signal.url} target="_blank" rel="noreferrer" style={{ textDecoration:"none",display:"block" }}>
+            <button style={{ width:"100%",padding:"10px 0",
+              background:"linear-gradient(135deg,rgba(122,168,255,.14),rgba(45,212,180,.08))",
+              border:"1px solid rgba(122,168,255,.25)",borderRadius:10,cursor:"pointer",
+              fontFamily:"Jost,sans-serif",fontSize:10,fontWeight:500,color:T.blue,
+              letterSpacing:".07em",display:"flex",alignItems:"center",justifyContent:"center",gap:8 }}>
+              Open Full Article ↗
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function DisclaimerTicker() {
   const text = "All information is publicly available — no proprietary data, internal systems, or confidential insights from Block / Square have been used. Built for demonstration purposes only.";
   return (
@@ -1189,6 +1317,18 @@ function DesktopView({ navigate }) {
           <Reveal delay={180}>
             <SfdcWidget isMobile={false} />
           </Reveal>
+          <Reveal delay={210}>
+            <SecHdr label="Re-Engagement Strategy" />
+            {[["#1","Drew Pinto Direct","\"What's Changed\" framing. Lead with MICROS pressure. Capability update, not a cold pitch."],["#2","Oracle Partner Path","Stevie Nicks at Oracle has active Marriott relationship. Co-sell MICROS EOL through the partner channel."],["#3","Courtyard GM Loop","Re-engage pilot GMs via Christine McVie. Updated testimonials + corporate referral to Drew Pinto's team."]].map(([n,t,b]) => (
+              <div key={n} style={{ padding:"7px 10px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:9,marginBottom:5 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:3 }}>
+                  <span style={{ fontFamily:"monospace",fontSize:8.5,color:T.blue,flexShrink:0 }}>{n}</span>
+                  <span style={{ fontFamily:"Georgia,serif",fontSize:10.5,fontWeight:300,color:T.txt }}>{t}</span>
+                </div>
+                <div style={{ fontSize:9.5,color:T.txt2,lineHeight:1.5,paddingLeft:16 }}>{b}</div>
+              </div>
+            ))}
+          </Reveal>
         </div>
 
         {/* MAIN COL */}
@@ -1293,35 +1433,9 @@ function DesktopView({ navigate }) {
                 <div style={{ width:5,height:5,borderRadius:"50%",background:T.green,animation:"pulse 2s ease-in-out infinite" }} />LIVE
               </div>
             </div>
-            {SIGNALS.map(s => (
-              <a key={s.title} href={s.url} target="_blank" rel="noreferrer" style={{ textDecoration:"none",display:"block",marginBottom:5 }}>
-                <div style={{ padding:"9px 11px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:10,transition:"border-color .2s,background .2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor="rgba(255,255,255,.14)"; e.currentTarget.style.background="rgba(255,255,255,.05)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,.07)"; e.currentTarget.style.background="rgba(255,255,255,.03)"; }}>
-                  <div style={{ display:"flex",alignItems:"center",gap:7,marginBottom:4 }}>
-                    <div style={{ width:5,height:5,borderRadius:"50%",flexShrink:0,background:dotColors[s.dot],boxShadow:`0 0 6px ${dotColors[s.dot]}99` }} />
-                    <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,lineHeight:1.3,flex:1 }}>{s.title}</div>
-                    <span style={{ fontSize:9,color:T.txt3,flexShrink:0 }}>↗</span>
-                  </div>
-                  <div style={{ fontSize:10,color:T.txt2,lineHeight:1.55,paddingLeft:12 }}>{s.body}</div>
-                  <div style={{ fontSize:8.5,color:T.blue,marginTop:3,paddingLeft:12,letterSpacing:".03em" }}>{s.meta}</div>
-                </div>
-              </a>
-            ))}
+            <LiveSignalsList dotColors={dotColors} />
           </Reveal>
 
-          <Reveal delay={140}>
-            <SecHdr label="Re-Engagement Strategy" />
-            {[["#1","Re-engage Drew Pinto Direct","Cold re-intro with \"What's Changed\" framing. Lead with MICROS pressure. He knows Square — capability update, not a cold pitch."],["#2","Activate Oracle Partner Path","Hayley Williams at Oracle has active Marriott relationship. Co-sell MICROS EOL + Square replacement through the partner channel."],["#3","Courtyard GM Referral Loop","Re-engage pilot GMs via Stevie Nicks. Get updated testimonials and corporate referral intro to Drew Pinto's team."]].map(([n,t,b]) => (
-              <div key={n} style={{ padding:"9px 11px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:10,marginBottom:5 }}>
-                <div style={{ display:"flex",alignItems:"center",gap:7,marginBottom:4 }}>
-                  <div style={{ fontFamily:"monospace",fontSize:9,color:T.blue,flexShrink:0 }}>{n}</div>
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:11,fontWeight:300,color:T.txt,lineHeight:1.3 }}>{t}</div>
-                </div>
-                <div style={{ fontSize:10,color:T.txt2,lineHeight:1.55,paddingLeft:18 }}>{b}</div>
-              </div>
-            ))}
-          </Reveal>
         </div>
       </div>
     </div>
