@@ -1019,17 +1019,16 @@ function OwnerRow({ o }) {
         transform: hov ? "translateY(-1px)" : "none",
         boxShadow: hov ? `0 6px 20px rgba(0,0,0,.35),0 0 12px ${o.border}18` : "0 2px 8px rgba(0,0,0,.2)",
       }}>
-      <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"8px 12px",cursor:"pointer" }}>
-        <div style={{ flex:1,display:"flex",alignItems:"center",gap:8,minWidth:0 }}>
-          <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>
+      <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"7px 12px",cursor:"pointer" }}>
+        <div style={{ flex:1,minWidth:0 }}>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:11.5,fontWeight:300,color:T.txt,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>
             <a href={o.href} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} style={{ color:T.txt,textDecoration:"none" }}>{o.name}</a>
           </div>
-          <div style={{ fontSize:9,color:T.txt3,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{o.role}</div>
+          <div style={{ fontSize:8,color:T.txt4,letterSpacing:".02em",marginTop:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis" }}>{o.role}</div>
         </div>
-        <SfdcMicroLog label={`Contact touched: ${o.name}`} small={true} />
-        <span style={{ fontSize:8,fontWeight:500,letterSpacing:".08em",padding:"2px 7px",borderRadius:3,
+        <span style={{ fontSize:7.5,fontWeight:500,letterSpacing:".07em",padding:"2px 6px",borderRadius:3,
           color:o.sigColor,background:o.sigBg,flexShrink:0 }}>{o.sig}</span>
-        <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
+        <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="1.5"
           style={{ transition:"transform .2s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
           <path d="M2 4l4 4 4-4"/>
         </svg>
@@ -1361,7 +1360,7 @@ function DesktopView({ navigate }) {
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none",zIndex:1 }} />
                 <SecHdr label="Key Stakeholders" />
-                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1,overflowY:"auto",minHeight:0,scrollbarWidth:"thin" }}>
+                <div style={{ display:"flex",flexDirection:"column",gap:3,flex:1,overflowY:"auto",minHeight:0,scrollbarWidth:"thin" }}>
                   {[
                     { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate. Ultimate economic buyer. Has referenced 2022 Square eval publicly.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
                     { name:"Drew Pinto",href:"#",role:"EVP & Chief Revenue + Technology Officer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022 — that no was not his. Active tech rationalization mandate.",action:"→ Primary re-engagement. He knows Square. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
