@@ -319,25 +319,27 @@ function PartnerCard({ p, isMobile }) {
         boxShadow:open?"0 8px 24px rgba(0,0,0,.3)":"0 2px 8px rgba(0,0,0,.2)" }}>
 
         {/* Always-visible collapsed row */}
-        <div style={{ display:"flex",alignItems:"center",padding:"10px 12px",gap:10,cursor:"pointer" }}
-          onClick={() => setOpen(!open)}>
-          {/* Left: name + badge + PM */}
-          <div style={{ flex:1,minWidth:0 }}>
-            <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:2,flexWrap:"wrap" }}>
-              <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:T.txt }}>{p.name}</div>
+        <div style={{ padding:"10px 12px",cursor:"pointer" }} onClick={() => setOpen(!open)}>
+          {/* Row 1: name + badge + chevron */}
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:5 }}>
+            <div style={{ display:"flex",alignItems:"center",gap:6,minWidth:0 }}>
+              <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>{p.name}</div>
               <span style={{ fontSize:7.5,fontWeight:500,letterSpacing:".07em",padding:"1px 6px",borderRadius:3,
-                color:p.badgeC,background:p.badgeBg,border:`1px solid ${p.badgeBr}`,flexShrink:0 }}>{p.badge}</span>
+                color:p.badgeC,background:p.badgeBg,border:`1px solid ${p.badgeBr}`,flexShrink:0,whiteSpace:"nowrap" }}>{p.badge}</span>
             </div>
-            <div style={{ fontSize:9.5,color:T.txt3,fontStyle:"italic",letterSpacing:".02em",
-              overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
+              style={{ transition:"transform .22s",transform:open?"rotate(180deg)":"none",flexShrink:0,marginLeft:8 }}>
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </div>
+          {/* Row 2: PM name/title + Slack button */}
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",gap:8 }}>
+            <div style={{ fontSize:9.5,color:T.txt3,fontStyle:"italic",letterSpacing:".02em",minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>
               {p.pm} · <span style={{ fontSize:8.5 }}>{p.pmTitle}</span>
             </div>
-          </div>
-          {/* Right: Slack + chevron — always right-aligned */}
-          <div style={{ display:"flex",alignItems:"center",gap:6,flexShrink:0,marginLeft:"auto" }}>
             <button onClick={e => { e.stopPropagation(); setModal(true); }} style={{
               display:"flex",alignItems:"center",justifyContent:"center",gap:5,
-              padding:isMobile?"7px 12px":"5px 10px",
+              padding:isMobile?"6px 11px":"5px 10px",flexShrink:0,
               background:messaged?"rgba(245,166,35,.12)":"rgba(122,168,255,.10)",
               border:messaged?"1px solid rgba(245,166,35,.3)":"1px solid rgba(122,168,255,.25)",
               borderRadius:8,cursor:"pointer",fontFamily:"Jost,sans-serif",
@@ -349,10 +351,6 @@ function PartnerCard({ p, isMobile }) {
               <span style={{ fontSize:isMobile?13:12 }}>⚡</span>
               {messaged ? `Sent ${messagedDate}` : `Message ${p.pm.split(" ")[0]}`}
             </button>
-            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
-              style={{ transition:"transform .22s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
-              <path d="M2 4l4 4 4-4"/>
-            </svg>
           </div>
         </div>
 
