@@ -321,7 +321,7 @@ function PartnerCard({ p, isMobile }) {
         {/* Always-visible collapsed row */}
         <div style={{ padding:"10px 12px",cursor:"pointer" }} onClick={() => setOpen(!open)}>
           {/* Row 1: name + badge + chevron */}
-          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:5 }}>
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6 }}>
             <div style={{ display:"flex",alignItems:"center",gap:6,minWidth:0 }}>
               <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>{p.name}</div>
               <span style={{ fontSize:7.5,fontWeight:500,letterSpacing:".07em",padding:"1px 6px",borderRadius:3,
@@ -332,26 +332,20 @@ function PartnerCard({ p, isMobile }) {
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </div>
-          {/* Row 2: PM name/title + Slack button */}
-          <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",gap:8 }}>
-            <div style={{ fontSize:9.5,color:T.txt3,fontStyle:"italic",letterSpacing:".02em",minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>
-              {p.pm} · <span style={{ fontSize:8.5 }}>{p.pmTitle}</span>
-            </div>
-            <button onClick={e => { e.stopPropagation(); setModal(true); }} style={{
-              display:"flex",alignItems:"center",justifyContent:"center",gap:5,
-              padding:isMobile?"6px 11px":"5px 10px",flexShrink:0,
-              background:messaged?"rgba(245,166,35,.12)":"rgba(122,168,255,.10)",
-              border:messaged?"1px solid rgba(245,166,35,.3)":"1px solid rgba(122,168,255,.25)",
-              borderRadius:8,cursor:"pointer",fontFamily:"Jost,sans-serif",
-              fontSize:isMobile?10:9,fontWeight:500,
-              color:messaged?T.amber:T.blue,letterSpacing:".05em",transition:"all .2s",
-              boxShadow:messaged?"none":"0 0 8px rgba(122,168,255,.15)",
-              animation:messaged?"none":"slackGlow 2.5s ease-in-out infinite",
-              whiteSpace:"nowrap" }}>
-              <span style={{ fontSize:isMobile?13:12 }}>⚡</span>
-              {messaged ? `Sent ${messagedDate}` : `Message ${p.pm.split(" ")[0]}`}
-            </button>
-          </div>
+          {/* Row 2: Slack button full width */}
+          <button onClick={e => { e.stopPropagation(); setModal(true); }} style={{
+            width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:5,
+            padding:isMobile?"7px 0":"5px 0",
+            background:messaged?"rgba(245,166,35,.12)":"rgba(122,168,255,.10)",
+            border:messaged?"1px solid rgba(245,166,35,.3)":"1px solid rgba(122,168,255,.25)",
+            borderRadius:8,cursor:"pointer",fontFamily:"Jost,sans-serif",
+            fontSize:isMobile?10:9,fontWeight:500,
+            color:messaged?T.amber:T.blue,letterSpacing:".05em",transition:"all .2s",
+            boxShadow:messaged?"none":"0 0 8px rgba(122,168,255,.15)",
+            animation:messaged?"none":"slackGlow 2.5s ease-in-out infinite" }}>
+            <span style={{ fontSize:isMobile?13:12 }}>⚡</span>
+            {messaged ? `Sent ${messagedDate}` : `Message ${p.pm.split(" ")[0]}`}
+          </button>
         </div>
 
         {/* Expanded content */}
@@ -706,6 +700,65 @@ function MobileView({ navigate }) {
   );
 }
 
+function OwnerRow({ o }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.05) 0%,transparent 65%)",
+      border:`1px solid ${open?"rgba(255,255,255,.13)":"rgba(255,255,255,.08)"}`,
+      borderLeft:`2px solid ${o.border}`,borderRadius:10,marginBottom:5,overflow:"hidden",transition:"border-color .2s" }}>
+      <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"8px 12px",cursor:"pointer" }}>
+        <div style={{ flex:1,display:"flex",alignItems:"center",gap:8,minWidth:0 }}>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>
+            <a href={o.href} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} style={{ color:T.txt,textDecoration:"none" }}>{o.name}</a>
+          </div>
+          <div style={{ fontSize:9,color:T.txt3,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{o.role}</div>
+        </div>
+        <span style={{ fontSize:8,fontWeight:500,letterSpacing:".08em",padding:"2px 7px",borderRadius:3,
+          color:o.sigColor,background:o.sigBg,flexShrink:0 }}>{o.sig}</span>
+        <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
+          style={{ transition:"transform .2s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
+          <path d="M2 4l4 4 4-4"/>
+        </svg>
+      </div>
+      {open && (
+        <div style={{ padding:"0 12px 10px",borderTop:"1px solid rgba(255,255,255,.06)" }}>
+          <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.58,paddingTop:8,marginBottom:6 }}>{o.body}</div>
+          <div style={{ fontSize:9.5,color:T.teal,fontStyle:"italic" }}>{o.action}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ExecRow({ e }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ background:"rgba(255,255,255,.03)",
+      border:`1px solid ${open?"rgba(255,255,255,.13)":"rgba(255,255,255,.07)"}`,
+      borderRadius:9,marginBottom:5,overflow:"hidden",transition:"border-color .2s" }}>
+      <div onClick={() => setOpen(!open)} style={{ display:"flex",alignItems:"center",gap:8,padding:"8px 12px",cursor:"pointer" }}>
+        <div style={{ flex:1,display:"flex",alignItems:"center",gap:8,minWidth:0 }}>
+          <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,color:T.txt,whiteSpace:"nowrap" }}>
+            <a href={e.href} target="_blank" rel="noreferrer" onClick={ev=>ev.stopPropagation()} style={{ color:T.txt,textDecoration:"none" }}>{e.name}</a>
+          </div>
+          <div style={{ fontSize:9,color:T.txt3,fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{e.title}</div>
+        </div>
+        <span style={{ fontSize:8,fontWeight:500,letterSpacing:".07em",padding:"2px 8px",borderRadius:3,
+          whiteSpace:"nowrap",flexShrink:0,color:e.bc,background:e.bb,border:`1px solid ${e.bbr}` }}>{e.badge}</span>
+        <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="1.5"
+          style={{ transition:"transform .2s",transform:open?"rotate(180deg)":"none",flexShrink:0 }}>
+          <path d="M2 4l4 4 4-4"/>
+        </svg>
+      </div>
+      {open && (
+        <div style={{ padding:"0 12px 10px",borderTop:"1px solid rgba(255,255,255,.06)" }}>
+          <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.55,paddingTop:8 }}>{e.note}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── DESKTOP VIEW ──
 function DesktopView({ navigate }) {
   const [clock, setClock] = useState("");
@@ -849,21 +902,11 @@ function DesktopView({ navigate }) {
 
           <Reveal delay={100}>
             <SecHdr label="Ownership & Power Structure" />
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:9 }}>
-              {[
-                { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO — Economic Buyer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025.",action:"→ Economic buyer. Board-level F&B tech mandate." },
-                { name:"Drew Pinto",href:"#",role:"EVP & Global CTO — Tech Decision Maker",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
-                { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
-              ].map(o => (
-                <div key={o.name} style={{ padding:"12px 13px",background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.06) 0%,transparent 65%)",border:`1px solid rgba(255,255,255,.1)`,borderLeft:`2px solid ${o.border}`,borderRadius:12,position:"relative" }}>
-                  <div style={{ position:"absolute",top:10,right:10,fontSize:8,fontWeight:500,letterSpacing:".08em",padding:"2px 7px",borderRadius:3,color:o.sigColor,background:o.sigBg }}>{o.sig}</div>
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:13,fontWeight:300,marginBottom:2 }}><a href={o.href} target="_blank" rel="noreferrer" style={{ color:T.txt,textDecoration:"none" }}>{o.name}</a></div>
-                  <div style={{ fontSize:9.5,color:T.txt3,fontStyle:"italic",marginBottom:7,letterSpacing:".02em" }}>{o.role}</div>
-                  <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.58 }}>{o.body}</div>
-                  <div style={{ marginTop:7,paddingTop:6,borderTop:"1px solid rgba(255,255,255,.06)",fontSize:9.5,color:T.teal,fontStyle:"italic" }}>{o.action}</div>
-                </div>
-              ))}
-            </div>
+            {[
+              { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Driving tech modernization across the portfolio. F&B digital transformation is board-mandated priority for 2025. Ultimate decision authority on enterprise vendor relationships.",action:"→ Economic buyer. Board-level F&B tech mandate." },
+              { name:"Drew Pinto",href:"#",role:"EVP & Global CTO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022. Rationalization mandate — the 2022 no was not his.",action:"→ Primary re-engagement. He knows Square. Clean slate." },
+              { name:"Vanguard Group",href:"#",role:"Institutional — 8.9% Stake",sig:"INVESTOR",sigColor:T.blue,sigBg:"rgba(100,145,255,.13)",border:T.blue,body:"Largest institutional holder. Constant margin pressure. Square's unit economics maps directly to shareholder mandate.",action:"→ Efficiency narrative. Per-property TCO reduction." },
+            ].map(o => <OwnerRow key={o.name} o={o} />)}
           </Reveal>
 
           <Reveal delay={160}>
@@ -873,16 +916,7 @@ function DesktopView({ navigate }) {
               { name:"Drew Pinto",href:"#",title:"EVP & Global CTO",note:"Evaluated Square in 2022. Re-engage on enterprise deployment. 2022 no was not his decision.",badge:"Tech Buyer",bc:T.teal,bb:"rgba(45,212,180,.10)",bbr:"rgba(45,212,180,.2)" },
               { name:"Leeny Oberg",href:"#",title:"EVP & CFO",note:"Lead with per-property TCO reduction and Square ↔ NetSuite reconciliation story.",badge:"CFO",bc:T.blue,bb:"rgba(100,145,255,.12)",bbr:"rgba(100,145,255,.22)" },
               { name:"VP F&B Americas",href:"#",title:"Active Search — Role Open",note:"Leadership transition. Engage before new exec is fully onboarded.",badge:"⚠ Gap",bc:T.red,bb:"rgba(255,96,96,.12)",bbr:"rgba(255,96,96,.2)" },
-            ].map(e => (
-              <div key={e.name} style={{ display:"flex",alignItems:"flex-start",gap:10,padding:"9px 12px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:10,marginBottom:5 }}>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontFamily:"Georgia,serif",fontSize:12,fontWeight:300,marginBottom:2 }}><a href={e.href} target="_blank" rel="noreferrer" style={{ color:T.txt,textDecoration:"none" }}>{e.name}</a></div>
-                  <div style={{ fontSize:9.5,color:T.txt3,fontStyle:"italic",marginBottom:4 }}>{e.title}</div>
-                  <div style={{ fontSize:10.5,color:T.txt2,lineHeight:1.5 }}>{e.note}</div>
-                </div>
-                <span style={{ fontSize:8,fontWeight:500,letterSpacing:".07em",padding:"2px 8px",borderRadius:3,whiteSpace:"nowrap",flexShrink:0,marginTop:2,color:e.bc,background:e.bb,border:`1px solid ${e.bbr}` }}>{e.badge}</span>
-              </div>
-            ))}
+            ].map(e => <ExecRow key={e.name} e={e} />)}
           </Reveal>
 
           <Reveal delay={220}>
