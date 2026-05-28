@@ -1340,21 +1340,20 @@ function DesktopView({ navigate }) {
           </Reveal>
 
           <Reveal delay={160}>
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch" }}>
+            <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"stretch",maxHeight:280 }}>
               {/* OWNERSHIP */}
               <div style={{
                 background:"radial-gradient(ellipse 65% 55% at 12% 0%,rgba(255,255,255,.07) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 88% 100%,rgba(255,255,255,.04) 0%,transparent 60%)",
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
                 display:"flex",flexDirection:"column",
                 boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
-                position:"relative",
+                position:"relative",overflow:"hidden",
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
                 <SecHdr label="Key Stakeholders" />
-                <div style={{ maxHeight:165,overflowY:"auto",display:"flex",flexDirection:"column",gap:4,
-                  scrollbarWidth:"thin",paddingRight:2 }}>
+                <div style={{ display:"flex",flexDirection:"column",gap:5,flex:1,overflowY:"auto",scrollbarWidth:"thin" }}>
                   {[
                     { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate. Ultimate economic buyer. Has referenced 2022 Square eval publicly.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
                     { name:"Drew Pinto",href:"#",role:"EVP & Chief Revenue + Technology Officer",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Oversees all tech across 8,785 properties. Evaluated Square in 2022 — that no was not his. Active tech rationalization mandate.",action:"→ Primary re-engagement. He knows Square. Clean slate.",stakeholders:"+12 incl. IT & Ops leads",prior:"2022 pilot decision maker",sentiment:"Neutral → Warm",sentimentColor:T.amber },
