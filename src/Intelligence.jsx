@@ -890,8 +890,8 @@ function ThesisCard({ isMobile }) {
         {/* Fade gradient — only when collapsed */}
         {!expanded && (
           <div style={{
-            position:"absolute",bottom:0,left:0,right:0,height:40,
-            background:"linear-gradient(to bottom,transparent,rgba(9,10,18,.96))",
+            position:"absolute",bottom:0,left:0,right:0,height:52,
+            background:"linear-gradient(to bottom,transparent 0%,rgba(9,10,18,.7) 40%,rgba(9,10,18,.97) 100%)",
             pointerEvents:"none",
           }} />
         )}
@@ -901,14 +901,12 @@ function ThesisCard({ isMobile }) {
       {!expanded && (
         <button onClick={() => setExpanded(true)} style={{
           display:"flex",alignItems:"center",justifyContent:"center",
-          width:"100%",paddingTop:6,paddingBottom:2,
-          background:"none",border:"none",cursor:"pointer",gap:5,
-          fontFamily:"Jost,sans-serif",fontSize:9,color:"rgba(255,255,255,.3)",
-          letterSpacing:".08em",transition:"color .2s" }}
+          width:"100%",paddingTop:4,paddingBottom:0,marginTop:-8,
+          background:"none",border:"none",cursor:"pointer",gap:4,
+          fontFamily:"Jost,sans-serif",fontSize:8.5,color:"rgba(255,255,255,.22)",
+          letterSpacing:".1em",transition:"color .2s",position:"relative",zIndex:2 }}
           onMouseEnter={e=>e.currentTarget.style.color=T.teal}
-          onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,.3)"}>
-          <span>show more</span>
-          {/* Bouncing animated arrow */}
+          onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,.22)"}>
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none"
             stroke="currentColor" strokeWidth="1.5"
             style={{ animation:"arrowBounce 1.8s ease-in-out infinite" }}>
