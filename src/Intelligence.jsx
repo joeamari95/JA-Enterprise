@@ -333,7 +333,7 @@ function PartnerCard({ p, isMobile }) {
       {modal && <SlackModal partner={p} onClose={handleSlackClose} isMobile={isMobile} />}
       <div style={{ background:"rgba(255,255,255,.04)",
         border:`1px solid ${open?"rgba(255,255,255,.14)":"rgba(255,255,255,.08)"}`,borderRadius:10,marginBottom:6,
-        overflow:"hidden",transition:"border-color .2s" }}>
+        transition:"border-color .2s" }}>
 
         {/* Always-visible collapsed row */}
         <div style={{ padding:"10px 12px",cursor:"pointer" }} onClick={() => setOpen(!open)}>
@@ -1293,6 +1293,8 @@ function DesktopView({ navigate }) {
           padding:"12px 14px 0 14px",
           overflowY:"auto",
           display:"flex",flexDirection:"column",gap:8,
+          maskImage:"linear-gradient(to bottom,black 0%,black 88%,transparent 100%)",
+          WebkitMaskImage:"linear-gradient(to bottom,black 0%,black 88%,transparent 100%)",
         }}>
           <div style={{ paddingBottom:6,borderBottom:"1px solid rgba(255,255,255,.07)" }}>
             <div style={{ fontFamily:"Georgia,serif",fontSize:14,fontWeight:300,lineHeight:1.1,marginBottom:2 }}>Marriott International</div>
@@ -1372,7 +1374,7 @@ function DesktopView({ navigate }) {
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"12px 12px",
                 display:"flex",flexDirection:"column",
                 boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
-                position:"relative",minHeight:0,
+                position:"relative",minHeight:0,overflow:"hidden",
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
@@ -1431,8 +1433,8 @@ function DesktopView({ navigate }) {
 
         {/* RIGHT COL */}
         <div style={{ borderLeft:"1px solid rgba(255,255,255,.07)",padding:"20px 16px 0 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:14,
-          maskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)",
-          WebkitMaskImage:"linear-gradient(to bottom, black 0%, black 80%, transparent 100%)" }}>
+          maskImage:"linear-gradient(to bottom,black 0%,black 85%,transparent 100%)",
+          WebkitMaskImage:"linear-gradient(to bottom,black 0%,black 85%,transparent 100%)" }}>
           <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
               <SecHdr label="Live Signals" />
               <div style={{ display:"flex",alignItems:"center",gap:5,fontSize:9,color:T.green,letterSpacing:".08em",fontWeight:500,marginBottom:12 }}>
