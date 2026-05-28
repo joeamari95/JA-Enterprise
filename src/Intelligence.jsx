@@ -1347,14 +1347,13 @@ function DesktopView({ navigate }) {
                 border:"1px solid rgba(255,255,255,.09)",borderRadius:14,padding:"14px 14px",
                 display:"flex",flexDirection:"column",
                 boxShadow:"0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10)",
-                position:"relative",overflow:"hidden",
-                maxHeight:165,
+                position:"relative",
               }}>
                 <div style={{ position:"absolute",top:0,left:0,right:0,height:1,
                   background:"linear-gradient(90deg,transparent,rgba(255,255,255,.28) 50%,transparent)",
                   pointerEvents:"none" }} />
                 <SecHdr label="Key Stakeholders" />
-                <div style={{ overflowY:"auto",display:"flex",flexDirection:"column",gap:4,
+                <div style={{ maxHeight:165,overflowY:"auto",display:"flex",flexDirection:"column",gap:4,
                   scrollbarWidth:"thin",paddingRight:2 }}>
                   {[
                     { name:"Anthony Capuano",href:"https://www.linkedin.com/in/anthonycapuano/",role:"President & CEO",sig:"HIGH",sigColor:T.red,sigBg:"rgba(255,96,96,.14)",border:T.red,body:"Board-level F&B modernization mandate. Ultimate economic buyer. Has referenced 2022 Square eval publicly.",action:"→ Economic buyer. Board-level F&B tech mandate.",stakeholders:"+12 across portfolio",prior:"Referenced 2022 eval in Q2 earnings",sentiment:"Receptive",sentimentColor:T.green },
