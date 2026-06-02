@@ -287,10 +287,10 @@ const ROLES = [
   { id:"r1",title:"Enterprise Account Executive",meta:"May 2023 – Present · L4 → L6",badge:"Current",open:true,
     groups:[
       { label:"Performance", bullets:[
-        ["Sustained 150%+ quota attainment"," across every quarter as the #1-ranked AE globally, including a 421% peak quarter, carrying a $2.8M revenue quota across 30+ simultaneous enterprise opportunities"],
-        ["Generated 2–3 net-new enterprise opportunities per week"," through a cultivated partner network spanning NYC private equity relationships, commerce events, and co-marketing campaigns with Cash App and Afterpay"],
-        ["Active seller of Square's AI capabilities"," including ManagerBot and Goose, built custom MCP integrations on the spot and delivered production-ready solutions without developer team involvement"],
-        ["Closed enterprise deals averaging 7–15 active stakeholders"," across Finance, IT, Legal, Operations, and C-suite, mapping each function's distinct priorities into a single unified buying motion across deal cycles averaging 7–13 months"],
+        ["#1-ranked AE globally, 150%+ quota attainment every single quarter"," — 421% peak quarter, carrying $2.8M quota across 30+ enterprise opportunities (no deal cycle under 12 mo.) — 95% self-sourced in a vertical where inbound is near zero."],
+        ["Deployed live, account-specific AI tools in prospect meetings",": replaced static decks with real-time Square × Claude dashboards, driving 45% higher follow-up rates and 25% higher deal values."],
+        ["Architected full system integration for Eataly (~5,000 employees)",": aligned multi-system infrastructure across Square's first party software, developer tools and Microsoft Dynamics to unlock revenue channels across all global locations and secure active enterprise pilot."],
+        ["Unlocked Square's services vertical"," by surfacing untapped Mobile Check Deposit implementation at a national HVAC enterprise — drove 2× enterprise deal velocity per quarter, 4× for SMB."],
       ]},
       { label:"Key Achievements", bullets:[
         ["Called out by Square's board of directors"," as the organizational benchmark for enterprise execution, the first individual AE whose methodology was elevated to board-level recognition"],
@@ -301,25 +301,25 @@ const ROLES = [
   { id:"r2",title:"Enterprise & Strategic Services BDR",meta:"February 2022 – May 2023 · L3",
     groups:[
       { label:"Performance", bullets:[
-        ["Averaged 190% quota attainment Q1-Q4"," sourcing enterprise pipeline across Healthcare, Hospitality, and QSR"],
-        ["Built Square's first channel sales motion from scratch"," growing closed-won opportunities 40% YoY with higher intent and shorter sales cycles"],
+        ["190% quota attainment Q1–Q4",": targeted accounts by integration complexity and infrastructure fit — BDR-originated opportunities consistently outperformed team close rates."],
+        ["Built Square's first channel sales motion",": outbounded to PE and consulting firms requiring infrastructure-level payment modernization, growing closed-won opportunities 40% YoY."],
       ]},
       { label:"Key Achievement", bullets:[["Promoted to Enterprise AE in 15 months"," through a path that didn't exist, the first BDR-to-Enterprise-AE transition in Square's history"]] },
     ]},
   { id:"r3",title:"Account Executive, SMB",meta:"May 2021 – February 2022 · L2",
     groups:[
       { label:"Performance", bullets:[
-        ["178% quota attainment"," running full-cycle deals with multi-stakeholder buying processes"],
-        ["Identified and developed the SuiteRetail partnership",", now a preferred Square Partner, building a referral network of 20+ midmarket and enterprise sellers"],
-        ["Selected as the only SMB AE"," to partner with the Enterprise AE on Cardinal Health"],
+        ["178% average quota attainment"," (Q1: 175%, Q2: 195%, Q3: 165%): repositioned Square as operational infrastructure, not a POS product, across multi-location and multi-system enterprise environments."],
+        ["Developed the SuiteRetail partnership",": now a preferred Square Partner, building a 20+ enterprise seller referral network, generating one qualified lead per week."],
+        ["Selected as the only SMB AE to co-sell Enterprise"," on Cardinal Health — ran a 10+ stakeholder enterprise channel motion from the ground up."],
       ]},
       { label:"Key Achievement", bullets:[["Promoted to Enterprise BDR in 9 months",", the fastest transition of its kind in Square's history"]] },
     ]},
   { id:"r4",title:"SMB Business Development Representative",meta:"August 2020 – May 2021 · L1",
     groups:[
       { label:"Performance", bullets:[
-        ["Averaged 182% quota attainment Q1–Q4",", consistently recognized among the top BDR performers"],
-        ["Executed targeted outbound"," across Restaurant, Retail, and Healthcare verticals from day one"],
+        ["182% quota attainment Q1–Q4",": top BDR in the org across outbound activity, demo-set volume, and conversion rate."],
+        ["Developed the account-level targeting approach"," across Restaurant, Retail, and Healthcare that became the model carried through every subsequent Square role."],
       ]},
       { label:"Key Achievement", bullets:[["Promoted to SMB AE in under 9 months",", the fastest BDR-to-AE transition in Square's history"]] },
     ]},
@@ -342,7 +342,15 @@ const BUILDS = [
   { color:"#b89a52",name:"PM Onboarding Flow",problem:"Multi-concept merchants with 40+ implementation stakeholders break every standard onboarding flow.",desc:"Multi-threaded system with pre-mortem risk analysis, auto-generated CPQ orders via Claude, and custom charts, Q&A forms, and sentiment tracking.",tools:["Claude","Glean","MCP","CPQ automation"],metrics:["30% faster implementation","100+ CPQ orders automated","40+ stakeholders managed"] },
 ];
 
-const STATS = [{v:"#1",l:"AE Globally"},{v:"38%",l:"Win Rate"},{v:"150%+",l:"Every Quarter"},{v:"421%",l:"Peak Attainment"},{v:"30+",l:"Concurrent Opps"}];
+const STATS = [
+  {v:"#1",l:"AE Globally"},
+  {v:"150%+",l:"Every Quarter"},
+  {v:"421%",l:"Peak Quarter"},
+  {v:"38%",l:"Win Rate"},
+  {v:"$2.8M",l:"Quota"},
+  {v:"95%",l:"Self-Sourced Pipeline"},
+];
+
 const TOOLS = ["Claude","Goose","Glean","MCP","GitHub","Tasker","Revenue.io","Salesforce","Slack","Notion","BlueBubble API"];
 
 function Portfolio() {
@@ -370,7 +378,6 @@ function Portfolio() {
       </div>
       <Grain />
 
-      {/* NAV */}
       <div style={{ position:"fixed",top:0,left:0,right:0,zIndex:100,height:isMobile?48:52,display:"flex",alignItems:"center",justifyContent:"space-between",padding:isMobile?"0 16px":"0 32px",background:"rgba(10,11,16,.78)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderBottom:"1px solid rgba(255,255,255,.1)",boxShadow:"0 1px 0 rgba(255,255,255,.07),0 8px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08)" }}>
         <div style={{ fontFamily:"Georgia,serif",fontSize:isMobile?13:15.5,fontWeight:400,letterSpacing:".04em" }}>
           Joseph <span style={{ color:"rgba(255,255,255,.2)",margin:"0 6px" }}>/</span> Amari
@@ -387,7 +394,6 @@ function Portfolio() {
         {isMobile && <div style={{ width:80 }} />}
       </div>
 
-      {/* COMPETENCIES */}
       {compOpen && (
         <>
           <div onClick={() => setCompOpen(false)} style={{ position:"fixed",inset:0,zIndex:88,background:"rgba(4,5,10,.18)",backdropFilter:"blur(2px)",WebkitBackdropFilter:"blur(2px)",animation:"fadeInBg .45s ease forwards" }} />
@@ -455,14 +461,16 @@ function Portfolio() {
                 </div>
               </div>
             </div>
+
             <RevealSection delay={0}>
               <div style={{ maxWidth:1060,margin:"0 auto",padding:`${isMobile?"36px":"56px"} ${pad} ${isMobile?"36px":"52px"}` }}>
                 <SecHdr label="Summary" right="Square" />
                 <div style={{ fontSize:isMobile?13:13.5,fontWeight:300,color:T.txt2,lineHeight:1.82,maxWidth:660 }}>
-                  Top-ranked Enterprise Account Executive at Square with <strong style={{ color:T.txt,fontWeight:400 }}>six years across four distinct roles</strong>. Specializes in complex, multi-stakeholder enterprise cycles with <strong style={{ color:T.txt,fontWeight:400 }}>7–13 month buying motions</strong>, C-suite and board-level relationship building, and cross-functional coordination across legal, finance, and product. Active seller of Square's AI capabilities, including ManagerBot and Goose, and builder of custom MCP integrations deployed directly into enterprise accounts without developer team dependencies.
+                  Enterprise Account Executive with a record of <strong style={{ color:T.txt,fontWeight:400 }}>150%+ quota attainment every quarter</strong> as the #1-ranked AE globally at Square. Navigates 12–18 month enterprise cycles across C-suite and board-level buying committees, deploying <strong style={{ color:T.txt,fontWeight:400 }}>MEDDIC</strong> qualification and multi-stakeholder deal architecture to compress cycles and close at scale. First in Square's history to create the BDR-to-Enterprise-AE progression. Built and deployed proprietary AI tools live in enterprise deals — Claude MCP dashboards replacing static decks in real time, zero engineering dependencies. Builds across the full pipeline: prospecting intelligence, deal execution, and implementation automation — using AI to fix what's broken at every stage.
                 </div>
               </div>
             </RevealSection>
+
             <RevealSection delay={100}>
               <div style={{ maxWidth:1060,margin:"0 auto",padding:`0 ${pad} ${isMobile?"48px":"80px"}` }}>
                 <SecHdr label="Experience" right="Square" />
